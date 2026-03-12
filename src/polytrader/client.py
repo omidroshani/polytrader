@@ -118,7 +118,9 @@ class PolyTrader:
         outcomes_raw = market_data.get("outcomes", "[]")
 
         token_ids = (
-            json.loads(token_ids_raw) if isinstance(token_ids_raw, str) else token_ids_raw
+            json.loads(token_ids_raw)
+            if isinstance(token_ids_raw, str)
+            else token_ids_raw
         )
         outcomes = (
             json.loads(outcomes_raw) if isinstance(outcomes_raw, str) else outcomes_raw
@@ -129,7 +131,9 @@ class PolyTrader:
             if i < len(token_ids):
                 outcome_map[outcome.lower()] = token_ids[i]
 
-        return TokenIdPair(up=outcome_map.get("up", ""), down=outcome_map.get("down", ""))
+        return TokenIdPair(
+            up=outcome_map.get("up", ""), down=outcome_map.get("down", "")
+        )
 
     async def get_btc_market(self, slug: str) -> BtcMarket | None:
         """
@@ -269,7 +273,10 @@ class PolyTrader:
 
         try:
             resp = client.cancel(order_id)
-            cancelled = bool(self._extract_cancelled(resp) or resp.get("canceled", resp.get("cancelled", False)))
+            cancelled = bool(
+                self._extract_cancelled(resp)
+                or resp.get("canceled", resp.get("cancelled", False))
+            )
             if cancelled:
                 logger.info(f"[POLYMARKET] Order cancelled: {order_id}")
             return cancelled
