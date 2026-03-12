@@ -14,8 +14,8 @@ from py_clob_client.clob_types import (
     TradeParams,
 )
 
-from polymarket.constants import CHAIN_ID, CLOB_HOST, DATA_API_HOST, GAMMA_API_HOST
-from polymarket.models import (
+from polytrader.constants import CHAIN_ID, CLOB_HOST, DATA_API_HOST, GAMMA_API_HOST
+from polytrader.models import (
     Balance,
     BtcMarket,
     OrderResult,

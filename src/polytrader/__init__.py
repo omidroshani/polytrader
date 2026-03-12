@@ -1,5 +1,5 @@
-from polymarket.client import PolyTrader
-from polymarket.models import (
+from polytrader.client import PolyTrader
+from polytrader.models import (
     Balance,
     BestBidAsk,
     Book,
@@ -29,7 +29,7 @@ from polymarket.models import (
     UserOrder,
     UserTrade,
 )
-from polymarket.websocket import (
+from polytrader.websocket import (
     BasePolymarketWebSocket,
     PolymarketMarketWebSocket,
     PolymarketUserWebSocket,

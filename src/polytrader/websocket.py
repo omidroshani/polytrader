@@ -11,7 +11,7 @@ import websockets
 from websockets import ConnectionClosed
 from websockets.asyncio.client import ClientConnection
 
-from polymarket.models import (
+from polytrader.models import (
     BestBidAsk,
     Book,
     LastTradePrice,
