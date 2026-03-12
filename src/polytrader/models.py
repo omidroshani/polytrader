@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from datetime import datetime
 from decimal import Decimal
 from enum import StrEnum
 from typing import Any, cast
@@ -49,6 +50,18 @@ class Outcome(StrEnum):
 class OrderSide(StrEnum):
     BUY = "BUY"
     SELL = "SELL"
+
+
+class Coin(StrEnum):
+    BTC = "btc"
+    ETH = "eth"
+    SOL = "sol"
+    XRP = "xrp"
+
+
+class Timeframe(StrEnum):
+    M5 = "5m"
+    M15 = "15m"
 
 
 class PolymarketOrderType(StrEnum):
@@ -417,7 +430,9 @@ class UserOrder:
 
     @property
     def fill_ratio(self) -> Decimal:
-        return self.size_matched / self.original_size if self.original_size > 0 else ZERO
+        return (
+            self.size_matched / self.original_size if self.original_size > 0 else ZERO
+        )
 
 
 # ============================================================================
@@ -426,8 +441,8 @@ class UserOrder:
 
 
 @dataclass
-class BtcMarketToken:
-    """Token info for a BTC Up/Down market outcome"""
+class UpDownMarketToken:
+    """Token info for an Up/Down market outcome"""
 
     token_id: str
     outcome: Outcome
@@ -443,18 +458,30 @@ class TokenIdPair:
 
 
 @dataclass
-class BtcMarket:
-    """BTC Up/Down market info from Gamma API"""
+class UpDownMarket:
+    """Up/Down market info from Gamma API"""
 
+    coin: Coin
+    timeframe: Timeframe
     condition_id: str
     question_id: str
     slug: str
     title: str
     up_token_id: str
     down_token_id: str
-    end_date: str
+    end_date: datetime
     active: bool
     closed: bool
+    order_price_min_tick_size: Decimal
+    order_min_size: Decimal
+    neg_risk: bool
+    accepting_orders: bool
+    best_bid: Decimal
+    best_ask: Decimal
+    last_trade_price: Decimal
+    spread: Decimal
+    maker_base_fee: int
+    taker_base_fee: int
 
 
 @dataclass

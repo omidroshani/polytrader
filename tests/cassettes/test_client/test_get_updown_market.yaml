@@ -1,0 +1,76 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Host:
+      - gamma-api.polymarket.com
+      User-Agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://gamma-api.polymarket.com/markets?slug=btc-updown-5m-1773313200
+  response:
+    body:
+      string: '[{"id":"1557982","question":"Bitcoin Up or Down - March 12, 7:00AM-7:05AM
+        ET","conditionId":"0x93db34cab8726675085ae85182c3797401799fec19d2d80025fd893a51d695e1","slug":"btc-updown-5m-1773313200","resolutionSource":"https://data.chain.link/streams/btc-usd","endDate":"2026-03-12T11:05:00Z","startDate":"2026-03-11T11:08:17.859052Z","image":"https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png","icon":"https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png","description":"This
+        market will resolve to \"Up\" if the Bitcoin price at the end of the time
+        range specified in the title is greater than or equal to the price at the
+        beginning of that range. Otherwise, it will resolve to \"Down\".\nThe resolution
+        source for this market is information from Chainlink, specifically the BTC/USD
+        data stream available at https://data.chain.link/streams/btc-usd.\nPlease
+        note that this market is about the price according to Chainlink data stream
+        BTC/USD, not according to other sources or spot markets.","outcomes":"[\"Up\",
+        \"Down\"]","outcomePrices":"[\"1\", \"0\"]","volume":"170815.8915139999","active":true,"closed":true,"marketMakerAddress":"","createdAt":"2026-03-11T11:07:08.670298Z","updatedAt":"2026-03-12T11:37:25.034906Z","closedTime":"2026-03-12
+        11:05:55+00","new":false,"featured":false,"archived":false,"restricted":true,"groupItemThreshold":"0","questionID":"0x6a7e4ff3637a7f5a7169fd2aa1269e8ca278870ccf1f423bfb5bd7049718e0c9","umaEndDate":"2026-03-12T11:05:55Z","enableOrderBook":true,"orderPriceMinTickSize":0.001,"orderMinSize":5,"umaResolutionStatus":"resolved","volumeNum":170815.8915139999,"endDateIso":"2026-03-12","startDateIso":"2026-03-11","hasReviewedDates":true,"volume24hr":170815.89151399944,"volume1wk":170815.89151399944,"volume1mo":170815.89151399944,"volume1yr":170815.89151399944,"clobTokenIds":"[\"59626939380980037975706270663503748097734372360318593666102472956828746469379\",
+        \"103482769632781255567896463351908856661616678100584625371022275571002040518192\"]","volume24hrClob":170815.89151399944,"volume1wkClob":170815.89151399944,"volume1moClob":170815.89151399944,"volume1yrClob":170815.89151399944,"volumeClob":170815.8915139999,"makerBaseFee":1000,"takerBaseFee":1000,"acceptingOrders":false,"negRisk":false,"events":[{"id":"260802","ticker":"btc-updown-5m-1773313200","slug":"btc-updown-5m-1773313200","title":"Bitcoin
+        Up or Down - March 12, 7:00AM-7:05AM ET","description":"This market will resolve
+        to \"Up\" if the Bitcoin price at the end of the time range specified in the
+        title is greater than or equal to the price at the beginning of that range.
+        Otherwise, it will resolve to \"Down\".\nThe resolution source for this market
+        is information from Chainlink, specifically the BTC/USD data stream available
+        at https://data.chain.link/streams/btc-usd.\nPlease note that this market
+        is about the price according to Chainlink data stream BTC/USD, not according
+        to other sources or spot markets.","resolutionSource":"https://data.chain.link/streams/btc-usd","startDate":"2026-03-11T11:09:41.360769Z","creationDate":"2026-03-11T11:09:41.360764Z","endDate":"2026-03-12T11:05:00Z","image":"https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png","icon":"https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png","active":true,"closed":true,"archived":false,"new":false,"featured":false,"restricted":true,"volume":170815.8915139999,"openInterest":0,"createdAt":"2026-03-11T11:07:08.57301Z","updatedAt":"2026-03-12T11:37:37.475333Z","volume24hr":170815.89151399944,"volume1wk":170815.89151399944,"volume1mo":170815.89151399944,"volume1yr":170815.89151399944,"enableOrderBook":true,"negRisk":false,"commentCount":0,"series":[{"id":"10684","ticker":"btc-up-or-down-5m","slug":"btc-up-or-down-5m","title":"BTC
+        Up or Down 5m","seriesType":"single","recurrence":"5m","image":"","icon":"","active":true,"closed":false,"archived":false,"featured":false,"restricted":true,"createdAt":"2025-11-21T21:46:22.201627Z","updatedAt":"2026-03-12T11:37:41.641927Z","volume24hr":42387024.398261964,"volume":26766.97766400004,"liquidity":6155354.3875,"commentCount":28049,"requiresTranslation":false}],"cyom":false,"closedTime":"2026-03-12T11:05:55Z","showAllOutcomes":true,"showMarketImages":true,"automaticallyResolved":true,"enableNegRisk":false,"automaticallyActive":true,"startTime":"2026-03-12T11:00:00Z","seriesSlug":"btc-up-or-down-5m","negRiskAugmented":false,"pendingDeployment":false,"deploying":false,"requiresTranslation":false,"eventMetadata":{"priceToBeat":70417.65543790754}}],"ready":false,"funded":false,"acceptingOrdersTimestamp":"2026-03-11T11:07:11Z","cyom":false,"pagerDutyNotificationEnabled":false,"approved":true,"rewardsMinSize":50,"rewardsMaxSpread":4.5,"spread":0.009,"automaticallyResolved":true,"lastTradePrice":0.999,"bestBid":0.99,"bestAsk":1,"automaticallyActive":true,"clearBookOnStart":false,"showGmpSeries":false,"showGmpOutcome":false,"manualActivation":false,"negRiskOther":false,"umaResolutionStatuses":"[]","pendingDeployment":false,"deploying":false,"rfqEnabled":false,"eventStartTime":"2026-03-12T11:00:00Z","holdingRewardsEnabled":false,"feesEnabled":true,"requiresTranslation":false,"makerRebatesFeeShareBps":10000,"feeType":"crypto_fees"}]
+
+        '
+    headers:
+      CF-RAY:
+      - 9db2872c690cdddb-DXB
+      Cache-Control:
+      - public, max-age=180
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 12 Mar 2026 11:41:08 GMT
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=7776000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - HIT
+      content-length:
+      - '5255'
+      expires:
+      - Thu, 12 Mar 2026 11:44:08 GMT
+      last-modified:
+      - Thu, 12 Mar 2026 11:38:15 GMT
+      set-cookie:
+      - FILTERED_set-cookie
+    status:
+      code: 200
+      message: OK
+version: 1

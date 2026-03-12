@@ -19,14 +19,16 @@ from polytrader.constants import CHAIN_ID, CLOB_HOST, DATA_API_HOST, GAMMA_API_H
 from polytrader.models import (
     ZERO,
     Balance,
-    BtcMarket,
+    Coin,
     OrderResult,
     OrderSide,
     PolymarketAuth,
     PolymarketOrder,
     PolymarketOrderType,
     PolymarketPosition,
+    Timeframe,
     TokenIdPair,
+    UpDownMarket,
 )
 
 logger = logging.getLogger(__name__)
@@ -137,55 +139,70 @@ class PolyTrader:
             up=outcome_map.get("up", ""), down=outcome_map.get("down", "")
         )
 
-    async def get_btc_market(self, slug: str) -> BtcMarket | None:
+    async def get_updown_market(
+        self, coin: Coin, timeframe: Timeframe, timestamp: int
+    ) -> UpDownMarket:
         """
-        Get BTC Up/Down market info by slug.
+        Get Up/Down market by coin, timeframe, and Unix timestamp.
 
         Args:
-            slug: Market slug (e.g., "btc-updown-5m-1772871600")
+            coin: Coin enum (BTC, ETH, SOL, XRP)
+            timeframe: Timeframe enum (M5, M15)
+            timestamp: Unix timestamp for the market period
 
         Returns:
-            BtcMarket with token IDs for Up and Down outcomes, or None if not found
+            UpDownMarket with token IDs for Up and Down outcomes
+
+        Raises:
+            ValueError: If no market found for the given parameters
+            httpx.HTTPError: If the API request fails
         """
+        slug = f"{coin}-updown-{timeframe}-{timestamp}"
         url = f"{GAMMA_API_HOST}/markets?slug={slug}"
-        try:
-            resp = await self._http.get(url)
-            resp.raise_for_status()
-            data = resp.json()
+        resp = await self._http.get(url)
+        resp.raise_for_status()
+        data = resp.json()
 
-            if not data:
-                logger.warning(f"[POLYMARKET] No market found for slug: {slug}")
-                return None
+        if not data:
+            raise ValueError(f"No market found for slug: {slug}")
 
-            market_data = data[0] if isinstance(data, list) else data
-            tokens = self._parse_token_ids(market_data)
+        market_data = data[0] if isinstance(data, list) else data
+        tokens = self._parse_token_ids(market_data)
 
-            return BtcMarket(
-                condition_id=market_data.get("conditionId", ""),
-                question_id=market_data.get("questionID", ""),
-                slug=market_data.get("slug", slug),
-                title=market_data.get("question", ""),
-                up_token_id=tokens.up,
-                down_token_id=tokens.down,
-                end_date=market_data.get("endDate", ""),
-                active=market_data.get("active", False),
-                closed=market_data.get("closed", False),
-            )
+        return UpDownMarket(
+            coin=coin,
+            timeframe=timeframe,
+            condition_id=market_data.get("conditionId", ""),
+            question_id=market_data.get("questionID", ""),
+            slug=market_data.get("slug", slug),
+            title=market_data.get("question", ""),
+            up_token_id=tokens.up,
+            down_token_id=tokens.down,
+            end_date=datetime.fromisoformat(market_data["endDate"]),
+            active=market_data.get("active", False),
+            closed=market_data.get("closed", False),
+            order_price_min_tick_size=Decimal(
+                str(market_data.get("orderPriceMinTickSize", 0))
+            ),
+            order_min_size=Decimal(str(market_data.get("orderMinSize", 0))),
+            neg_risk=market_data.get("negRisk", False),
+            accepting_orders=market_data.get("acceptingOrders", False),
+            best_bid=Decimal(str(market_data.get("bestBid", 0))),
+            best_ask=Decimal(str(market_data.get("bestAsk", 0))),
+            last_trade_price=Decimal(str(market_data.get("lastTradePrice", 0))),
+            spread=Decimal(str(market_data.get("spread", 0))),
+            maker_base_fee=int(market_data.get("makerBaseFee", 0)),
+            taker_base_fee=int(market_data.get("takerBaseFee", 0)),
+        )
 
-        except httpx.HTTPError as e:
-            logger.error(f"[POLYMARKET] Failed to fetch market: {e}")
-            return None
-
-    async def get_btc_market_by_timestamp(self, timestamp: int) -> BtcMarket | None:
-        """Get BTC Up/Down 5-minute market by Unix timestamp."""
-        slug = f"btc-updown-5m-{timestamp}"
-        return await self.get_btc_market(slug)
-
-    async def get_current_btc_market(self) -> BtcMarket | None:
-        """Get current BTC Up/Down 5-minute market."""
+    async def get_current_updown_market(
+        self, coin: Coin, timeframe: Timeframe
+    ) -> UpDownMarket:
+        """Get current Up/Down market for a coin and timeframe."""
         now = datetime.now(UTC)
-        rounded_ts = (int(now.timestamp()) // 300) * 300
-        return await self.get_btc_market_by_timestamp(rounded_ts)
+        interval = 300 if timeframe == Timeframe.M5 else 900
+        rounded_ts = (int(now.timestamp()) // interval) * interval
+        return await self.get_updown_market(coin, timeframe, rounded_ts)
 
     # ========================================================================
     # Order Management
@@ -222,7 +239,9 @@ class PolyTrader:
             actual_price = price
 
             if order_type == PolymarketOrderType.MARKET:
-                actual_price = Decimal("0.99") if side == OrderSide.BUY else Decimal("0.01")
+                actual_price = (
+                    Decimal("0.99") if side == OrderSide.BUY else Decimal("0.01")
+                )
                 actual_order_type = PolymarketOrderType.FOK
                 logger.debug(f"[POLYMARKET] MARKET order -> FOK at {actual_price}")
 
