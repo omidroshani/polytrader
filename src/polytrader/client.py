@@ -10,8 +10,10 @@ from py_clob_client.client import ApiCreds, ClobClient, OrderBookSummary
 from py_clob_client.clob_types import (
     AssetType,
     BalanceAllowanceParams,
+    MarketOrderArgs,
     OpenOrderParams,
     OrderArgs,
+    PartialCreateOrderOptions,
     TradeParams,
 )
 
@@ -215,73 +217,88 @@ class PolyTrader:
         side: OrderSide,
         price: Decimal,
         size: Decimal,
+        tick_size: str = "0.01",
+        neg_risk: bool = False,
         order_type: PolymarketOrderType = PolymarketOrderType.GTC,
+        expiration: int = 0,
         post_only: bool = False,
     ) -> OrderResult:
         """
         Create and post an order.
 
+        For limit orders (GTC, GTD): specify price and size.
+        For market orders (FOK, FAK): size is the dollar amount for BUY,
+            or number of shares for SELL. Price acts as worst-price limit.
+        For MARKET pseudo-type: converted to FOK with aggressive price.
+
         Args:
             token_id: The token ID (asset ID) to trade
             side: BUY or SELL
-            price: Price (0.01 to 0.99 for binary markets). Ignored for MARKET orders.
-            size: Number of shares
+            price: Limit price (slippage protection for FOK/FAK)
+            size: Shares for limit/SELL, dollar amount for FOK/FAK BUY
+            tick_size: Market tick size ("0.1", "0.01", "0.001", "0.0001")
+            neg_risk: Whether this is a negative risk market (3+ outcomes)
             order_type: GTC, GTD, FOK, FAK, or MARKET
-            post_only: If True, order will be rejected if it would match immediately
-
-        Returns:
-            OrderResult with success status and order ID
+            expiration: Unix timestamp for GTD orders (add 60s security buffer)
+            post_only: Reject if order would match immediately (GTC/GTD only)
         """
         client = self._get_authenticated_client()
+        options = PartialCreateOrderOptions(tick_size=tick_size, neg_risk=neg_risk)
 
-        try:
-            # Handle MARKET orders: use aggressive price with FOK
-            actual_order_type = order_type
-            actual_price = price
+        actual_order_type = order_type
+        if order_type == PolymarketOrderType.MARKET:
+            actual_order_type = PolymarketOrderType.FOK
 
+        if actual_order_type in (PolymarketOrderType.FOK, PolymarketOrderType.FAK):
+            # Market orders: use create_market_order
+            market_price = price
             if order_type == PolymarketOrderType.MARKET:
-                actual_price = (
+                market_price = (
                     Decimal("0.99") if side == OrderSide.BUY else Decimal("0.01")
                 )
-                actual_order_type = PolymarketOrderType.FOK
-                logger.debug(f"[POLYMARKET] MARKET order -> FOK at {actual_price}")
 
+            market_args = MarketOrderArgs(
+                token_id=token_id,
+                amount=float(size),
+                side=side.value,
+                price=float(market_price),
+            )
+            signed_order = client.create_market_order(market_args, options)
+        else:
+            # Limit orders: GTC or GTD
             order_args = OrderArgs(
                 token_id=token_id,
-                price=float(actual_price),
+                price=float(price),
                 size=float(size),
                 side=side.value,
+                expiration=expiration,
             )
+            signed_order = client.create_order(order_args, options)
 
-            signed_order = client.create_order(order_args)
-            resp = client.post_order(
-                signed_order,
-                orderType=actual_order_type.to_clob_order_type(),
-                post_only=(
-                    post_only if order_type != PolymarketOrderType.MARKET else False
-                ),
-            )
+        resp = client.post_order(
+            signed_order,
+            orderType=actual_order_type.to_clob_order_type(),
+            post_only=post_only
+            and actual_order_type
+            in (
+                PolymarketOrderType.GTC,
+                PolymarketOrderType.GTD,
+            ),
+        )
 
-            order_id = resp.get("orderID") or resp.get("order_id")
-            status = resp.get("status", "UNKNOWN")
+        result = OrderResult.from_dict(resp)
 
-            logger.info(
-                f"[POLYMARKET] Order created: {side.value} {size}@{actual_price} "
-                f"type={order_type.value} id={order_id}"
-            )
+        logger.info(
+            "[POLYMARKET] Order %s: %s %s@%s type=%s id=%s",
+            result.status.value,
+            side.value,
+            size,
+            price,
+            order_type.value,
+            result.order_id,
+        )
 
-            return OrderResult(
-                success=True,
-                order_id=order_id,
-                status=status,
-            )
-
-        except Exception as e:
-            logger.exception(f"[POLYMARKET] Failed to create order: {e}")
-            return OrderResult(
-                success=False,
-                error_msg=f"{type(e).__name__}: {e}",
-            )
+        return result
 
     @staticmethod
     def _extract_cancelled(resp: dict[str, Any]) -> list[str]:
@@ -292,51 +309,42 @@ class PolyTrader:
     def cancel_order(self, order_id: str) -> bool:
         """Cancel a specific order."""
         client = self._get_authenticated_client()
-
-        try:
-            resp = client.cancel(order_id)
-            cancelled = bool(
-                self._extract_cancelled(resp)
-                or resp.get("canceled", resp.get("cancelled", False))
-            )
-            if cancelled:
-                logger.info(f"[POLYMARKET] Order cancelled: {order_id}")
-            return cancelled
-        except Exception as e:
-            logger.error(f"[POLYMARKET] Failed to cancel order {order_id}: {e}")
-            return False
+        resp = client.cancel(order_id)
+        cancelled = bool(
+            self._extract_cancelled(resp)
+            or resp.get("canceled", resp.get("cancelled", False))
+        )
+        if cancelled:
+            logger.info(f"[POLYMARKET] Order cancelled: {order_id}")
+        return cancelled
 
     def cancel_all_orders(self) -> int:
         """Cancel all open orders."""
         client = self._get_authenticated_client()
-
-        try:
-            resp = client.cancel_all()
-            cancelled_ids = self._extract_cancelled(resp)
-            logger.info(f"[POLYMARKET] Cancelled {len(cancelled_ids)} orders")
-            return len(cancelled_ids)
-        except Exception as e:
-            logger.error(f"[POLYMARKET] Failed to cancel all orders: {e}")
-            return 0
+        resp = client.cancel_all()
+        cancelled_ids = self._extract_cancelled(resp)
+        logger.info(f"[POLYMARKET] Cancelled {len(cancelled_ids)} orders")
+        return len(cancelled_ids)
 
     def cancel_orders_for_market(self, market_id: str) -> int:
         """Cancel all orders for a specific market."""
         client = self._get_authenticated_client()
-
-        try:
-            resp = client.cancel_market_orders(market_id)
-            cancelled_ids = self._extract_cancelled(resp)
-            logger.info(
-                f"[POLYMARKET] Cancelled {len(cancelled_ids)} orders for market {market_id}"
-            )
-            return len(cancelled_ids)
-        except Exception as e:
-            logger.error(f"[POLYMARKET] Failed to cancel market orders: {e}")
-            return 0
+        resp = client.cancel_market_orders(market_id)
+        cancelled_ids = self._extract_cancelled(resp)
+        logger.info(
+            f"[POLYMARKET] Cancelled {len(cancelled_ids)} orders for market {market_id}"
+        )
+        return len(cancelled_ids)
 
     # ========================================================================
     # Order/Position Queries
     # ========================================================================
+
+    def get_order(self, order_id: str) -> PolymarketOrder:
+        """Get a single order by ID."""
+        client = self._get_authenticated_client()
+        resp = client.get_order(order_id)
+        return PolymarketOrder.from_dict(resp)
 
     def get_orders(
         self,

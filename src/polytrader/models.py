@@ -670,14 +670,38 @@ class PolymarketTrade:
         )
 
 
+class OrderResultStatus(StrEnum):
+    LIVE = "live"
+    MATCHED = "matched"
+    DELAYED = "delayed"
+    UNMATCHED = "unmatched"
+
+
 @dataclass
 class OrderResult:
-    """Result of order creation"""
+    """Result of order creation (SendOrderResponse)"""
 
     success: bool
-    order_id: str | None = None
-    error_msg: str | None = None
-    status: str | None = None
+    order_id: str
+    status: OrderResultStatus
+    making_amount: Decimal = ZERO
+    taking_amount: Decimal = ZERO
+    error_msg: str = ""
+    transaction_hashes: list[str] = field(default_factory=list)
+    trade_ids: list[str] = field(default_factory=list)
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "OrderResult":
+        return cls(
+            success=data.get("success", False),
+            order_id=data.get("orderID", ""),
+            status=OrderResultStatus(data.get("status", "live")),
+            making_amount=Decimal(str(data.get("makingAmount", 0) or 0)),
+            taking_amount=Decimal(str(data.get("takingAmount", 0) or 0)),
+            error_msg=data.get("errorMsg", ""),
+            transaction_hashes=data.get("transactionsHashes", []),
+            trade_ids=data.get("tradeIDs", []),
+        )
 
 
 @dataclass

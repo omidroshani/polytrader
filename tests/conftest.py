@@ -2,12 +2,19 @@ import json
 import os
 from typing import Any
 
+import httpx
 import pytest
 from dotenv import load_dotenv
 
 from polytrader import PolyTrader
 
 load_dotenv()
+
+# py_clob_client uses a global httpx.Client with default 5s timeout — too short
+# for market orders that settle on-chain. Patch it to 30s.
+import py_clob_client.http_helpers.helpers as _clob_helpers
+
+_clob_helpers._http_client = httpx.Client(http2=True, timeout=30.0)
 
 # Headers that contain sensitive data
 _SENSITIVE_HEADERS = {
