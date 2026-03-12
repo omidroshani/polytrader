@@ -26,6 +26,7 @@ from polytrader.models import (
     PolymarketOrder,
     PolymarketOrderType,
     PolymarketPosition,
+    PolymarketTrade,
     Timeframe,
     TokenIdPair,
     UpDownMarket,
@@ -344,64 +345,37 @@ class PolyTrader:
     ) -> list[PolymarketOrder]:
         """Get open orders, optionally filtered by market or asset."""
         client = self._get_authenticated_client()
-
-        try:
-            params = OpenOrderParams(market=market_id, asset_id=asset_id)
-            resp = client.get_orders(params)
-            return [PolymarketOrder.from_dict(d) for d in resp]
-        except Exception as e:
-            logger.error(f"[POLYMARKET] Failed to get orders: {e}")
-            return []
+        params = OpenOrderParams(market=market_id, asset_id=asset_id)
+        resp = client.get_orders(params)
+        return [PolymarketOrder.from_dict(d) for d in resp]
 
     def get_trades(
         self,
         market_id: str | None = None,
         asset_id: str | None = None,
-        limit: int = 100,
-    ) -> list[dict[str, Any]]:
+    ) -> list[PolymarketTrade]:
         """Get trade history."""
         client = self._get_authenticated_client()
-
-        try:
-            params = TradeParams(market=market_id, asset_id=asset_id)
-            return client.get_trades(params)  # type: ignore[no-any-return]
-        except Exception as e:
-            logger.error(f"[POLYMARKET] Failed to get trades: {e}")
-            return []
+        params = TradeParams(market=market_id, asset_id=asset_id)
+        resp = client.get_trades(params)
+        return [PolymarketTrade.from_dict(d) for d in resp]
 
     async def get_positions(self) -> list[PolymarketPosition]:
         """Get current positions from the data API."""
         url = f"{DATA_API_HOST}/positions?user={self.funder}"
-        try:
-            resp = await self._http.get(url)
-            resp.raise_for_status()
-            data = resp.json()
-
-            positions: list[PolymarketPosition] = []
-            for pos_data in data:
-                try:
-                    positions.append(PolymarketPosition.from_dict(pos_data))
-                except Exception as e:
-                    logger.warning(f"[POLYMARKET] Failed to parse position: {e}")
-            return positions
-
-        except httpx.HTTPError as e:
-            logger.error(f"[POLYMARKET] Failed to fetch positions: {e}")
-            return []
+        resp = await self._http.get(url)
+        resp.raise_for_status()
+        data = resp.json()
+        return [PolymarketPosition.from_dict(pos_data) for pos_data in data]
 
     def get_balance(self) -> Balance:
         """Get USDC balance and allowance."""
         client = self._get_authenticated_client()
-
-        try:
-            params = BalanceAllowanceParams(
-                asset_type=cast(AssetType, AssetType.COLLATERAL)
-            )
-            resp = cast(dict[str, Any], client.get_balance_allowance(params))
-            return Balance.from_dict(resp)
-        except Exception as e:
-            logger.error(f"[POLYMARKET] Failed to get balance: {e}")
-            return Balance(balance=ZERO, allowance=ZERO)
+        params = BalanceAllowanceParams(
+            asset_type=cast(AssetType, AssetType.COLLATERAL)
+        )
+        resp = cast(dict[str, Any], client.get_balance_allowance(params))
+        return Balance.from_dict(resp)
 
     def get_orderbook(self, token_id: str) -> OrderBookSummary:
         """Get orderbook for a token."""

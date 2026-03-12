@@ -52,6 +52,11 @@ class OrderSide(StrEnum):
     SELL = "SELL"
 
 
+class TraderSide(StrEnum):
+    TAKER = "TAKER"
+    MAKER = "MAKER"
+
+
 class Coin(StrEnum):
     BTC = "btc"
     ETH = "eth"
@@ -62,6 +67,15 @@ class Coin(StrEnum):
 class Timeframe(StrEnum):
     M5 = "5m"
     M15 = "15m"
+
+
+class OrderStatus(StrEnum):
+    LIVE = "LIVE"
+    MATCHED = "MATCHED"
+    CANCELED = "CANCELED"
+    CANCELED_MARKET_RESOLVED = "CANCELED_MARKET_RESOLVED"
+    INVALID = "INVALID"
+    DELAYED = "DELAYED"
 
 
 class PolymarketOrderType(StrEnum):
@@ -345,16 +359,20 @@ class MarketResolved:
 class MakerOrder:
     """Maker order in a trade"""
 
+    order_id: str
+    owner: str
     asset_id: str
     matched_amount: Decimal
-    order_id: str
-    outcome: Outcome
-    owner: str
     price: Decimal
+    outcome: str
+    maker_address: str = ""
+    fee_rate_bps: int = 0
+    side: OrderSide = OrderSide.BUY
 
     def __post_init__(self) -> None:
         self.matched_amount = _decimal(self.matched_amount)
         self.price = _decimal(self.price)
+        self.fee_rate_bps = _int(self.fee_rate_bps)
 
 
 @dataclass
@@ -488,46 +506,82 @@ class UpDownMarket:
 class PolymarketPosition:
     """User position in a market"""
 
+    proxy_wallet: str
     asset_id: str
     condition_id: str
-    outcome: Outcome
+    outcome: str
     size: Decimal
     avg_price: Decimal
     cur_price: Decimal
     initial_value: Decimal
     current_value: Decimal
-    pnl: Decimal
+    cash_pnl: Decimal
+    percent_pnl: Decimal
+    total_bought: Decimal
     realized_pnl: Decimal
+    percent_realized_pnl: Decimal
+    redeemable: bool
+    mergeable: bool
+    title: str
+    slug: str
+    icon: str
+    event_slug: str
+    outcome_index: int
+    opposite_outcome: str
+    opposite_asset: str
+    end_date: str
+    negative_risk: bool
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "PolymarketPosition":
         return cls(
+            proxy_wallet=data.get("proxyWallet", ""),
             asset_id=data.get("asset", ""),
             condition_id=data.get("conditionId", ""),
-            outcome=Outcome(data.get("outcome", "YES")),
+            outcome=data.get("outcome", ""),
             size=Decimal(str(data.get("size", 0))),
             avg_price=Decimal(str(data.get("avgPrice", 0))),
             cur_price=Decimal(str(data.get("curPrice", 0))),
             initial_value=Decimal(str(data.get("initialValue", 0))),
             current_value=Decimal(str(data.get("currentValue", 0))),
-            pnl=Decimal(str(data.get("pnl", 0))),
+            cash_pnl=Decimal(str(data.get("cashPnl", 0))),
+            percent_pnl=Decimal(str(data.get("percentPnl", 0))),
+            total_bought=Decimal(str(data.get("totalBought", 0))),
             realized_pnl=Decimal(str(data.get("realizedPnl", 0))),
+            percent_realized_pnl=Decimal(str(data.get("percentRealizedPnl", 0))),
+            redeemable=data.get("redeemable", False),
+            mergeable=data.get("mergeable", False),
+            title=data.get("title", ""),
+            slug=data.get("slug", ""),
+            icon=data.get("icon", ""),
+            event_slug=data.get("eventSlug", ""),
+            outcome_index=data.get("outcomeIndex", 0),
+            opposite_outcome=data.get("oppositeOutcome", ""),
+            opposite_asset=data.get("oppositeAsset", ""),
+            end_date=data.get("endDate", ""),
+            negative_risk=data.get("negativeRisk", False),
         )
 
 
 @dataclass
 class PolymarketOrder:
-    """Order info from CLOB"""
+    """Order info from CLOB API"""
 
     id: str
     asset_id: str
     market: str
     side: OrderSide
+    outcome: str
     price: Decimal
     original_size: Decimal
     size_matched: Decimal
-    status: str
+    status: OrderStatus
+    owner: str
+    maker_address: str
+    order_type: PolymarketOrderType
     created_at: int | None = None
+    expiration: int | None = None
+    associate_trades: list[str] | None = None
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "PolymarketOrder":
@@ -536,16 +590,84 @@ class PolymarketOrder:
             asset_id=data.get("asset_id", ""),
             market=data.get("market", ""),
             side=OrderSide(data.get("side", "BUY")),
+            outcome=data.get("outcome", ""),
             price=Decimal(str(data.get("price", 0))),
             original_size=Decimal(str(data.get("original_size", 0))),
             size_matched=Decimal(str(data.get("size_matched", 0))),
-            status=data.get("status", ""),
-            created_at=data.get("created_at"),
+            status=OrderStatus(data.get("status", "LIVE")),
+            owner=data.get("owner", ""),
+            maker_address=data.get("maker_address", ""),
+            order_type=PolymarketOrderType(data.get("order_type", "GTC")),
+            created_at=_int_or_none(data.get("created_at")),
+            expiration=_int_or_none(data.get("expiration")),
+            associate_trades=data.get("associate_trades"),
         )
 
     @property
     def size_remaining(self) -> Decimal:
         return self.original_size - self.size_matched
+
+
+@dataclass
+class PolymarketTrade:
+    """Trade info from CLOB API"""
+
+    id: str
+    taker_order_id: str
+    market: str
+    asset_id: str
+    side: OrderSide
+    size: Decimal
+    fee_rate_bps: int
+    price: Decimal
+    status: TradeStatus
+    match_time: int
+    last_update: int
+    outcome: str
+    bucket_index: int
+    owner: str
+    maker_address: str
+    transaction_hash: str
+    trader_side: TraderSide
+    maker_orders: list[MakerOrder] = field(default_factory=list)
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "PolymarketTrade":
+        maker_orders_raw = data.get("maker_orders", [])
+        maker_orders = [
+            MakerOrder(
+                order_id=mo.get("order_id", ""),
+                owner=mo.get("owner", ""),
+                maker_address=mo.get("maker_address", ""),
+                matched_amount=Decimal(str(mo.get("matched_amount", 0))),
+                price=Decimal(str(mo.get("price", 0))),
+                fee_rate_bps=int(mo.get("fee_rate_bps", 0)),
+                asset_id=mo.get("asset_id", ""),
+                outcome=mo.get("outcome", ""),
+                side=OrderSide(mo.get("side", "BUY")),
+            )
+            for mo in maker_orders_raw
+        ]
+        return cls(
+            id=data.get("id", ""),
+            taker_order_id=data.get("taker_order_id", ""),
+            market=data.get("market", ""),
+            asset_id=data.get("asset_id", ""),
+            side=OrderSide(data.get("side", "BUY")),
+            size=Decimal(str(data.get("size", 0))),
+            fee_rate_bps=int(data.get("fee_rate_bps", 0)),
+            price=Decimal(str(data.get("price", 0))),
+            status=TradeStatus(data.get("status", "CONFIRMED")),
+            match_time=int(data.get("match_time", 0)),
+            last_update=int(data.get("last_update", 0)),
+            outcome=data.get("outcome", ""),
+            bucket_index=data.get("bucket_index", 0),
+            owner=data.get("owner", ""),
+            maker_address=data.get("maker_address", ""),
+            transaction_hash=data.get("transaction_hash", ""),
+            trader_side=TraderSide(data.get("trader_side", "TAKER")),
+            maker_orders=maker_orders,
+        )
 
 
 @dataclass

@@ -17,7 +17,7 @@ interactions:
   response:
     body:
       string: '[{"id":"1558517","question":"Bitcoin Up or Down - March 12, 7:40AM-7:45AM
-        ET","conditionId":"0xccf5ee7ec82ca301b7f89625b833bc54ddbd0606dd7737bb7517c50e399f2224","slug":"btc-updown-5m-1773315600","resolutionSource":"https://data.chain.link/streams/btc-usd","endDate":"2026-03-12T11:45:00Z","liquidity":"39992.1436","startDate":"2026-03-11T11:48:15.257655Z","image":"https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png","icon":"https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png","description":"This
+        ET","conditionId":"0xccf5ee7ec82ca301b7f89625b833bc54ddbd0606dd7737bb7517c50e399f2224","slug":"btc-updown-5m-1773315600","resolutionSource":"https://data.chain.link/streams/btc-usd","endDate":"2026-03-12T11:45:00Z","startDate":"2026-03-11T11:48:15.257655Z","image":"https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png","icon":"https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png","description":"This
         market will resolve to \"Up\" if the Bitcoin price at the end of the time
         range specified in the title is greater than or equal to the price at the
         beginning of that range. Otherwise, it will resolve to \"Down\".\nThe resolution
@@ -25,8 +25,9 @@ interactions:
         data stream available at https://data.chain.link/streams/btc-usd.\nPlease
         note that this market is about the price according to Chainlink data stream
         BTC/USD, not according to other sources or spot markets.","outcomes":"[\"Up\",
-        \"Down\"]","outcomePrices":"[\"0.495\", \"0.505\"]","volume":"1617.5833399999997","active":true,"closed":false,"marketMakerAddress":"","createdAt":"2026-03-11T11:47:03.613705Z","updatedAt":"2026-03-12T11:36:41.705974Z","new":false,"featured":false,"archived":false,"restricted":true,"groupItemThreshold":"0","questionID":"0xf29b47ee40f32ddca5893bd1fd1836dbf7a4c6760d8a3fedc252dbe30393033c","enableOrderBook":true,"orderPriceMinTickSize":0.01,"orderMinSize":5,"volumeNum":1617.5833399999997,"liquidityNum":39992.1436,"endDateIso":"2026-03-12","startDateIso":"2026-03-11","hasReviewedDates":true,"volume24hr":1617.58334,"volume1wk":1617.58334,"volume1mo":1617.58334,"volume1yr":1617.58334,"clobTokenIds":"[\"68342102748657336172110088031728506800828868371959751019344881225382794291846\",
-        \"94243964714285438546095904137893657041482625155347052078456506346471111606718\"]","volume24hrClob":1617.58334,"volume1wkClob":1617.58334,"volume1moClob":1617.58334,"volume1yrClob":1617.58334,"volumeClob":1617.5833399999997,"liquidityClob":39992.1436,"makerBaseFee":1000,"takerBaseFee":1000,"acceptingOrders":true,"negRisk":false,"events":[{"id":"260874","ticker":"btc-updown-5m-1773315600","slug":"btc-updown-5m-1773315600","title":"Bitcoin
+        \"Down\"]","outcomePrices":"[\"1\", \"0\"]","volume":"147323.11622800038","active":true,"closed":true,"marketMakerAddress":"","createdAt":"2026-03-11T11:47:03.613705Z","updatedAt":"2026-03-12T14:13:15.569909Z","closedTime":"2026-03-12
+        11:45:37+00","new":false,"featured":false,"archived":false,"restricted":true,"groupItemThreshold":"0","questionID":"0xf29b47ee40f32ddca5893bd1fd1836dbf7a4c6760d8a3fedc252dbe30393033c","umaEndDate":"2026-03-12T11:45:37Z","enableOrderBook":true,"orderPriceMinTickSize":0.001,"orderMinSize":5,"umaResolutionStatus":"resolved","volumeNum":147323.11622800038,"endDateIso":"2026-03-12","startDateIso":"2026-03-11","hasReviewedDates":true,"volume24hr":147283.82352899984,"volume1wk":147323.11622799985,"volume1mo":147323.11622799985,"volume1yr":147323.11622799985,"clobTokenIds":"[\"68342102748657336172110088031728506800828868371959751019344881225382794291846\",
+        \"94243964714285438546095904137893657041482625155347052078456506346471111606718\"]","volume24hrClob":147283.82352899984,"volume1wkClob":147323.11622799985,"volume1moClob":147323.11622799985,"volume1yrClob":147323.11622799985,"volumeClob":147323.11622800038,"makerBaseFee":1000,"takerBaseFee":1000,"acceptingOrders":false,"negRisk":false,"events":[{"id":"260874","ticker":"btc-updown-5m-1773315600","slug":"btc-updown-5m-1773315600","title":"Bitcoin
         Up or Down - March 12, 7:40AM-7:45AM ET","description":"This market will resolve
         to \"Up\" if the Bitcoin price at the end of the time range specified in the
         title is greater than or equal to the price at the beginning of that range.
@@ -34,15 +35,13 @@ interactions:
         is information from Chainlink, specifically the BTC/USD data stream available
         at https://data.chain.link/streams/btc-usd.\nPlease note that this market
         is about the price according to Chainlink data stream BTC/USD, not according
-        to other sources or spot markets.","resolutionSource":"https://data.chain.link/streams/btc-usd","startDate":"2026-03-11T11:49:43.982145Z","creationDate":"2026-03-11T11:49:43.982141Z","endDate":"2026-03-12T11:45:00Z","image":"https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png","icon":"https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png","active":true,"closed":false,"archived":false,"new":false,"featured":false,"restricted":true,"liquidity":39992.1436,"volume":1617.5833399999997,"openInterest":0,"createdAt":"2026-03-11T11:47:03.51361Z","updatedAt":"2026-03-12T11:37:34.237139Z","competitive":0.9999750006249843,"volume24hr":1617.58334,"volume1wk":1617.58334,"volume1mo":1617.58334,"volume1yr":1617.58334,"enableOrderBook":true,"liquidityClob":39992.1436,"negRisk":false,"commentCount":0,"series":[{"id":"10684","ticker":"btc-up-or-down-5m","slug":"btc-up-or-down-5m","title":"BTC
-        Up or Down 5m","seriesType":"single","recurrence":"5m","image":"","icon":"","active":true,"closed":false,"archived":false,"featured":false,"restricted":true,"createdAt":"2025-11-21T21:46:22.201627Z","updatedAt":"2026-03-12T11:37:41.641927Z","volume24hr":42387024.398261964,"volume":26766.97766400004,"liquidity":6155354.3875,"commentCount":28049,"requiresTranslation":false}],"cyom":false,"showAllOutcomes":true,"showMarketImages":true,"enableNegRisk":false,"automaticallyActive":true,"startTime":"2026-03-12T11:40:00Z","seriesSlug":"btc-up-or-down-5m","negRiskAugmented":false,"pendingDeployment":false,"deploying":false,"requiresTranslation":false}],"ready":false,"funded":false,"acceptingOrdersTimestamp":"2026-03-11T11:47:09Z","cyom":false,"competitive":0.9999750006249843,"pagerDutyNotificationEnabled":false,"approved":true,"rewardsMinSize":50,"rewardsMaxSpread":4.5,"spread":0.009,"lastTradePrice":0.49,"bestBid":0.49,"bestAsk":0.5,"automaticallyActive":true,"clearBookOnStart":false,"showGmpSeries":false,"showGmpOutcome":false,"manualActivation":false,"negRiskOther":false,"umaResolutionStatuses":"[]","pendingDeployment":false,"deploying":false,"rfqEnabled":false,"eventStartTime":"2026-03-12T11:40:00Z","holdingRewardsEnabled":false,"feesEnabled":true,"requiresTranslation":false,"makerRebatesFeeShareBps":10000,"feeType":"crypto_fees"}]
+        to other sources or spot markets.","resolutionSource":"https://data.chain.link/streams/btc-usd","startDate":"2026-03-11T11:49:43.982145Z","creationDate":"2026-03-11T11:49:43.982141Z","endDate":"2026-03-12T11:45:00Z","image":"https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png","icon":"https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png","active":true,"closed":true,"archived":false,"new":false,"featured":false,"restricted":true,"volume":147323.11622800038,"openInterest":0,"createdAt":"2026-03-11T11:47:03.51361Z","updatedAt":"2026-03-12T14:13:27.04492Z","volume24hr":147283.82352899984,"volume1wk":147323.11622799985,"volume1mo":147323.11622799985,"volume1yr":147323.11622799985,"enableOrderBook":true,"negRisk":false,"commentCount":0,"series":[{"id":"10684","ticker":"btc-up-or-down-5m","slug":"btc-up-or-down-5m","title":"BTC
+        Up or Down 5m","seriesType":"single","recurrence":"5m","image":"","icon":"","active":true,"closed":false,"archived":false,"featured":false,"restricted":true,"createdAt":"2025-11-21T21:46:22.201627Z","updatedAt":"2026-03-12T14:13:31.566261Z","volume24hr":41885397.42928997,"volume":47987.84951499999,"liquidity":6174246.4409,"commentCount":28203,"requiresTranslation":false}],"cyom":false,"closedTime":"2026-03-12T11:45:37Z","showAllOutcomes":true,"showMarketImages":true,"automaticallyResolved":true,"enableNegRisk":false,"automaticallyActive":true,"startTime":"2026-03-12T11:40:00Z","seriesSlug":"btc-up-or-down-5m","negRiskAugmented":false,"pendingDeployment":false,"deploying":false,"requiresTranslation":false,"eventMetadata":{"priceToBeat":70650.17506258783}}],"ready":false,"funded":false,"acceptingOrdersTimestamp":"2026-03-11T11:47:09Z","cyom":false,"pagerDutyNotificationEnabled":false,"approved":true,"rewardsMinSize":50,"rewardsMaxSpread":4.5,"spread":0.009,"automaticallyResolved":true,"lastTradePrice":0.99,"bestBid":0.99,"bestAsk":1,"automaticallyActive":true,"clearBookOnStart":false,"showGmpSeries":false,"showGmpOutcome":false,"manualActivation":false,"negRiskOther":false,"umaResolutionStatuses":"[]","pendingDeployment":false,"deploying":false,"rfqEnabled":false,"eventStartTime":"2026-03-12T11:40:00Z","holdingRewardsEnabled":false,"feesEnabled":true,"requiresTranslation":false,"makerRebatesFeeShareBps":10000,"feeType":"crypto_fees"}]
 
         '
     headers:
-      Age:
-      - '171'
       CF-RAY:
-      - 9db2872de94e4a1f-DXB
+      - 9db36a11cedf6122-DXB
       Cache-Control:
       - public, max-age=180
       Connection:
@@ -50,7 +49,7 @@ interactions:
       Content-Type:
       - application/json
       Date:
-      - Thu, 12 Mar 2026 11:41:08 GMT
+      - Thu, 12 Mar 2026 14:16:01 GMT
       Server:
       - cloudflare
       Strict-Transport-Security:
@@ -64,11 +63,11 @@ interactions:
       cf-cache-status:
       - HIT
       content-length:
-      - '5114'
+      - '5255'
       expires:
-      - Thu, 12 Mar 2026 11:44:08 GMT
+      - Thu, 12 Mar 2026 14:19:01 GMT
       last-modified:
-      - Thu, 12 Mar 2026 11:38:16 GMT
+      - Thu, 12 Mar 2026 14:14:49 GMT
       set-cookie:
       - FILTERED_set-cookie
     status:

@@ -26,7 +26,7 @@ interactions:
     uri: https://clob.polymarket.com/auth/derive-api-key
   response:
     body:
-      string: '{"apiKey": "FILTERED_apiKey", "secret": "FILTERED_secret", "passphrase":
+      string: '{"apiKey": "FILTERED_apiKey", "secret": "RklMVEVSRURfc2VjcmV0", "passphrase":
         "FILTERED_passphrase"}'
     headers:
       alt-svc:
@@ -34,13 +34,13 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       cf-ray:
-      - 9db2543a9e9fb47f-DXB
+      - 9db36a0e18d24a1f-DXB
       content-length:
       - '186'
       content-type:
       - application/json
       date:
-      - Thu, 12 Mar 2026 11:06:21 GMT
+      - Thu, 12 Mar 2026 14:16:01 GMT
       server:
       - cloudflare
       set-cookie:
@@ -92,13 +92,13 @@ interactions:
       cf-cache-status:
       - DYNAMIC
       cf-ray:
-      - 9db2543b8fcfb47f-DXB
+      - 9db36a0f0c5a4a1f-DXB
       content-length:
       - '417'
       content-type:
       - application/json
       date:
-      - Thu, 12 Mar 2026 11:06:21 GMT
+      - Thu, 12 Mar 2026 14:16:01 GMT
       server:
       - cloudflare
       strict-transport-security:

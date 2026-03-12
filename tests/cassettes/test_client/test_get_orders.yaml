@@ -1,0 +1,112 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Host:
+      - clob.polymarket.com
+      POLY_ADDRESS:
+      - FILTERED_POLY_ADDRESS
+      POLY_NONCE:
+      - FILTERED_POLY_NONCE
+      POLY_SIGNATURE:
+      - FILTERED_POLY_SIGNATURE
+      POLY_TIMESTAMP:
+      - FILTERED_POLY_TIMESTAMP
+      User-Agent:
+      - py_clob_client
+    method: GET
+    uri: https://clob.polymarket.com/auth/derive-api-key
+  response:
+    body:
+      string: '{"apiKey": "FILTERED_apiKey", "secret": "RklMVEVSRURfc2VjcmV0", "passphrase":
+        "FILTERED_passphrase"}'
+    headers:
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - 9db395964e25b80b-ARN
+      content-length:
+      - '186'
+      content-type:
+      - application/json
+      date:
+      - Thu, 12 Mar 2026 14:45:44 GMT
+      server:
+      - cloudflare
+      set-cookie:
+      - FILTERED_set-cookie
+      strict-transport-security:
+      - max-age=7776000; includeSubDomains
+      vary:
+      - Origin
+    status:
+      code: 200
+      message: null
+- request:
+    body: ''
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - FILTERED_Cookie
+      Host:
+      - clob.polymarket.com
+      POLY_ADDRESS:
+      - FILTERED_POLY_ADDRESS
+      POLY_API_KEY:
+      - FILTERED_POLY_API_KEY
+      POLY_PASSPHRASE:
+      - FILTERED_POLY_PASSPHRASE
+      POLY_SIGNATURE:
+      - FILTERED_POLY_SIGNATURE
+      POLY_TIMESTAMP:
+      - FILTERED_POLY_TIMESTAMP
+      User-Agent:
+      - py_clob_client
+    method: GET
+    uri: https://clob.polymarket.com/data/orders?next_cursor=MA==
+  response:
+    body:
+      string: '{"data":[{"id":"0x8a430b3726cb0bf655d00e589316817844597802f084984431f58d81746efad2","status":"LIVE","owner":"93d9821a-275c-dc78-a0cc-c4160c6f9952","maker_address":"0xF15b9994af295608D9fdEa5b4dceacee86296CD6","market":"0xa7df10fcb3ef9b685b1a0eabfb4312f9b2cbcae43110c9a4362f5758c4b298dd","asset_id":"73546908051663667794712574756022641757026876553184607928934112098057607193943","side":"BUY","original_size":"5","size_matched":"0","price":"0.4","outcome":"Up","expiration":"0","order_type":"GTC","associate_trades":[],"created_at":1773326738},{"id":"0x43b0224bcea2ce3ab11f8a2bea69fad73991518641273f69e1b941f5637ca372","status":"LIVE","owner":"93d9821a-275c-dc78-a0cc-c4160c6f9952","maker_address":"0xF15b9994af295608D9fdEa5b4dceacee86296CD6","market":"0x6925776e65efb49c06d0d705fb0b2af389d9ba406ab363e9d42162b72da8c2ae","asset_id":"6565818332860226322260190526243732962170366213629421839828588262682335740344","side":"BUY","original_size":"5","size_matched":"0","price":"0.25","outcome":"Up","expiration":"0","order_type":"GTC","associate_trades":[],"created_at":1773326531}],"next_cursor":"LTE=","limit":500,"count":2}
+
+        '
+    headers:
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - 9db3959799a6b80b-ARN
+      content-length:
+      - '1118'
+      content-type:
+      - application/json
+      date:
+      - Thu, 12 Mar 2026 14:45:44 GMT
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=7776000; includeSubDomains
+      vary:
+      - Accept-Encoding
+      - Origin
+    status:
+      code: 200
+      message: null
+version: 1

@@ -21,8 +21,12 @@ _SENSITIVE_HEADERS = {
     "set-cookie",
 }
 
-# Keys to scrub from JSON response bodies
-_SENSITIVE_BODY_KEYS = {"apiKey", "secret", "passphrase"}
+# Keys to scrub from JSON response bodies (value must be valid for the field's format)
+_SENSITIVE_BODY_REPLACEMENTS = {
+    "apiKey": "FILTERED_apiKey",
+    "secret": "RklMVEVSRURfc2VjcmV0",  # base64("FILTERED_secret") — must be valid base64
+    "passphrase": "FILTERED_passphrase",
+}
 
 
 def _scrub_headers(headers: dict[str, Any]) -> dict[str, Any]:
@@ -46,10 +50,10 @@ def _scrub_response(response: dict[str, Any]) -> dict[str, Any]:
 
     try:
         data = json.loads(raw)
-        if any(k in data for k in _SENSITIVE_BODY_KEYS):
-            for key in _SENSITIVE_BODY_KEYS:
+        if any(k in data for k in _SENSITIVE_BODY_REPLACEMENTS):
+            for key, replacement in _SENSITIVE_BODY_REPLACEMENTS.items():
                 if key in data:
-                    data[key] = f"FILTERED_{key}"
+                    data[key] = replacement
             scrubbed = json.dumps(data)
             # Preserve original type (bytes or str)
             response["body"]["string"] = (
