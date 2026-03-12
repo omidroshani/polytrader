@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from decimal import Decimal
 from enum import StrEnum
 from typing import Any, cast
 
@@ -70,20 +71,26 @@ ORDER_TYPE_MAP: dict[PolymarketOrderType, ClobOrderType] = {
     PolymarketOrderType.FAK: cast(ClobOrderType, ClobOrderType.FAK),
 }
 
+ZERO = Decimal("0")
+
 
 # ============================================================================
 # Helpers
 # ============================================================================
 
 
-def _float(v: Any) -> float:
-    return float(v) if isinstance(v, str) else v
+def _decimal(v: Any) -> Decimal:
+    if isinstance(v, Decimal):
+        return v
+    return Decimal(str(v))
 
 
-def _float_or_none(v: Any) -> float | None:
+def _decimal_or_none(v: Any) -> Decimal | None:
     if v is None:
         return None
-    return float(v) if isinstance(v, str) else v
+    if isinstance(v, Decimal):
+        return v
+    return Decimal(str(v))
 
 
 def _int(v: Any) -> int:
@@ -105,12 +112,12 @@ def _int_or_none(v: Any) -> int | None:
 class OrderBookLevel:
     """Single orderbook level"""
 
-    price: float
-    size: float
+    price: Decimal
+    size: Decimal
 
     def __post_init__(self) -> None:
-        self.price = _float(self.price)
-        self.size = _float(self.size)
+        self.price = _decimal(self.price)
+        self.size = _decimal(self.size)
 
 
 @dataclass
@@ -137,21 +144,21 @@ class Book:
         ]
 
     @property
-    def best_bid(self) -> float | None:
+    def best_bid(self) -> Decimal | None:
         return self.bids[0].price if self.bids else None
 
     @property
-    def best_ask(self) -> float | None:
+    def best_ask(self) -> Decimal | None:
         return self.asks[0].price if self.asks else None
 
     @property
-    def spread(self) -> float | None:
+    def spread(self) -> Decimal | None:
         if self.best_bid and self.best_ask:
             return self.best_ask - self.best_bid
         return None
 
     @property
-    def mid_price(self) -> float | None:
+    def mid_price(self) -> Decimal | None:
         if self.best_bid and self.best_ask:
             return (self.best_bid + self.best_ask) / 2
         return None
@@ -162,18 +169,18 @@ class PriceChangeItem:
     """Single price change item"""
 
     asset_id: str
-    price: float
-    size: float
+    price: Decimal
+    size: Decimal
     side: OrderSide
     hash: str
-    best_bid: float | None = None
-    best_ask: float | None = None
+    best_bid: Decimal | None = None
+    best_ask: Decimal | None = None
 
     def __post_init__(self) -> None:
-        self.price = _float(self.price)
-        self.size = _float(self.size)
-        self.best_bid = _float_or_none(self.best_bid)
-        self.best_ask = _float_or_none(self.best_ask)
+        self.price = _decimal(self.price)
+        self.size = _decimal(self.size)
+        self.best_bid = _decimal_or_none(self.best_bid)
+        self.best_ask = _decimal_or_none(self.best_ask)
 
 
 @dataclass
@@ -200,13 +207,13 @@ class TickSizeChange:
     event_type: str
     asset_id: str
     market: str
-    old_tick_size: float
-    new_tick_size: float
+    old_tick_size: Decimal
+    new_tick_size: Decimal
     timestamp: int
 
     def __post_init__(self) -> None:
-        self.old_tick_size = _float(self.old_tick_size)
-        self.new_tick_size = _float(self.new_tick_size)
+        self.old_tick_size = _decimal(self.old_tick_size)
+        self.new_tick_size = _decimal(self.new_tick_size)
         self.timestamp = _int(self.timestamp)
 
 
@@ -217,20 +224,20 @@ class LastTradePrice:
     event_type: str
     asset_id: str
     market: str
-    price: float
-    size: float
+    price: Decimal
+    size: Decimal
     side: OrderSide
     fee_rate_bps: int
     timestamp: int
 
     def __post_init__(self) -> None:
-        self.price = _float(self.price)
-        self.size = _float(self.size)
+        self.price = _decimal(self.price)
+        self.size = _decimal(self.size)
         self.fee_rate_bps = _int(self.fee_rate_bps)
         self.timestamp = _int(self.timestamp)
 
     @property
-    def quote_value(self) -> float:
+    def quote_value(self) -> Decimal:
         return self.price * self.size
 
     @property
@@ -245,19 +252,19 @@ class BestBidAsk:
     event_type: str
     market: str
     asset_id: str
-    best_bid: float
-    best_ask: float
-    spread: float
+    best_bid: Decimal
+    best_ask: Decimal
+    spread: Decimal
     timestamp: int
 
     def __post_init__(self) -> None:
-        self.best_bid = _float(self.best_bid)
-        self.best_ask = _float(self.best_ask)
-        self.spread = _float(self.spread)
+        self.best_bid = _decimal(self.best_bid)
+        self.best_ask = _decimal(self.best_ask)
+        self.spread = _decimal(self.spread)
         self.timestamp = _int(self.timestamp)
 
     @property
-    def mid_price(self) -> float:
+    def mid_price(self) -> Decimal:
         return (self.best_bid + self.best_ask) / 2
 
 
@@ -326,15 +333,15 @@ class MakerOrder:
     """Maker order in a trade"""
 
     asset_id: str
-    matched_amount: float
+    matched_amount: Decimal
     order_id: str
     outcome: Outcome
     owner: str
-    price: float
+    price: Decimal
 
     def __post_init__(self) -> None:
-        self.matched_amount = _float(self.matched_amount)
-        self.price = _float(self.price)
+        self.matched_amount = _decimal(self.matched_amount)
+        self.price = _decimal(self.price)
 
 
 @dataclass
@@ -345,8 +352,8 @@ class UserTrade:
     id: str
     asset_id: str
     market: str
-    price: float
-    size: float
+    price: Decimal
+    size: Decimal
     side: OrderSide
     outcome: Outcome
     status: TradeStatus
@@ -360,8 +367,8 @@ class UserTrade:
     last_update: int | None = None
 
     def __post_init__(self) -> None:
-        self.price = _float(self.price)
-        self.size = _float(self.size)
+        self.price = _decimal(self.price)
+        self.size = _decimal(self.size)
         self.timestamp = _int(self.timestamp)
         self.matchtime = _int_or_none(self.matchtime)
         self.last_update = _int_or_none(self.last_update)
@@ -371,7 +378,7 @@ class UserTrade:
         ]
 
     @property
-    def quote_value(self) -> float:
+    def quote_value(self) -> Decimal:
         return self.price * self.size
 
     @property
@@ -387,11 +394,11 @@ class UserOrder:
     id: str
     asset_id: str
     market: str
-    price: float
+    price: Decimal
     side: OrderSide
     outcome: Outcome
-    original_size: float
-    size_matched: float
+    original_size: Decimal
+    size_matched: Decimal
     owner: str
     order_owner: str
     timestamp: int
@@ -399,18 +406,18 @@ class UserOrder:
     associate_trades: list[str] | None = None
 
     def __post_init__(self) -> None:
-        self.price = _float(self.price)
-        self.original_size = _float(self.original_size)
-        self.size_matched = _float(self.size_matched)
+        self.price = _decimal(self.price)
+        self.original_size = _decimal(self.original_size)
+        self.size_matched = _decimal(self.size_matched)
         self.timestamp = _int(self.timestamp)
 
     @property
-    def size_remaining(self) -> float:
+    def size_remaining(self) -> Decimal:
         return self.original_size - self.size_matched
 
     @property
-    def fill_ratio(self) -> float:
-        return self.size_matched / self.original_size if self.original_size > 0 else 0.0
+    def fill_ratio(self) -> Decimal:
+        return self.size_matched / self.original_size if self.original_size > 0 else ZERO
 
 
 # ============================================================================
@@ -424,7 +431,7 @@ class BtcMarketToken:
 
     token_id: str
     outcome: Outcome
-    price: float | None = None
+    price: Decimal | None = None
 
 
 @dataclass
@@ -457,13 +464,13 @@ class PolymarketPosition:
     asset_id: str
     condition_id: str
     outcome: Outcome
-    size: float
-    avg_price: float
-    cur_price: float
-    initial_value: float
-    current_value: float
-    pnl: float
-    realized_pnl: float
+    size: Decimal
+    avg_price: Decimal
+    cur_price: Decimal
+    initial_value: Decimal
+    current_value: Decimal
+    pnl: Decimal
+    realized_pnl: Decimal
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "PolymarketPosition":
@@ -471,13 +478,13 @@ class PolymarketPosition:
             asset_id=data.get("asset", ""),
             condition_id=data.get("conditionId", ""),
             outcome=Outcome(data.get("outcome", "YES")),
-            size=float(data.get("size", 0)),
-            avg_price=float(data.get("avgPrice", 0)),
-            cur_price=float(data.get("curPrice", 0)),
-            initial_value=float(data.get("initialValue", 0)),
-            current_value=float(data.get("currentValue", 0)),
-            pnl=float(data.get("pnl", 0)),
-            realized_pnl=float(data.get("realizedPnl", 0)),
+            size=Decimal(str(data.get("size", 0))),
+            avg_price=Decimal(str(data.get("avgPrice", 0))),
+            cur_price=Decimal(str(data.get("curPrice", 0))),
+            initial_value=Decimal(str(data.get("initialValue", 0))),
+            current_value=Decimal(str(data.get("currentValue", 0))),
+            pnl=Decimal(str(data.get("pnl", 0))),
+            realized_pnl=Decimal(str(data.get("realizedPnl", 0))),
         )
 
 
@@ -489,9 +496,9 @@ class PolymarketOrder:
     asset_id: str
     market: str
     side: OrderSide
-    price: float
-    original_size: float
-    size_matched: float
+    price: Decimal
+    original_size: Decimal
+    size_matched: Decimal
     status: str
     created_at: int | None = None
 
@@ -502,15 +509,15 @@ class PolymarketOrder:
             asset_id=data.get("asset_id", ""),
             market=data.get("market", ""),
             side=OrderSide(data.get("side", "BUY")),
-            price=float(data.get("price", 0)),
-            original_size=float(data.get("original_size", 0)),
-            size_matched=float(data.get("size_matched", 0)),
+            price=Decimal(str(data.get("price", 0))),
+            original_size=Decimal(str(data.get("original_size", 0))),
+            size_matched=Decimal(str(data.get("size_matched", 0))),
             status=data.get("status", ""),
             created_at=data.get("created_at"),
         )
 
     @property
-    def size_remaining(self) -> float:
+    def size_remaining(self) -> Decimal:
         return self.original_size - self.size_matched
 
 
@@ -528,14 +535,14 @@ class OrderResult:
 class Balance:
     """USDC balance and allowance"""
 
-    balance: float
-    allowance: float
+    balance: Decimal
+    allowance: Decimal
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Balance":
         return cls(
-            balance=float(data.get("balance", 0)),
-            allowance=float(data.get("allowance", 0)),
+            balance=Decimal(str(data.get("balance", 0))),
+            allowance=Decimal(str(data.get("allowance", 0))),
         )
 
 

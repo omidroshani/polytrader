@@ -1,6 +1,7 @@
 import json
 import logging
 from datetime import UTC, datetime
+from decimal import Decimal
 from typing import Any, cast
 
 import httpx
@@ -16,6 +17,7 @@ from py_clob_client.clob_types import (
 
 from polytrader.constants import CHAIN_ID, CLOB_HOST, DATA_API_HOST, GAMMA_API_HOST
 from polytrader.models import (
+    ZERO,
     Balance,
     BtcMarket,
     OrderResult,
@@ -193,8 +195,8 @@ class PolyTrader:
         self,
         token_id: str,
         side: OrderSide,
-        price: float,
-        size: float,
+        price: Decimal,
+        size: Decimal,
         order_type: PolymarketOrderType = PolymarketOrderType.GTC,
         post_only: bool = False,
     ) -> OrderResult:
@@ -220,14 +222,14 @@ class PolyTrader:
             actual_price = price
 
             if order_type == PolymarketOrderType.MARKET:
-                actual_price = 0.99 if side == OrderSide.BUY else 0.01
+                actual_price = Decimal("0.99") if side == OrderSide.BUY else Decimal("0.01")
                 actual_order_type = PolymarketOrderType.FOK
                 logger.debug(f"[POLYMARKET] MARKET order -> FOK at {actual_price}")
 
             order_args = OrderArgs(
                 token_id=token_id,
-                price=actual_price,
-                size=size,
+                price=float(actual_price),
+                size=float(size),
                 side=side.value,
             )
 
@@ -380,7 +382,7 @@ class PolyTrader:
             return Balance.from_dict(resp)
         except Exception as e:
             logger.error(f"[POLYMARKET] Failed to get balance: {e}")
-            return Balance(balance=0.0, allowance=0.0)
+            return Balance(balance=ZERO, allowance=ZERO)
 
     def get_orderbook(self, token_id: str) -> OrderBookSummary:
         """Get orderbook for a token."""
@@ -391,7 +393,7 @@ class PolyTrader:
     # Token Approvals
     # ========================================================================
 
-    def ensure_can_sell(self, token_id: str, size: float) -> bool:
+    def ensure_can_sell(self, token_id: str, size: Decimal) -> bool:
         """
         Check if a sell order is possible, auto-approving token if needed.
 
@@ -406,8 +408,8 @@ class PolyTrader:
                 token_id=token_id,
             )
             resp = cast(dict[str, Any], client.get_balance_allowance(params))
-            balance = float(resp.get("balance", 0))
-            allowance = float(resp.get("allowance", 0))
+            balance = Decimal(str(resp.get("balance", 0)))
+            allowance = Decimal(str(resp.get("allowance", 0)))
         except Exception as e:
             logger.error(f"[POLYMARKET] Sell check failed: {e}")
             return False
@@ -427,7 +429,9 @@ class PolyTrader:
 
         # Account for tokens locked in open sell orders
         open_orders = self.get_orders(asset_id=token_id)
-        locked = sum(o.size_remaining for o in open_orders if o.side == OrderSide.SELL)
+        locked = sum(
+            (o.size_remaining for o in open_orders if o.side == OrderSide.SELL), ZERO
+        )
         available = balance - locked
 
         if available < size:

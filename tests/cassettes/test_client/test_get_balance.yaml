@@ -1,0 +1,111 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Host:
+      - clob.polymarket.com
+      POLY_ADDRESS:
+      - FILTERED_POLY_ADDRESS
+      POLY_NONCE:
+      - FILTERED_POLY_NONCE
+      POLY_SIGNATURE:
+      - FILTERED_POLY_SIGNATURE
+      POLY_TIMESTAMP:
+      - FILTERED_POLY_TIMESTAMP
+      User-Agent:
+      - py_clob_client
+    method: GET
+    uri: https://clob.polymarket.com/auth/derive-api-key
+  response:
+    body:
+      string: '{"apiKey": "FILTERED_apiKey", "secret": "FILTERED_secret", "passphrase":
+        "FILTERED_passphrase"}'
+    headers:
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - 9db2543a9e9fb47f-DXB
+      content-length:
+      - '186'
+      content-type:
+      - application/json
+      date:
+      - Thu, 12 Mar 2026 11:06:21 GMT
+      server:
+      - cloudflare
+      set-cookie:
+      - FILTERED_set-cookie
+      strict-transport-security:
+      - max-age=7776000; includeSubDomains
+      vary:
+      - Origin
+    status:
+      code: 200
+      message: null
+- request:
+    body: ''
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - FILTERED_Cookie
+      Host:
+      - clob.polymarket.com
+      POLY_ADDRESS:
+      - FILTERED_POLY_ADDRESS
+      POLY_API_KEY:
+      - FILTERED_POLY_API_KEY
+      POLY_PASSPHRASE:
+      - FILTERED_POLY_PASSPHRASE
+      POLY_SIGNATURE:
+      - FILTERED_POLY_SIGNATURE
+      POLY_TIMESTAMP:
+      - FILTERED_POLY_TIMESTAMP
+      User-Agent:
+      - py_clob_client
+    method: GET
+    uri: https://clob.polymarket.com/balance-allowance?asset_type=COLLATERAL&signature_type=2
+  response:
+    body:
+      string: '{"balance":"102901034","allowances":{"0x4bFb41d5B3570DeFd03C39a9A4D8dE6Bd8B8982E":"115792089237316195423570985008687907853269984665640564039457584007901796445577","0xC5d563A36AE78145C45a50134d48A1215220f80a":"115792089237316195423570985008687907853269984665640564039457584007912557810002","0xd91E80cF2E7be2e162c6513ceD06f1dD0dA35296":"115792089237316195423570985008687907853269984665640564039457584007913129639935"}}
+
+        '
+    headers:
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - 9db2543b8fcfb47f-DXB
+      content-length:
+      - '417'
+      content-type:
+      - application/json
+      date:
+      - Thu, 12 Mar 2026 11:06:21 GMT
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=7776000; includeSubDomains
+      vary:
+      - Origin
+    status:
+      code: 200
+      message: null
+version: 1
