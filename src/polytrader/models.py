@@ -171,9 +171,13 @@ class Book:
     hash: str
     bids: list[OrderBookLevel]
     asks: list[OrderBookLevel]
+    tick_size: Decimal | None = None
+    last_trade_price: Decimal | None = None
 
     def __post_init__(self) -> None:
         self.timestamp = _int(self.timestamp)
+        self.tick_size = _decimal_or_none(self.tick_size)
+        self.last_trade_price = _decimal_or_none(self.last_trade_price)
         self.bids = [
             b if isinstance(b, OrderBookLevel) else OrderBookLevel(**b)
             for b in self.bids
@@ -269,10 +273,12 @@ class LastTradePrice:
     side: OrderSide
     fee_rate_bps: int
     timestamp: int
+    transaction_hash: str = ""
 
     def __post_init__(self) -> None:
         self.price = _decimal(self.price)
         self.size = _decimal(self.size)
+        self.side = OrderSide(self.side)
         self.fee_rate_bps = _int(self.fee_rate_bps)
         self.timestamp = _int(self.timestamp)
 

@@ -3,6 +3,7 @@
 To capture fresh data from the live WebSocket::
 
     uv run pytest tests/test_websocket.py::test_capture_user_ws -s --no-header
+    uv run pytest tests/test_websocket.py::test_capture_market_ws -s --no-header
 """
 
 import asyncio
@@ -15,18 +16,26 @@ from unittest.mock import AsyncMock
 import pytest
 
 from polytrader.models import (
+    BestBidAsk,
+    Book,
     Coin,
+    LastTradePrice,
     MakerOrder,
+    OrderBookLevel,
     OrderSide,
     PolymarketOrderType,
+    PriceChange,
+    PriceChangeItem,
     Timeframe,
     TradeStatus,
     UserOrder,
     UserTrade,
 )
-from polytrader.websocket import PolymarketUserWebSocket
+from polytrader.websocket import PolymarketMarketWebSocket, PolymarketUserWebSocket
 
-FIXTURE_FILE = Path(__file__).parent / "fixtures" / "user_ws_messages.jsonl"
+FIXTURE_DIR = Path(__file__).parent / "fixtures"
+USER_FIXTURE = FIXTURE_DIR / "user_ws_messages.jsonl"
+MARKET_FIXTURE = FIXTURE_DIR / "market_ws_messages.jsonl"
 
 
 @pytest.mark.skip(reason="Live capture -- run explicitly with -k test_capture_user_ws")
@@ -95,15 +104,50 @@ async def test_capture_user_ws(trader) -> None:
         await task
 
     assert messages, "No WS messages received"
-    FIXTURE_FILE.parent.mkdir(exist_ok=True)
-    with open(FIXTURE_FILE, "w") as f:
+    FIXTURE_DIR.mkdir(exist_ok=True)
+    with open(USER_FIXTURE, "w") as f:
+        for msg in messages:
+            f.write(json.dumps(msg) + "\n")
+
+
+@pytest.mark.skip(
+    reason="Live capture -- run explicitly with -k test_capture_market_ws"
+)
+async def test_capture_market_ws(trader) -> None:
+    """Connect to market WS, collect book/price/trade events for 15s."""
+    market = await trader.get_current_updown_market(Coin.BTC, Timeframe.M5)
+
+    ws = PolymarketMarketWebSocket()
+    messages: list[dict] = []
+    _orig = ws._handle_message
+
+    async def _capture(data: dict) -> None:
+        messages.append(data)
+        await _orig(data)
+
+    ws._handle_message = _capture  # type: ignore[method-assign]
+
+    await ws.connect()
+    await ws.subscribe([market.up_token_id], lambda _: None)
+    task = asyncio.create_task(ws.run())
+
+    await asyncio.sleep(15)
+
+    ws._running = False
+    task.cancel()
+    with contextlib.suppress(asyncio.CancelledError):
+        await task
+
+    assert messages, "No market WS messages received"
+    FIXTURE_DIR.mkdir(exist_ok=True)
+    with open(MARKET_FIXTURE, "w") as f:
         for msg in messages:
             f.write(json.dumps(msg) + "\n")
 
 
 async def test_user_ws_parsing() -> None:
     """Replay fixture data and validate parsing + dispatch."""
-    with open(FIXTURE_FILE) as f:
+    with open(USER_FIXTURE) as f:
         messages = [json.loads(line) for line in f if line.strip()]
 
     for msg in messages:
@@ -146,3 +190,76 @@ async def test_user_ws_parsing() -> None:
     for msg in messages:
         await ws._handle_message(msg)
     assert len(received) == len(messages)
+
+
+async def test_market_ws_parsing() -> None:
+    """Replay market fixture data and validate parsing + dispatch."""
+    with open(MARKET_FIXTURE) as f:
+        messages = [json.loads(line) for line in f if line.strip()]
+
+    event_types_seen: set[str] = set()
+    for msg in messages:
+        event_type = msg["event_type"]
+        event_types_seen.add(event_type)
+
+        if event_type == "book":
+            book = Book(**msg)
+            assert book.asset_id != ""
+            assert book.market != ""
+            assert book.timestamp > 0
+            assert isinstance(book.bids, list)
+            assert isinstance(book.asks, list)
+            for level in book.bids + book.asks:
+                assert isinstance(level, OrderBookLevel)
+                assert isinstance(level.price, Decimal)
+                assert isinstance(level.size, Decimal)
+            if book.bids and book.asks:
+                assert book.spread is not None
+                assert book.spread >= 0
+
+        elif event_type == "price_change":
+            pc = PriceChange(**msg)
+            assert pc.market != ""
+            assert pc.timestamp > 0
+            assert len(pc.price_changes) > 0
+            for item in pc.price_changes:
+                assert isinstance(item, PriceChangeItem)
+                assert isinstance(item.price, Decimal)
+                assert isinstance(item.size, Decimal)
+                assert item.side in (OrderSide.BUY, OrderSide.SELL)
+
+        elif event_type == "last_trade_price":
+            ltp = LastTradePrice(**msg)
+            assert ltp.asset_id != ""
+            assert isinstance(ltp.price, Decimal)
+            assert isinstance(ltp.size, Decimal)
+            assert ltp.price > 0
+            assert ltp.size > 0
+            assert ltp.side in (OrderSide.BUY, OrderSide.SELL)
+            assert ltp.quote_value == ltp.price * ltp.size
+
+        elif event_type == "best_bid_ask":
+            bba = BestBidAsk(**msg)
+            assert bba.asset_id != ""
+            assert isinstance(bba.best_bid, Decimal)
+            assert isinstance(bba.best_ask, Decimal)
+            assert isinstance(bba.spread, Decimal)
+            assert bba.best_ask >= bba.best_bid
+
+    # Expect at least book and price_change from a 15s capture
+    assert "book" in event_types_seen, f"No book events, got: {event_types_seen}"
+
+    # Verify WS handler dispatches events
+    ws = PolymarketMarketWebSocket()
+    received: list = []
+    # Register callback for all asset_ids and markets in fixture
+    keys = set()
+    for msg in messages:
+        for key_field in ("asset_id", "market"):
+            if key_field in msg:
+                keys.add(msg[key_field])
+    for key in keys:
+        ws._callbacks[key] = [received.append]
+    for msg in messages:
+        await ws._handle_message(msg)
+    assert len(received) > 0
