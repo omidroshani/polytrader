@@ -381,6 +381,7 @@ class MakerOrder:
     maker_address: str = ""
     fee_rate_bps: int = 0
     side: OrderSide = OrderSide.BUY
+    outcome_index: int | None = None
 
     def __post_init__(self) -> None:
         self.matched_amount = _decimal(self.matched_amount)
@@ -409,6 +410,12 @@ class UserTrade:
     maker_orders: list[MakerOrder] = field(default_factory=list)
     matchtime: int | None = None
     last_update: int | None = None
+    fee_rate_bps: str | None = None
+    maker_address: str | None = None
+    match_time: str | None = None
+    transaction_hash: str | None = None
+    trader_side: str | None = None
+    bucket_index: int | None = None
 
     def __post_init__(self) -> None:
         self.price = _decimal(self.price)
@@ -448,6 +455,11 @@ class UserOrder:
     timestamp: int
     type: OrderType  # PLACEMENT, UPDATE, CANCELLATION
     associate_trades: list[str] | None = None
+    created_at: str | None = None
+    expiration: str | None = None
+    status: str | None = None
+    order_type: str | None = None
+    maker_address: str | None = None
 
     def __post_init__(self) -> None:
         self.price = _decimal(self.price)
