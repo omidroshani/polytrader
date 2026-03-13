@@ -5,7 +5,7 @@ A Python trading client for [Polymarket](https://polymarket.com) — the world's
 ## Features
 
 - **Order management** — create limit (GTC/GTD) and market (FOK/FAK) orders, cancel single or all orders
-- **Real-time WebSocket** — market data (order book, price changes, trades, best bid/ask) and user events (order updates, trade confirmations)
+- **Real-time WebSocket** — market data (order book, price changes, trades, best bid/ask), user events (order updates, trade confirmations), and Binance streams (aggTrade, kline, depth)
 - **Typed models** — all API and WebSocket data parsed into Python dataclasses with proper types (Decimal prices, enum statuses)
 - **Position & balance tracking** — query positions, USDC balance, and conditional token balances
 - **On-chain operations** — approve tokens and collateral for trading, with optional builder/relayer support
@@ -58,6 +58,19 @@ await trader.market_ws.run()
 await trader.user_ws.connect()
 await trader.user_ws.subscribe([market.condition_id], callback)
 await trader.user_ws.run()
+```
+
+## Binance WebSocket
+
+```python
+from polytrader import BinanceAggTrade, BinanceKline
+
+# Subscribe to Binance streams
+await trader.binance_ws.connect()
+await trader.binance_ws.subscribe_agg_trade("BTCUSDT", on_trade)
+await trader.binance_ws.subscribe_kline("BTCUSDT", "1m", on_kline)
+await trader.binance_ws.subscribe_depth("BTCUSDT", on_depth)
+await trader.binance_ws.run()
 ```
 
 ## Requirements

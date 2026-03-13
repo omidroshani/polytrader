@@ -1,6 +1,6 @@
 [project]
 name = "polytrader"
-version = "0.1.2"
+version = "0.1.3"
 description = "Python trading client for Polymarket"
 readme = "README.md"
 requires-python = ">=3.11"
