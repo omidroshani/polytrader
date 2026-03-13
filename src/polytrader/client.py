@@ -51,6 +51,7 @@ from polytrader.rpc import (
 from polytrader.rpc import (
     approve_token as _approve_token,
 )
+from polytrader.binance import BinanceWebSocket
 from polytrader.websocket import PolymarketMarketWebSocket, PolymarketUserWebSocket
 
 logger = logging.getLogger(__name__)
@@ -80,6 +81,7 @@ class PolyTrader:
         self._auth: PolymarketAuth | None = None
         self._market_ws: PolymarketMarketWebSocket | None = None
         self._user_ws: PolymarketUserWebSocket | None = None
+        self._binance_ws: BinanceWebSocket | None = None
         self._http = httpx.AsyncClient(timeout=10.0)
 
     @property
@@ -538,6 +540,13 @@ class PolyTrader:
     # ========================================================================
     # WebSocket
     # ========================================================================
+
+    @property
+    def binance_ws(self) -> BinanceWebSocket:
+        """Lazy-initialized Binance WebSocket (public, subscribes by symbol stream)."""
+        if self._binance_ws is None:
+            self._binance_ws = BinanceWebSocket()
+        return self._binance_ws
 
     @property
     def market_ws(self) -> PolymarketMarketWebSocket:
