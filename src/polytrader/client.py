@@ -370,7 +370,7 @@ class PolyTrader:
         """Get a single order by ID."""
         client = self._get_authenticated_client()
         resp = client.get_order(order_id)
-        return PolymarketOrder.from_dict(resp)
+        return PolymarketOrder(**resp)
 
     def get_orders(
         self,
@@ -381,7 +381,7 @@ class PolyTrader:
         client = self._get_authenticated_client()
         params = OpenOrderParams(market=market_id, asset_id=asset_id)
         resp = client.get_orders(params)
-        return [PolymarketOrder.from_dict(d) for d in resp]
+        return [PolymarketOrder(**d) for d in resp]
 
     def get_trades(
         self,
@@ -392,7 +392,7 @@ class PolyTrader:
         client = self._get_authenticated_client()
         params = TradeParams(market=market_id, asset_id=asset_id)
         resp = client.get_trades(params)
-        return [PolymarketTrade.from_dict(d) for d in resp]
+        return [PolymarketTrade(**d) for d in resp]
 
     async def get_positions(self) -> list[PolymarketPosition]:
         """Get current positions from the data API."""

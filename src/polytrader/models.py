@@ -387,95 +387,7 @@ class MakerOrder:
         self.matched_amount = _decimal(self.matched_amount)
         self.price = _decimal(self.price)
         self.fee_rate_bps = _int(self.fee_rate_bps)
-
-
-@dataclass
-class UserTrade:
-    """User trade event"""
-
-    event_type: str
-    id: str
-    asset_id: str
-    market: str
-    price: Decimal
-    size: Decimal
-    side: OrderSide
-    outcome: Outcome
-    status: TradeStatus
-    owner: str
-    type: str  # "TRADE"
-    timestamp: int
-    trade_owner: str | None = None
-    taker_order_id: str | None = None
-    maker_orders: list[MakerOrder] = field(default_factory=list)
-    matchtime: int | None = None
-    last_update: int | None = None
-    fee_rate_bps: str | None = None
-    maker_address: str | None = None
-    match_time: str | None = None
-    transaction_hash: str | None = None
-    trader_side: str | None = None
-    bucket_index: int | None = None
-
-    def __post_init__(self) -> None:
-        self.price = _decimal(self.price)
-        self.size = _decimal(self.size)
-        self.timestamp = _int(self.timestamp)
-        self.matchtime = _int_or_none(self.matchtime)
-        self.last_update = _int_or_none(self.last_update)
-        self.maker_orders = [
-            mo if isinstance(mo, MakerOrder) else MakerOrder(**mo)
-            for mo in self.maker_orders
-        ]
-
-    @property
-    def quote_value(self) -> Decimal:
-        return self.price * self.size
-
-    @property
-    def is_terminal(self) -> bool:
-        return self.status in (TradeStatus.CONFIRMED, TradeStatus.FAILED)
-
-
-@dataclass
-class UserOrder:
-    """User order event"""
-
-    event_type: str
-    id: str
-    asset_id: str
-    market: str
-    price: Decimal
-    side: OrderSide
-    outcome: Outcome
-    original_size: Decimal
-    size_matched: Decimal
-    owner: str
-    order_owner: str
-    timestamp: int
-    type: OrderType  # PLACEMENT, UPDATE, CANCELLATION
-    associate_trades: list[str] | None = None
-    created_at: str | None = None
-    expiration: str | None = None
-    status: str | None = None
-    order_type: str | None = None
-    maker_address: str | None = None
-
-    def __post_init__(self) -> None:
-        self.price = _decimal(self.price)
-        self.original_size = _decimal(self.original_size)
-        self.size_matched = _decimal(self.size_matched)
-        self.timestamp = _int(self.timestamp)
-
-    @property
-    def size_remaining(self) -> Decimal:
-        return self.original_size - self.size_matched
-
-    @property
-    def fill_ratio(self) -> Decimal:
-        return (
-            self.size_matched / self.original_size if self.original_size > 0 else ZERO
-        )
+        self.side = OrderSide(self.side)
 
 
 # ============================================================================
@@ -590,7 +502,7 @@ class PolymarketPosition:
 
 @dataclass
 class PolymarketOrder:
-    """Order info from CLOB API"""
+    """Order info from CLOB API or WebSocket."""
 
     id: str
     asset_id: str
@@ -602,97 +514,96 @@ class PolymarketOrder:
     size_matched: Decimal
     status: OrderStatus
     owner: str
-    maker_address: str
-    order_type: PolymarketOrderType
+    maker_address: str = ""
+    order_type: PolymarketOrderType | str = ""
     created_at: int | None = None
     expiration: int | None = None
     associate_trades: list[str] | None = None
 
-    @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "PolymarketOrder":
-        return cls(
-            id=data.get("id", ""),
-            asset_id=data.get("asset_id", ""),
-            market=data.get("market", ""),
-            side=OrderSide(data.get("side", "BUY")),
-            outcome=data.get("outcome", ""),
-            price=Decimal(str(data.get("price", 0))),
-            original_size=Decimal(str(data.get("original_size", 0))),
-            size_matched=Decimal(str(data.get("size_matched", 0))),
-            status=OrderStatus(data.get("status", "LIVE")),
-            owner=data.get("owner", ""),
-            maker_address=data.get("maker_address", ""),
-            order_type=PolymarketOrderType(data.get("order_type", "GTC")),
-            created_at=_int_or_none(data.get("created_at")),
-            expiration=_int_or_none(data.get("expiration")),
-            associate_trades=data.get("associate_trades"),
-        )
+    def __post_init__(self) -> None:
+        self.price = _decimal(self.price)
+        self.original_size = _decimal(self.original_size)
+        self.size_matched = _decimal(self.size_matched)
+        self.status = OrderStatus(self.status)
+        if self.order_type:
+            self.order_type = PolymarketOrderType(self.order_type)
+        self.side = OrderSide(self.side)
+        self.created_at = _int_or_none(self.created_at)
+        self.expiration = _int_or_none(self.expiration)
 
     @property
     def size_remaining(self) -> Decimal:
         return self.original_size - self.size_matched
 
+    @property
+    def fill_ratio(self) -> Decimal:
+        return (
+            self.size_matched / self.original_size if self.original_size > 0 else ZERO
+        )
+
+
+@dataclass
+class UserOrder(PolymarketOrder):
+    """Order event from the User WebSocket channel.
+
+    Inherits all fields from PolymarketOrder and adds WS event metadata.
+    """
+
+    event_type: str = ""
+    type: str = ""  # PLACEMENT, UPDATE, CANCELLATION
+    timestamp: int = 0
+    order_owner: str = ""
+
+    def __post_init__(self) -> None:
+        super().__post_init__()
+        self.timestamp = _int(self.timestamp)
+
 
 @dataclass
 class PolymarketTrade:
-    """Trade info from CLOB API"""
+    """Trade info from CLOB API or WebSocket."""
 
     id: str
-    taker_order_id: str
     market: str
     asset_id: str
     side: OrderSide
     size: Decimal
-    fee_rate_bps: int
     price: Decimal
     status: TradeStatus
-    match_time: int
-    last_update: int
     outcome: str
-    bucket_index: int
     owner: str
-    maker_address: str
-    transaction_hash: str
-    trader_side: TraderSide
+    fee_rate_bps: int = 0
+    taker_order_id: str = ""
+    match_time: int = 0
+    last_update: int = 0
+    bucket_index: int = 0
+    maker_address: str = ""
+    transaction_hash: str = ""
+    trader_side: TraderSide | str = ""
     maker_orders: list[MakerOrder] = field(default_factory=list)
 
-    @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "PolymarketTrade":
-        maker_orders_raw = data.get("maker_orders", [])
-        maker_orders = [
-            MakerOrder(
-                order_id=mo.get("order_id", ""),
-                owner=mo.get("owner", ""),
-                maker_address=mo.get("maker_address", ""),
-                matched_amount=Decimal(str(mo.get("matched_amount", 0))),
-                price=Decimal(str(mo.get("price", 0))),
-                fee_rate_bps=int(mo.get("fee_rate_bps", 0)),
-                asset_id=mo.get("asset_id", ""),
-                outcome=mo.get("outcome", ""),
-                side=OrderSide(mo.get("side", "BUY")),
-            )
-            for mo in maker_orders_raw
+    def __post_init__(self) -> None:
+        self.price = _decimal(self.price)
+        self.size = _decimal(self.size)
+        self.side = OrderSide(self.side)
+        self.status = TradeStatus(self.status)
+        if self.trader_side:
+            self.trader_side = TraderSide(self.trader_side)
+        self.fee_rate_bps = int(self.fee_rate_bps)
+        self.match_time = int(self.match_time)
+        self.last_update = int(self.last_update)
+        self.maker_orders = [
+            mo if isinstance(mo, MakerOrder) else MakerOrder(**mo)
+            for mo in self.maker_orders
         ]
-        return cls(
-            id=data.get("id", ""),
-            taker_order_id=data.get("taker_order_id", ""),
-            market=data.get("market", ""),
-            asset_id=data.get("asset_id", ""),
-            side=OrderSide(data.get("side", "BUY")),
-            size=Decimal(str(data.get("size", 0))),
-            fee_rate_bps=int(data.get("fee_rate_bps", 0)),
-            price=Decimal(str(data.get("price", 0))),
-            status=TradeStatus(data.get("status", "CONFIRMED")),
-            match_time=int(data.get("match_time", 0)),
-            last_update=int(data.get("last_update", 0)),
-            outcome=data.get("outcome", ""),
-            bucket_index=data.get("bucket_index", 0),
-            owner=data.get("owner", ""),
-            maker_address=data.get("maker_address", ""),
-            transaction_hash=data.get("transaction_hash", ""),
-            trader_side=TraderSide(data.get("trader_side", "TAKER")),
-            maker_orders=maker_orders,
-        )
+
+    @property
+    def quote_value(self) -> Decimal:
+        return self.price * self.size
+
+    @property
+    def is_terminal(self) -> bool:
+        return self.status in (TradeStatus.CONFIRMED, TradeStatus.FAILED)
 
     @property
     def fee(self) -> Decimal:
@@ -710,6 +621,23 @@ class PolymarketTrade:
         if self.side == OrderSide.BUY:
             return self.size - fee / self.price if self.price else self.size
         return self.size * self.price - fee
+
+
+@dataclass
+class UserTrade(PolymarketTrade):
+    """Trade event from the User WebSocket channel.
+
+    Inherits all fields from PolymarketTrade and adds WS event metadata.
+    """
+
+    event_type: str = ""
+    type: str = ""
+    timestamp: int = 0
+    trade_owner: str | None = None
+
+    def __post_init__(self) -> None:
+        super().__post_init__()
+        self.timestamp = _int(self.timestamp)
 
 
 class OrderResultStatus(StrEnum):
