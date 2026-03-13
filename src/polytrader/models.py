@@ -733,3 +733,213 @@ class PolymarketAuth:
             "secret": self.secret,
             "passphrase": self.passphrase,
         }
+
+
+# ============================================================================
+# Binance Models
+# ============================================================================
+
+
+class BinanceStreamType(StrEnum):
+    AGG_TRADE = "aggTrade"
+    DEPTH = "depth"
+    KLINE = "kline"
+
+
+def _float(v: Any) -> float:
+    return float(v) if isinstance(v, str) else v
+
+
+@dataclass
+class BinanceAggTrade:
+    """Aggregate trade data"""
+
+    event: str
+    event_time: int
+    symbol: str
+    agg_trade_id: int
+    price: float
+    quantity: float
+    first_trade_id: int
+    last_trade_id: int
+    trade_time: int
+    is_buyer_maker: bool
+
+    def __post_init__(self) -> None:
+        self.price = _float(self.price)
+        self.quantity = _float(self.quantity)
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "BinanceAggTrade":
+        return cls(
+            event=data["e"],
+            event_time=data["E"],
+            symbol=data["s"],
+            agg_trade_id=data["a"],
+            price=data["p"],
+            quantity=data["q"],
+            first_trade_id=data["f"],
+            last_trade_id=data["l"],
+            trade_time=data["T"],
+            is_buyer_maker=data["m"],
+        )
+
+    @property
+    def quote_qty(self) -> float:
+        return self.price * self.quantity
+
+    @property
+    def is_taker_buy(self) -> bool:
+        return not self.is_buyer_maker
+
+
+@dataclass
+class BinanceKline:
+    """Kline/Candlestick data"""
+
+    open_time: int
+    close_time: int
+    symbol: str
+    interval: str
+    first_trade_id: int
+    last_trade_id: int
+    open: float
+    close: float
+    high: float
+    low: float
+    volume: float
+    num_trades: int
+    is_closed: bool
+    quote_volume: float
+    taker_buy_base_volume: float
+    taker_buy_quote_volume: float
+
+    def __post_init__(self) -> None:
+        for f in (
+            "open",
+            "close",
+            "high",
+            "low",
+            "volume",
+            "quote_volume",
+            "taker_buy_base_volume",
+            "taker_buy_quote_volume",
+        ):
+            setattr(self, f, _float(getattr(self, f)))
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "BinanceKline":
+        return cls(
+            open_time=data["t"],
+            close_time=data["T"],
+            symbol=data["s"],
+            interval=data["i"],
+            first_trade_id=data["f"],
+            last_trade_id=data["L"],
+            open=data["o"],
+            close=data["c"],
+            high=data["h"],
+            low=data["l"],
+            volume=data["v"],
+            num_trades=data["n"],
+            is_closed=data["x"],
+            quote_volume=data["q"],
+            taker_buy_base_volume=data["V"],
+            taker_buy_quote_volume=data["Q"],
+        )
+
+    @property
+    def taker_buy_ratio(self) -> float:
+        return (
+            self.taker_buy_quote_volume / self.quote_volume
+            if self.quote_volume > 0
+            else 0.5
+        )
+
+    @property
+    def is_bullish(self) -> bool:
+        return self.close > self.open
+
+
+@dataclass
+class BinanceKlineEvent:
+    """Kline stream event wrapper"""
+
+    event: str
+    event_time: int
+    symbol: str
+    kline: BinanceKline
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "BinanceKlineEvent":
+        return cls(
+            event=data["e"],
+            event_time=data["E"],
+            symbol=data["s"],
+            kline=BinanceKline.from_dict(data["k"]),
+        )
+
+
+@dataclass
+class BinanceOrderBookLevel:
+    """Single orderbook level"""
+
+    price: float
+    quantity: float
+
+    def __post_init__(self) -> None:
+        self.price = _float(self.price)
+        self.quantity = _float(self.quantity)
+
+
+@dataclass
+class BinanceDepthUpdate:
+    """Orderbook depth update"""
+
+    event: str
+    event_time: int
+    symbol: str
+    first_update_id: int
+    final_update_id: int
+    bids: list[list[str]]
+    asks: list[list[str]]
+
+    @classmethod
+    def from_dict(cls, data: dict[str, Any]) -> "BinanceDepthUpdate":
+        return cls(
+            event=data["e"],
+            event_time=data["E"],
+            symbol=data["s"],
+            first_update_id=data["U"],
+            final_update_id=data["u"],
+            bids=data["b"],
+            asks=data["a"],
+        )
+
+    @property
+    def bid_levels(self) -> list[BinanceOrderBookLevel]:
+        return [
+            BinanceOrderBookLevel(price=float(b[0]), quantity=float(b[1]))
+            for b in self.bids
+        ]
+
+    @property
+    def ask_levels(self) -> list[BinanceOrderBookLevel]:
+        return [
+            BinanceOrderBookLevel(price=float(a[0]), quantity=float(a[1]))
+            for a in self.asks
+        ]
+
+    @property
+    def best_bid(self) -> float | None:
+        return float(self.bids[0][0]) if self.bids else None
+
+    @property
+    def best_ask(self) -> float | None:
+        return float(self.asks[0][0]) if self.asks else None
+
+    @property
+    def spread(self) -> float | None:
+        if self.best_bid and self.best_ask:
+            return self.best_ask - self.best_bid
+        return None

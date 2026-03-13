@@ -1,7 +1,14 @@
+from polytrader.binance import BinanceWebSocket
 from polytrader.client import PolyTrader
 from polytrader.models import (
     Balance,
     BestBidAsk,
+    BinanceAggTrade,
+    BinanceDepthUpdate,
+    BinanceKline,
+    BinanceKlineEvent,
+    BinanceOrderBookLevel,
+    BinanceStreamType,
     Book,
     Coin,
     EventMessage,
@@ -45,6 +52,13 @@ from polytrader.websocket import (
 __all__ = [
     "Balance",
     "BasePolymarketWebSocket",
+    "BinanceAggTrade",
+    "BinanceDepthUpdate",
+    "BinanceKline",
+    "BinanceKlineEvent",
+    "BinanceOrderBookLevel",
+    "BinanceStreamType",
+    "BinanceWebSocket",
     "BestBidAsk",
     "Book",
     "Coin",
