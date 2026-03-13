@@ -17,6 +17,7 @@ from py_clob_client.clob_types import (
     TradeParams,
 )
 
+from polytrader.binance import BinanceWebSocket
 from polytrader.constants import (
     CHAIN_ID,
     CLOB_HOST,
@@ -51,7 +52,6 @@ from polytrader.rpc import (
 from polytrader.rpc import (
     approve_token as _approve_token,
 )
-from polytrader.binance import BinanceWebSocket
 from polytrader.websocket import PolymarketMarketWebSocket, PolymarketUserWebSocket
 
 logger = logging.getLogger(__name__)
