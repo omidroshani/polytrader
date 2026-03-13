@@ -6,6 +6,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 dependencies = [
     "httpx>=0.28.1",
+    "py-builder-relayer-client>=0.0.1",
     "py-clob-client>=0.34.6",
     "python-dotenv>=1.2.2",
     "websockets>=16.0",
@@ -20,4 +21,5 @@ dev = [
     "python-dotenv>=1.2.2",
     "rich>=14.3.3",
     "ruff>=0.15.5",
+    "freezegun>=1.5.0",
 ]

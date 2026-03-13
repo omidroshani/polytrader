@@ -3,6 +3,7 @@ import os
 from typing import Any
 
 import httpx
+import py_clob_client.http_helpers.helpers as _clob_helpers
 import pytest
 from dotenv import load_dotenv
 
@@ -10,10 +11,8 @@ from polytrader import PolyTrader
 
 load_dotenv()
 
-# py_clob_client uses a global httpx.Client with default 5s timeout — too short
+# py_clob_client uses a global httpx.Client with default 5s timeout -- too short
 # for market orders that settle on-chain. Patch it to 30s.
-import py_clob_client.http_helpers.helpers as _clob_helpers
-
 _clob_helpers._http_client = httpx.Client(http2=True, timeout=30.0)
 
 # Headers that contain sensitive data
@@ -24,6 +23,10 @@ _SENSITIVE_HEADERS = {
     "POLY_SIGNATURE",
     "POLY_TIMESTAMP",
     "POLY_NONCE",
+    "POLY_BUILDER_API_KEY",
+    "POLY_BUILDER_PASSPHRASE",
+    "POLY_BUILDER_SIGNATURE",
+    "POLY_BUILDER_TIMESTAMP",
     "Cookie",
     "set-cookie",
 }
@@ -94,4 +97,11 @@ def trader() -> PolyTrader:
     private_key = os.environ["POLYMARKET_PRIVATE_KEY"]
     funder = os.environ["POLYMARKET_FUNDER"]
     signature_type = int(os.environ.get("POLYMARKET_SIGNATURE_TYPE", "0"))
-    return PolyTrader(private_key, funder, signature_type)
+    return PolyTrader(
+        private_key,
+        funder,
+        signature_type,
+        builder_key=os.environ.get("POLY_BUILDER_API_KEY"),
+        builder_secret=os.environ.get("POLY_BUILDER_SECRET"),
+        builder_passphrase=os.environ.get("POLY_BUILDER_PASSPHRASE"),
+    )

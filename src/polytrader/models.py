@@ -6,6 +6,8 @@ from typing import Any, cast
 
 from py_clob_client.clob_types import OrderType as ClobOrderType
 
+from polytrader.constants import CRYPTO_FEE_EXPONENT, CRYPTO_FEE_RATE
+
 # ============================================================================
 # Enums
 # ============================================================================
@@ -104,6 +106,17 @@ ZERO = Decimal("0")
 # ============================================================================
 # Helpers
 # ============================================================================
+
+
+def crypto_fee(size: Decimal, price: Decimal) -> Decimal:
+    """Compute the trading fee for a crypto market in USDC.
+
+    Formula: ``C * p * 0.25 * (p * (1 - p))^2``
+
+    The fee peaks at ~1.56 % when *p* = 0.50 and drops toward 0 at the
+    extremes (p -> 0 or p -> 1).
+    """
+    return size * price * CRYPTO_FEE_RATE * (price * (1 - price)) ** CRYPTO_FEE_EXPONENT
 
 
 def _decimal(v: Any) -> Decimal:
@@ -669,6 +682,23 @@ class PolymarketTrade:
             maker_orders=maker_orders,
         )
 
+    @property
+    def fee(self) -> Decimal:
+        """Trading fee in USDC (crypto markets)."""
+        return crypto_fee(self.size, self.price)
+
+    @property
+    def net_size(self) -> Decimal:
+        """Net shares/USDC after fee deduction.
+
+        BUY: net shares received (fee deducted in shares).
+        SELL: net USDC received (fee deducted in USDC).
+        """
+        fee = self.fee
+        if self.side == OrderSide.BUY:
+            return self.size - fee / self.price if self.price else self.size
+        return self.size * self.price - fee
+
 
 class OrderResultStatus(StrEnum):
     LIVE = "live"
@@ -706,17 +736,35 @@ class OrderResult:
 
 @dataclass
 class Balance:
-    """USDC balance and allowance"""
+    """Balance and allowance (works for both USDC and conditional tokens).
+
+    For USDC (collateral), the API returns ``{"balance": "...", "allowance": "..."}``.
+    For conditional tokens, it returns ``{"balance": "...", "allowances": {"<exchange>": "..."}}``.
+    The ``allowance`` field is the minimum across all exchange allowances (or the
+    single ``allowance`` value for collateral).
+    """
 
     balance: Decimal
     allowance: Decimal
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "Balance":
-        return cls(
-            balance=Decimal(str(data.get("balance", 0))),
-            allowance=Decimal(str(data.get("allowance", 0))),
-        )
+        balance = Decimal(str(data.get("balance", 0)))
+
+        # Collateral returns "allowance" (singular str)
+        if "allowance" in data:
+            allowance = Decimal(str(data["allowance"]))
+        # Conditional tokens return "allowances" (dict of exchange → value)
+        elif "allowances" in data:
+            allowances_dict: dict[str, str] = data["allowances"]
+            if allowances_dict:
+                allowance = min(Decimal(str(v)) for v in allowances_dict.values())
+            else:
+                allowance = Decimal(0)
+        else:
+            allowance = Decimal(0)
+
+        return cls(balance=balance, allowance=allowance)
 
 
 # ============================================================================

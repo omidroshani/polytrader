@@ -34,6 +34,7 @@ from polytrader.models import (
     UserEventType,
     UserOrder,
     UserTrade,
+    crypto_fee,
 )
 from polytrader.websocket import (
     BasePolymarketWebSocket,
@@ -80,4 +81,5 @@ __all__ = [
     "UserEventType",
     "UserOrder",
     "UserTrade",
+    "crypto_fee",
 ]

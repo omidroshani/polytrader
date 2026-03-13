@@ -17,7 +17,13 @@ from py_clob_client.clob_types import (
     TradeParams,
 )
 
-from polytrader.constants import CHAIN_ID, CLOB_HOST, DATA_API_HOST, GAMMA_API_HOST
+from polytrader.constants import (
+    CHAIN_ID,
+    CLOB_HOST,
+    DATA_API_HOST,
+    GAMMA_API_HOST,
+    TOKEN_DECIMALS,
+)
 from polytrader.models import (
     ZERO,
     Balance,
@@ -33,6 +39,18 @@ from polytrader.models import (
     TokenIdPair,
     UpDownMarket,
 )
+from polytrader.rpc import (
+    BuilderCreds as _BuilderCreds,
+)
+from polytrader.rpc import (
+    approve_all as _approve_all,
+)
+from polytrader.rpc import (
+    approve_collateral as _approve_collateral,
+)
+from polytrader.rpc import (
+    approve_token as _approve_token,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -45,10 +63,18 @@ class PolyTrader:
         private_key: str,
         funder: str,
         signature_type: int,
+        builder_key: str | None = None,
+        builder_secret: str | None = None,
+        builder_passphrase: str | None = None,
     ) -> None:
         self._private_key = private_key
         self.funder: str = funder
         self._signature_type: int = signature_type
+        self._builder_creds: _BuilderCreds | None = None
+        if builder_key and builder_secret and builder_passphrase:
+            self._builder_creds = _BuilderCreds(
+                key=builder_key, secret=builder_secret, passphrase=builder_passphrase
+            )
         self._clob_client: ClobClient | None = None
         self._auth: PolymarketAuth | None = None
         self._http = httpx.AsyncClient(timeout=10.0)
@@ -385,97 +411,123 @@ class PolyTrader:
         resp = cast(dict[str, Any], client.get_balance_allowance(params))
         return Balance.from_dict(resp)
 
+    def get_token_balance(self, token_id: str) -> Balance:
+        """Get conditional token balance and allowance."""
+        client = self._get_authenticated_client()
+        params = BalanceAllowanceParams(
+            asset_type=cast(AssetType, AssetType.CONDITIONAL),
+            token_id=token_id,
+        )
+        resp = cast(dict[str, Any], client.get_balance_allowance(params))
+        return Balance.from_dict(resp)
+
     def get_orderbook(self, token_id: str) -> OrderBookSummary:
         """Get orderbook for a token."""
         client = self._get_clob_client()
         return client.get_order_book(token_id)
 
     # ========================================================================
-    # Token Approvals
+    # Balance & Allowance
     # ========================================================================
 
-    def ensure_can_sell(self, token_id: str, size: Decimal) -> bool:
+    def ensure_can_sell(
+        self, token_id: str, size: Decimal, neg_risk: bool = False
+    ) -> bool:
         """
-        Check if a sell order is possible, auto-approving token if needed.
+        Check if a sell order is possible, auto-approving if needed.
+
+        Verifies token balance, on-chain allowance, and available (unlocked)
+        shares.  If allowance is zero, sends an on-chain ``setApprovalForAll``
+        transaction and refreshes the server cache.
+
+        Args:
+            token_id: Conditional token to sell.
+            size: Number of shares to sell (human-readable, e.g. ``5.0``).
+            neg_risk: Whether this is a neg-risk market.
 
         Returns:
-            True if sell of given size is possible
+            True if sell of given size is possible.
         """
-        client = self._get_authenticated_client()
+        token_bal = self.get_token_balance(token_id)
 
-        try:
-            params = BalanceAllowanceParams(
-                asset_type=cast(AssetType, AssetType.CONDITIONAL),
-                token_id=token_id,
-            )
-            resp = cast(dict[str, Any], client.get_balance_allowance(params))
-            balance = Decimal(str(resp.get("balance", 0)))
-            allowance = Decimal(str(resp.get("allowance", 0)))
-        except Exception as e:
-            logger.error(f"[POLYMARKET] Sell check failed: {e}")
+        # Balance & allowance from the CLOB API are in raw 6-decimal units;
+        # *size* is human-readable (create_order multiplies by 1e6 internally).
+        raw_size = size * TOKEN_DECIMALS
+
+        if token_bal.balance < raw_size:
             return False
 
-        if balance < size:
-            logger.warning(
-                f"[POLYMARKET] Insufficient token balance: {balance} < {size}"
-            )
-            return False
-
-        if allowance < size:
-            logger.info(
-                f"[POLYMARKET] Allowance too low ({allowance}), approving token..."
-            )
-            if not self.approve_token(token_id):
+        if token_bal.allowance < raw_size:
+            self.approve_token(neg_risk)
+            self.refresh_token_allowance(token_id)
+            token_bal = self.get_token_balance(token_id)
+            if token_bal.allowance < raw_size:
                 return False
 
-        # Account for tokens locked in open sell orders
+        # Account for tokens locked in open sell orders (human-readable sizes)
         open_orders = self.get_orders(asset_id=token_id)
-        locked = sum(
-            (o.size_remaining for o in open_orders if o.side == OrderSide.SELL), ZERO
+        locked_raw = sum(
+            (
+                o.size_remaining * TOKEN_DECIMALS
+                for o in open_orders
+                if o.side == OrderSide.SELL
+            ),
+            ZERO,
         )
-        available = balance - locked
+        available = token_bal.balance - locked_raw
+        return available >= raw_size
 
-        if available < size:
-            logger.warning(
-                f"[POLYMARKET] Available after open orders: {available} < {size}"
-            )
-            return False
+    def refresh_token_allowance(self, token_id: str) -> None:
+        """Refresh server's cached balance/allowance for a conditional token.
 
-        return True
-
-    def approve_token(self, token_id: str) -> bool:
-        """Approve a conditional token for trading (required before selling)."""
+        This does NOT perform on-chain approval. It tells the CLOB server to
+        re-read on-chain state. For first-time token approval, use the
+        Polymarket UI or send a setApprovalForAll transaction on-chain.
+        """
         client = self._get_authenticated_client()
+        params = BalanceAllowanceParams(
+            asset_type=cast(AssetType, AssetType.CONDITIONAL),
+            token_id=token_id,
+        )
+        client.update_balance_allowance(params)
 
-        try:
-            params = BalanceAllowanceParams(
-                asset_type=cast(AssetType, AssetType.CONDITIONAL),
-                token_id=token_id,
-            )
-            client.update_balance_allowance(params)
-            logger.info(f"[POLYMARKET] Approved token: {token_id[:20]}...")
-            return True
-        except Exception as e:
-            logger.error(f"[POLYMARKET] Failed to approve token: {e}")
-            return False
-
-    def approve_collateral(self) -> bool:
-        """Approve USDC collateral for trading."""
+    def refresh_collateral_allowance(self) -> None:
+        """Refresh server's cached balance/allowance for USDC collateral."""
         client = self._get_authenticated_client()
+        params = BalanceAllowanceParams(
+            asset_type=cast(AssetType, AssetType.COLLATERAL),
+        )
+        client.update_balance_allowance(params)
 
-        try:
-            params = BalanceAllowanceParams(
-                asset_type=cast(AssetType, AssetType.COLLATERAL),
-            )
-            client.update_balance_allowance(params)
-            logger.info("[POLYMARKET] Approved USDC collateral")
-            return True
-        except Exception as e:
-            logger.error(f"[POLYMARKET] Failed to approve collateral: {e}")
-            return False
+    def approve_token(self, neg_risk: bool = False) -> str:
+        """Approve the CTF conditional tokens for the exchange on-chain.
 
-    def approve_market_tokens(self, up_token_id: str, down_token_id: str) -> bool:
-        """Approve both UP and DOWN tokens for a market."""
-        up_ok = self.approve_token(up_token_id)
-        down_ok = self.approve_token(down_token_id)
-        return up_ok and down_ok
+        Sends a setApprovalForAll transaction on the CTF ERC1155 contract.
+        One-time setup per exchange (neg_risk vs non-neg_risk).
+
+        Returns:
+            Transaction hash.
+        """
+        return _approve_token(
+            self._private_key, neg_risk, self.funder, self._builder_creds
+        )
+
+    def approve_collateral(self, neg_risk: bool = False) -> str:
+        """Approve USDC for the exchange contract on-chain.
+
+        Sends an ERC20 approve transaction for max uint256.
+
+        Returns:
+            Transaction hash.
+        """
+        return _approve_collateral(
+            self._private_key, neg_risk, self.funder, self._builder_creds
+        )
+
+    def approve_all(self) -> list[str]:
+        """Approve both exchanges (neg_risk + non-neg_risk) for tokens and USDC.
+
+        Returns:
+            List of transaction hashes.
+        """
+        return _approve_all(self._private_key, self.funder, self._builder_creds)

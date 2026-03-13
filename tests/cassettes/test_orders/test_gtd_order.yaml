@@ -1,0 +1,458 @@
+interactions:
+- request:
+    body: ''
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Host:
+      - gamma-api.polymarket.com
+      User-Agent:
+      - python-httpx/0.28.1
+    method: GET
+    uri: https://gamma-api.polymarket.com/markets?slug=btc-updown-5m-1773339000
+  response:
+    body:
+      string: '[{"id":"1560332","question":"Bitcoin Up or Down - March 12, 2:10PM-2:15PM
+        ET","conditionId":"0x4d6c69fb3b6e2add1a40a81485aef8d830855b5e33340a24dbf8c30d884fdcea","slug":"btc-updown-5m-1773339000","resolutionSource":"https://data.chain.link/streams/btc-usd","endDate":"2026-03-12T18:15:00Z","liquidity":"11151.6126","startDate":"2026-03-11T18:18:42.853451Z","image":"https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png","icon":"https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png","description":"This
+        market will resolve to \"Up\" if the Bitcoin price at the end of the time
+        range specified in the title is greater than or equal to the price at the
+        beginning of that range. Otherwise, it will resolve to \"Down\".\nThe resolution
+        source for this market is information from Chainlink, specifically the BTC/USD
+        data stream available at https://data.chain.link/streams/btc-usd.\nPlease
+        note that this market is about the price according to Chainlink data stream
+        BTC/USD, not according to other sources or spot markets.","outcomes":"[\"Up\",
+        \"Down\"]","outcomePrices":"[\"0.4\", \"0.6\"]","volume":"19957.012435999983","active":true,"closed":false,"marketMakerAddress":"","createdAt":"2026-03-11T18:17:30.742169Z","updatedAt":"2026-03-12T18:11:39.591583Z","new":false,"featured":false,"archived":false,"restricted":true,"groupItemThreshold":"0","questionID":"0xdf2cd61956aec7b85a684412c7e33b07ef2157ab4a32fc988fd4c6ed2d9fbb62","enableOrderBook":true,"orderPriceMinTickSize":0.01,"orderMinSize":5,"volumeNum":19957.012435999983,"liquidityNum":11151.6126,"endDateIso":"2026-03-12","startDateIso":"2026-03-11","hasReviewedDates":true,"volume24hr":22416.442363000013,"volume1wk":22416.442363000013,"volume1mo":22416.442363000013,"volume1yr":22416.442363000013,"clobTokenIds":"[\"43325540984420495581202737222863905069751138820002709244176727931234321849400\",
+        \"66653522103973232753856135696612463784391425609307263167216970067625745190081\"]","volume24hrClob":22416.442363000013,"volume1wkClob":22416.442363000013,"volume1moClob":22416.442363000013,"volume1yrClob":22416.442363000013,"volumeClob":19957.012435999983,"liquidityClob":11151.6126,"makerBaseFee":1000,"takerBaseFee":1000,"acceptingOrders":true,"negRisk":false,"events":[{"id":"261502","ticker":"btc-updown-5m-1773339000","slug":"btc-updown-5m-1773339000","title":"Bitcoin
+        Up or Down - March 12, 2:10PM-2:15PM ET","description":"This market will resolve
+        to \"Up\" if the Bitcoin price at the end of the time range specified in the
+        title is greater than or equal to the price at the beginning of that range.
+        Otherwise, it will resolve to \"Down\".\nThe resolution source for this market
+        is information from Chainlink, specifically the BTC/USD data stream available
+        at https://data.chain.link/streams/btc-usd.\nPlease note that this market
+        is about the price according to Chainlink data stream BTC/USD, not according
+        to other sources or spot markets.","resolutionSource":"https://data.chain.link/streams/btc-usd","startDate":"2026-03-11T18:19:27.287946Z","creationDate":"2026-03-11T18:19:27.287941Z","endDate":"2026-03-12T18:15:00Z","image":"https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png","icon":"https://polymarket-upload.s3.us-east-2.amazonaws.com/BTC+fullsize.png","active":true,"closed":false,"archived":false,"new":false,"featured":false,"restricted":true,"liquidity":11151.6126,"volume":19957.012435999983,"openInterest":0,"createdAt":"2026-03-11T18:17:30.356188Z","updatedAt":"2026-03-12T18:12:15.096133Z","competitive":0.9900990099009901,"volume24hr":22416.442363000013,"volume1wk":22416.442363000013,"volume1mo":22416.442363000013,"volume1yr":22416.442363000013,"enableOrderBook":true,"liquidityClob":11151.6126,"negRisk":false,"commentCount":0,"series":[{"id":"10684","ticker":"btc-up-or-down-5m","slug":"btc-up-or-down-5m","title":"BTC
+        Up or Down 5m","seriesType":"single","recurrence":"5m","image":"","icon":"","active":true,"closed":false,"archived":false,"featured":false,"restricted":true,"createdAt":"2025-11-21T21:46:22.201627Z","updatedAt":"2026-03-12T18:10:40.006032Z","volume24hr":40787232.73561997,"volume":74840.99550399986,"liquidity":6151721.0539,"commentCount":28451,"requiresTranslation":false}],"cyom":false,"showAllOutcomes":true,"showMarketImages":true,"enableNegRisk":false,"automaticallyActive":true,"startTime":"2026-03-12T18:10:00Z","seriesSlug":"btc-up-or-down-5m","negRiskAugmented":false,"pendingDeployment":false,"deploying":false,"requiresTranslation":false}],"ready":false,"funded":false,"acceptingOrdersTimestamp":"2026-03-11T18:17:37Z","cyom":false,"competitive":0.9900990099009901,"pagerDutyNotificationEnabled":false,"approved":true,"rewardsMinSize":50,"rewardsMaxSpread":4.5,"spread":0.02,"lastTradePrice":0.49,"bestBid":0.39,"bestAsk":0.41,"automaticallyActive":true,"clearBookOnStart":false,"showGmpSeries":false,"showGmpOutcome":false,"manualActivation":false,"negRiskOther":false,"umaResolutionStatuses":"[]","pendingDeployment":false,"deploying":false,"rfqEnabled":false,"eventStartTime":"2026-03-12T18:10:00Z","holdingRewardsEnabled":false,"feesEnabled":true,"requiresTranslation":false,"makerRebatesFeeShareBps":10000,"feeType":"crypto_fees"}]
+
+        '
+    headers:
+      Age:
+      - '87'
+      CF-RAY:
+      - 9db4c652ff37d115-DXB
+      Cache-Control:
+      - public, max-age=180
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Date:
+      - Thu, 12 Mar 2026 18:13:46 GMT
+      Server:
+      - cloudflare
+      Strict-Transport-Security:
+      - max-age=7776000; includeSubDomains
+      Transfer-Encoding:
+      - chunked
+      Vary:
+      - Accept-Encoding
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - HIT
+      content-length:
+      - '5206'
+      expires:
+      - Thu, 12 Mar 2026 18:16:46 GMT
+      last-modified:
+      - Thu, 12 Mar 2026 18:12:18 GMT
+      set-cookie:
+      - FILTERED_set-cookie
+    status:
+      code: 200
+      message: OK
+- request:
+    body: ''
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Host:
+      - clob.polymarket.com
+      POLY_ADDRESS:
+      - FILTERED_POLY_ADDRESS
+      POLY_NONCE:
+      - FILTERED_POLY_NONCE
+      POLY_SIGNATURE:
+      - FILTERED_POLY_SIGNATURE
+      POLY_TIMESTAMP:
+      - FILTERED_POLY_TIMESTAMP
+      User-Agent:
+      - py_clob_client
+    method: GET
+    uri: https://clob.polymarket.com/auth/derive-api-key
+  response:
+    body:
+      string: '{"apiKey": "FILTERED_apiKey", "secret": "RklMVEVSRURfc2VjcmV0", "passphrase":
+        "FILTERED_passphrase"}'
+    headers:
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - 9db4c653ba10dddb-DXB
+      content-length:
+      - '186'
+      content-type:
+      - application/json
+      date:
+      - Thu, 12 Mar 2026 18:13:46 GMT
+      server:
+      - cloudflare
+      set-cookie:
+      - FILTERED_set-cookie
+      strict-transport-security:
+      - max-age=7776000; includeSubDomains
+      vary:
+      - Origin
+    status:
+      code: 200
+      message: null
+- request:
+    body: ''
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - FILTERED_Cookie
+      Host:
+      - clob.polymarket.com
+      User-Agent:
+      - py_clob_client
+    method: GET
+    uri: https://clob.polymarket.com/tick-size?token_id=43325540984420495581202737222863905069751138820002709244176727931234321849400
+  response:
+    body:
+      string: '{"minimum_tick_size":0.01}
+
+        '
+    headers:
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - 9db4c654ae49dddb-DXB
+      content-length:
+      - '27'
+      content-type:
+      - application/json
+      date:
+      - Thu, 12 Mar 2026 18:13:46 GMT
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=7776000; includeSubDomains
+      vary:
+      - Origin
+    status:
+      code: 200
+      message: null
+- request:
+    body: ''
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - FILTERED_Cookie
+      Host:
+      - clob.polymarket.com
+      User-Agent:
+      - py_clob_client
+    method: GET
+    uri: https://clob.polymarket.com/neg-risk?token_id=43325540984420495581202737222863905069751138820002709244176727931234321849400
+  response:
+    body:
+      string: '{"neg_risk":false}
+
+        '
+    headers:
+      accept-ranges:
+      - bytes
+      age:
+      - '86175'
+      alt-svc:
+      - h3=":443"; ma=86400
+      cache-control:
+      - public, max-age=86400
+      cf-cache-status:
+      - HIT
+      cf-ray:
+      - 9db4c655ab4edddb-DXB
+      content-length:
+      - '19'
+      content-type:
+      - application/json
+      date:
+      - Thu, 12 Mar 2026 18:13:46 GMT
+      expires:
+      - Fri, 13 Mar 2026 18:13:46 GMT
+      last-modified:
+      - Wed, 11 Mar 2026 18:17:31 GMT
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=7776000; includeSubDomains
+      vary:
+      - Origin, accept-encoding
+    status:
+      code: 200
+      message: null
+- request:
+    body: ''
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - FILTERED_Cookie
+      Host:
+      - clob.polymarket.com
+      User-Agent:
+      - py_clob_client
+    method: GET
+    uri: https://clob.polymarket.com/fee-rate?token_id=43325540984420495581202737222863905069751138820002709244176727931234321849400
+  response:
+    body:
+      string: '{"base_fee":1000}
+
+        '
+    headers:
+      accept-ranges:
+      - bytes
+      alt-svc:
+      - h3=":443"; ma=86400
+      cache-control:
+      - public, max-age=600
+      cf-cache-status:
+      - HIT
+      cf-ray:
+      - 9db4c655ec3bdddb-DXB
+      content-length:
+      - '18'
+      content-type:
+      - application/json
+      date:
+      - Thu, 12 Mar 2026 18:13:46 GMT
+      expires:
+      - Thu, 12 Mar 2026 18:23:46 GMT
+      last-modified:
+      - Thu, 12 Mar 2026 18:12:27 GMT
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=7776000; includeSubDomains
+      vary:
+      - Origin, accept-encoding
+    status:
+      code: 200
+      message: null
+- request:
+    body: '{"order":{"salt":357895042,"maker":"0xF15b9994af295608D9fdEa5b4dceacee86296CD6","signer":"0xc85487De752e8a0b67d92af8F1A21F43722A9214","taker":"0x0000000000000000000000000000000000000000","tokenId":"43325540984420495581202737222863905069751138820002709244176727931234321849400","makerAmount":"500000","takerAmount":"5000000","expiration":"1893456000","nonce":"0","feeRateBps":"1000","side":"BUY","signatureType":2,"signature":"0xa12d776b0ca326dde650c2bbfdf00b3e810867bd72d29844834a17eb3a2fcd0f372e6116a094b686ac7ec203593735712cef1edfef942805f4c09fb0ba2348a91b"},"owner":"93d9821a-275c-dc78-a0cc-c4160c6f9952","orderType":"GTD","postOnly":false}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '643'
+      Content-Type:
+      - application/json
+      Cookie:
+      - FILTERED_Cookie
+      Host:
+      - clob.polymarket.com
+      POLY_ADDRESS:
+      - FILTERED_POLY_ADDRESS
+      POLY_API_KEY:
+      - FILTERED_POLY_API_KEY
+      POLY_PASSPHRASE:
+      - FILTERED_POLY_PASSPHRASE
+      POLY_SIGNATURE:
+      - FILTERED_POLY_SIGNATURE
+      POLY_TIMESTAMP:
+      - FILTERED_POLY_TIMESTAMP
+      User-Agent:
+      - py_clob_client
+    method: POST
+    uri: https://clob.polymarket.com/order
+  response:
+    body:
+      string: '{"errorMsg":"","orderID":"0xc5defc35b72600e5462fb6554d3425ae3b43e4cc1ccf8e2800456775a5c07fcd","takingAmount":"","makingAmount":"","status":"live","success":true}
+
+        '
+    headers:
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - 9db4c656f8d7dddb-DXB
+      content-length:
+      - '162'
+      content-type:
+      - application/json
+      date:
+      - Thu, 12 Mar 2026 18:13:47 GMT
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=7776000; includeSubDomains
+      vary:
+      - Origin
+    status:
+      code: 200
+      message: null
+- request:
+    body: ''
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip
+      Connection:
+      - keep-alive
+      Content-Type:
+      - application/json
+      Cookie:
+      - FILTERED_Cookie
+      Host:
+      - clob.polymarket.com
+      POLY_ADDRESS:
+      - FILTERED_POLY_ADDRESS
+      POLY_API_KEY:
+      - FILTERED_POLY_API_KEY
+      POLY_PASSPHRASE:
+      - FILTERED_POLY_PASSPHRASE
+      POLY_SIGNATURE:
+      - FILTERED_POLY_SIGNATURE
+      POLY_TIMESTAMP:
+      - FILTERED_POLY_TIMESTAMP
+      User-Agent:
+      - py_clob_client
+    method: GET
+    uri: https://clob.polymarket.com/data/order/0xc5defc35b72600e5462fb6554d3425ae3b43e4cc1ccf8e2800456775a5c07fcd
+  response:
+    body:
+      string: '{"id":"0xc5defc35b72600e5462fb6554d3425ae3b43e4cc1ccf8e2800456775a5c07fcd","status":"LIVE","owner":"93d9821a-275c-dc78-a0cc-c4160c6f9952","maker_address":"0xF15b9994af295608D9fdEa5b4dceacee86296CD6","market":"0x4d6c69fb3b6e2add1a40a81485aef8d830855b5e33340a24dbf8c30d884fdcea","asset_id":"43325540984420495581202737222863905069751138820002709244176727931234321849400","side":"BUY","original_size":"5","size_matched":"0","price":"0.1","outcome":"Up","expiration":"1893456000","order_type":"GTD","associate_trades":[],"created_at":1773339227}
+
+        '
+    headers:
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - 9db4c658f9a5dddb-DXB
+      content-length:
+      - '541'
+      content-type:
+      - application/json
+      date:
+      - Thu, 12 Mar 2026 18:13:47 GMT
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=7776000; includeSubDomains
+      vary:
+      - Origin
+    status:
+      code: 200
+      message: null
+- request:
+    body: '{"orderID":"0xc5defc35b72600e5462fb6554d3425ae3b43e4cc1ccf8e2800456775a5c07fcd"}'
+    headers:
+      Accept:
+      - '*/*'
+      Accept-Encoding:
+      - gzip, deflate
+      Connection:
+      - keep-alive
+      Content-Length:
+      - '80'
+      Content-Type:
+      - application/json
+      Cookie:
+      - FILTERED_Cookie
+      Host:
+      - clob.polymarket.com
+      POLY_ADDRESS:
+      - FILTERED_POLY_ADDRESS
+      POLY_API_KEY:
+      - FILTERED_POLY_API_KEY
+      POLY_PASSPHRASE:
+      - FILTERED_POLY_PASSPHRASE
+      POLY_SIGNATURE:
+      - FILTERED_POLY_SIGNATURE
+      POLY_TIMESTAMP:
+      - FILTERED_POLY_TIMESTAMP
+      User-Agent:
+      - py_clob_client
+    method: DELETE
+    uri: https://clob.polymarket.com/order
+  response:
+    body:
+      string: '{"not_canceled":{},"canceled":["0xc5defc35b72600e5462fb6554d3425ae3b43e4cc1ccf8e2800456775a5c07fcd"]}
+
+        '
+    headers:
+      alt-svc:
+      - h3=":443"; ma=86400
+      cf-cache-status:
+      - DYNAMIC
+      cf-ray:
+      - 9db4c65a0e2adddb-DXB
+      content-length:
+      - '102'
+      content-type:
+      - application/json
+      date:
+      - Thu, 12 Mar 2026 18:13:47 GMT
+      server:
+      - cloudflare
+      strict-transport-security:
+      - max-age=7776000; includeSubDomains
+      vary:
+      - Origin
+    status:
+      code: 200
+      message: null
+version: 1

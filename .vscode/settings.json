@@ -1,3 +1,14 @@
 {
-  "cSpell.words": ["Clob", "creds", "funder", "Polymarket", "polytrader"]
+  "cSpell.words": [
+    "asyncio",
+    "Clob",
+    "creds",
+    "dotenv",
+    "freezegun",
+    "funder",
+    "mypy",
+    "Polymarket",
+    "polytrader",
+    "pytest"
+  ]
 }
