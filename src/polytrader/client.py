@@ -51,6 +51,7 @@ from polytrader.rpc import (
 from polytrader.rpc import (
     approve_token as _approve_token,
 )
+from polytrader.websocket import PolymarketMarketWebSocket, PolymarketUserWebSocket
 
 logger = logging.getLogger(__name__)
 
@@ -77,6 +78,8 @@ class PolyTrader:
             )
         self._clob_client: ClobClient | None = None
         self._auth: PolymarketAuth | None = None
+        self._market_ws: PolymarketMarketWebSocket | None = None
+        self._user_ws: PolymarketUserWebSocket | None = None
         self._http = httpx.AsyncClient(timeout=10.0)
 
     @property
@@ -531,3 +534,21 @@ class PolyTrader:
             List of transaction hashes.
         """
         return _approve_all(self._private_key, self.funder, self._builder_creds)
+
+    # ========================================================================
+    # WebSocket
+    # ========================================================================
+
+    @property
+    def market_ws(self) -> PolymarketMarketWebSocket:
+        """Lazy-initialized market WebSocket (public, subscribes by asset_id)."""
+        if self._market_ws is None:
+            self._market_ws = PolymarketMarketWebSocket()
+        return self._market_ws
+
+    @property
+    def user_ws(self) -> PolymarketUserWebSocket:
+        """Lazy-initialized user WebSocket (authenticated, subscribes by market_id)."""
+        if self._user_ws is None:
+            self._user_ws = PolymarketUserWebSocket(auth=self.get_auth())
+        return self._user_ws
