@@ -1,8 +1,9 @@
-import json
 import logging
 import uuid
 from collections.abc import Callable
 from typing import Any
+
+import orjson
 
 from .models import (
     BinanceAggTrade,
@@ -52,7 +53,7 @@ class BinanceWebSocket(BaseWebSocket):
     def _filter_message(self, msg: str) -> dict[str, Any] | None:
         if not msg or not msg.startswith("{"):
             return None
-        data: dict[str, Any] = json.loads(msg)
+        data: dict[str, Any] = orjson.loads(msg)
         # Skip subscription confirmations
         if "result" in data or "id" in data:
             return None

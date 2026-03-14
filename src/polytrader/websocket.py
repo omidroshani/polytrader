@@ -1,12 +1,12 @@
 import asyncio
 import contextlib
 import inspect
-import json
 import logging
 from abc import ABC, abstractmethod
 from collections.abc import Callable
 from typing import Any
 
+import orjson
 import websockets
 from websockets import ConnectionClosed
 from websockets.asyncio.client import ClientConnection
@@ -128,7 +128,7 @@ class BaseWebSocket(ABC):
     async def _send_json(self, data: dict[str, Any]) -> None:
         if not self._ws:
             raise WebSocketError("WebSocket not connected")
-        await self._ws.send(json.dumps(data))
+        await self._ws.send(orjson.dumps(data))
 
     async def _send_ping(self) -> None:
         while self._running:
@@ -247,7 +247,7 @@ class BasePolymarketWebSocket(BaseWebSocket, ABC):
                 logger.debug("[%s] Non-JSON: %s", self.LOG_TAG, msg)
             return None
 
-        result: dict[str, Any] = json.loads(msg)
+        result: dict[str, Any] = orjson.loads(msg)
         return result
 
     async def _handle_message(self, data: dict[str, Any]) -> None:

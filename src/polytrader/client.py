@@ -1,10 +1,10 @@
-import json
 import logging
 from datetime import UTC, datetime
 from decimal import Decimal
 from typing import Any, cast
 
 import httpx
+import orjson
 from eth_account import Account
 from py_clob_client.client import ApiCreds, ClobClient, OrderBookSummary
 from py_clob_client.clob_types import (
@@ -157,12 +157,14 @@ class PolyTrader:
         outcomes_raw = market_data.get("outcomes", "[]")
 
         token_ids = (
-            json.loads(token_ids_raw)
+            orjson.loads(token_ids_raw)
             if isinstance(token_ids_raw, str)
             else token_ids_raw
         )
         outcomes = (
-            json.loads(outcomes_raw) if isinstance(outcomes_raw, str) else outcomes_raw
+            orjson.loads(outcomes_raw)
+            if isinstance(outcomes_raw, str)
+            else outcomes_raw
         )
 
         outcome_map: dict[str, str] = {}
