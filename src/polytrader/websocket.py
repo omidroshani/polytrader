@@ -27,11 +27,16 @@ from polytrader.models import (
 logger = logging.getLogger(__name__)
 
 
-class BasePolymarketWebSocket(ABC):
-    """Base WebSocket manager for Polymarket channels"""
+# ============================================================================
+# Base WebSocket
+# ============================================================================
+
+
+class BaseWebSocket(ABC):
+    """Shared async WebSocket manager with reconnection and ping support."""
 
     BASE_URL: str
-    CHANNEL_NAME: str
+    LOG_TAG: str
     PING_INTERVAL = 10  # seconds
 
     def __init__(self) -> None:
@@ -43,55 +48,19 @@ class BasePolymarketWebSocket(ABC):
         self._ping_task: asyncio.Task[None] | None = None
 
     async def connect(self) -> None:
-        """Connect to Polymarket WebSocket"""
         await self._close_ws()
         self._ws = await websockets.connect(self.BASE_URL)
         self._running = True
-        logger.info("[POLYMARKET_WS] %s connected", self.CHANNEL_NAME)
+        logger.info("[%s] Connected", self.LOG_TAG)
 
     async def disconnect(self) -> None:
-        """Disconnect from WebSocket"""
         self._running = False
         await self._stop_ping()
         await self._close_ws()
-        logger.info("[POLYMARKET_WS] %s disconnected", self.CHANNEL_NAME)
-
-    async def subscribe(
-        self,
-        ids: list[str],
-        callback: Callable[..., Any],
-    ) -> None:
-        """Subscribe to events for given IDs"""
-        async with self._lock:
-            new_ids = [i for i in ids if i not in self._subscriptions]
-            if not new_ids:
-                return
-
-            if self._subscriptions:
-                await self._send_dynamic_subscribe(new_ids, subscribe=True)
-            else:
-                await self._send_subscribe(new_ids)
-
-            for id_ in new_ids:
-                self._subscriptions.add(id_)
-                self._callbacks.setdefault(id_, []).append(
-                    (callback, inspect.iscoroutinefunction(callback))
-                )
-
-    async def unsubscribe(self, ids: list[str]) -> None:
-        """Unsubscribe from IDs"""
-        async with self._lock:
-            existing = [i for i in ids if i in self._subscriptions]
-            if not existing:
-                return
-
-            await self._send_dynamic_subscribe(existing, subscribe=False)
-            for id_ in existing:
-                self._subscriptions.discard(id_)
-                self._callbacks.pop(id_, None)
+        logger.info("[%s] Disconnected", self.LOG_TAG)
 
     async def run(self) -> None:
-        """Main loop to receive and process messages"""
+        """Main loop to receive and process messages."""
         try:
             if not self._ws:
                 await self.connect()
@@ -111,40 +80,18 @@ class BasePolymarketWebSocket(ABC):
                         else raw_msg
                     )
 
-                    if not msg or msg in ("PONG", "PING", ""):
-                        continue
-
-                    if not msg.startswith(("{", "[")):
-                        if "INVALID" in msg:
-                            logger.warning(
-                                "[POLYMARKET_WS] %s received: %s, reconnecting...",
-                                self.CHANNEL_NAME, msg,
-                            )
-                            await self._close_ws()
-                            await asyncio.sleep(1)
-                        else:
-                            logger.debug(
-                                "[POLYMARKET_WS] %s non-JSON: %s",
-                                self.CHANNEL_NAME, msg,
-                            )
-                        continue
-
-                    data = json.loads(msg)
-                    messages = data if isinstance(data, list) else [data]
-                    for item in messages:
-                        await self._handle_message(item)
+                    data = self._filter_message(msg)
+                    if data is not None:
+                        await self._handle_message(data)
 
                 except TimeoutError:
-                    logger.debug("[POLYMARKET_WS] %s timeout", self.CHANNEL_NAME)
+                    logger.debug("[%s] Timeout", self.LOG_TAG)
                 except ConnectionClosed:
-                    logger.warning(
-                        "[POLYMARKET_WS] %s connection closed, reconnecting...",
-                        self.CHANNEL_NAME,
-                    )
+                    logger.warning("[%s] Connection closed, reconnecting...", self.LOG_TAG)
                     await self._close_ws()
                     await asyncio.sleep(1)
                 except Exception as e:
-                    logger.error("[POLYMARKET_WS] %s error: %s", self.CHANNEL_NAME, e)
+                    logger.error("[%s] Error: %s", self.LOG_TAG, e)
                     await asyncio.sleep(1)
         finally:
             await self.disconnect()
@@ -166,10 +113,9 @@ class BasePolymarketWebSocket(ABC):
 
     async def _reconnect(self) -> None:
         await self.connect()
-        if self._subscriptions:
-            await self._send_subscribe(list(self._subscriptions))
+        await self._resubscribe()
 
-    async def _send(self, data: dict[str, Any]) -> None:
+    async def _send_json(self, data: dict[str, Any]) -> None:
         if not self._ws:
             raise RuntimeError("WebSocket not connected")
         await self._ws.send(json.dumps(data))
@@ -179,11 +125,11 @@ class BasePolymarketWebSocket(ABC):
             try:
                 await asyncio.sleep(self.PING_INTERVAL)
                 if self._ws and self._running:
-                    await self._ws.send("PING")
+                    await self._do_ping()
             except asyncio.CancelledError:
                 return
             except Exception as e:
-                logger.error("[POLYMARKET_WS] %s ping error: %s", self.CHANNEL_NAME, e)
+                logger.error("[%s] Ping error: %s", self.LOG_TAG, e)
                 break
 
     async def _dispatch_callbacks(self, key: str, model: Any) -> None:
@@ -194,17 +140,118 @@ class BasePolymarketWebSocket(ABC):
                 else:
                     cb(model)
             except Exception as e:
-                logger.error("[POLYMARKET_WS] %s callback error: %s", self.CHANNEL_NAME, e)
+                logger.error("[%s] Callback error: %s", self.LOG_TAG, e)
 
     async def _dispatch_all_callbacks(self, model: Any) -> None:
-        """Dispatch to all registered callbacks regardless of key"""
+        """Dispatch to all registered callbacks regardless of key."""
         for key in self._callbacks:
             await self._dispatch_callbacks(key, model)
 
+    def _register_callback(self, key: str, callback: Callable[..., Any]) -> None:
+        """Register a callback with cached async status."""
+        self._callbacks.setdefault(key, []).append(
+            (callback, inspect.iscoroutinefunction(callback))
+        )
+
+    # -- Abstract hooks --
+
+    @abstractmethod
+    async def _do_ping(self) -> None:
+        """Send a ping (protocol differs per exchange)."""
+        ...
+
+    @abstractmethod
+    def _filter_message(self, msg: str) -> dict[str, Any] | None:
+        """Filter and parse raw message. Return parsed dict or None to skip."""
+        ...
+
+    @abstractmethod
     async def _handle_message(self, data: dict[str, Any]) -> None:
+        """Handle a parsed message dict."""
+        ...
+
+    @abstractmethod
+    async def _resubscribe(self) -> None:
+        """Re-subscribe after reconnection."""
+        ...
+
+
+# ============================================================================
+# Polymarket WebSocket
+# ============================================================================
+
+
+class BasePolymarketWebSocket(BaseWebSocket, ABC):
+    """Base WebSocket manager for Polymarket channels."""
+
+    CHANNEL_NAME: str
+
+    @property
+    def LOG_TAG(self) -> str:  # noqa: N802
+        return f"POLYMARKET_WS:{self.CHANNEL_NAME}"
+
+    async def subscribe(
+        self,
+        ids: list[str],
+        callback: Callable[..., Any],
+    ) -> None:
+        """Subscribe to events for given IDs."""
+        async with self._lock:
+            new_ids = [i for i in ids if i not in self._subscriptions]
+            if not new_ids:
+                return
+
+            if self._subscriptions:
+                await self._send_dynamic_subscribe(new_ids, subscribe=True)
+            else:
+                await self._send_subscribe(new_ids)
+
+            for id_ in new_ids:
+                self._subscriptions.add(id_)
+                self._register_callback(id_, callback)
+
+    async def unsubscribe(self, ids: list[str]) -> None:
+        """Unsubscribe from IDs."""
+        async with self._lock:
+            existing = [i for i in ids if i in self._subscriptions]
+            if not existing:
+                return
+
+            await self._send_dynamic_subscribe(existing, subscribe=False)
+            for id_ in existing:
+                self._subscriptions.discard(id_)
+                self._callbacks.pop(id_, None)
+
+    async def _do_ping(self) -> None:
+        assert self._ws is not None
+        await self._ws.send("PING")
+
+    def _filter_message(self, msg: str) -> dict[str, Any] | None:
+        if not msg or msg in ("PONG", "PING", ""):
+            return None
+
+        if not msg.startswith(("{", "[")):
+            if "INVALID" in msg:
+                logger.warning("[%s] Received: %s, reconnecting...", self.LOG_TAG, msg)
+            else:
+                logger.debug("[%s] Non-JSON: %s", self.LOG_TAG, msg)
+            return None
+
+        return json.loads(msg)
+
+    async def _handle_message(self, data: dict[str, Any]) -> None:
+        messages = data if isinstance(data, list) else [data]
+        for item in messages:
+            await self._handle_single(item)
+
+    async def _handle_single(self, data: dict[str, Any]) -> None:
         key, model = self._parse_message(data)
         if key and model:
             await self._dispatch_callbacks(key, model)
+
+    async def _resubscribe(self) -> None:
+        if self._subscriptions:
+            await self._send_subscribe(list(self._subscriptions))
 
     @abstractmethod
     async def _send_subscribe(self, ids: list[str]) -> None: ...
@@ -237,20 +284,20 @@ _USER_EVENT_PARSERS: dict[str, type] = {
 
 
 class PolymarketMarketWebSocket(BasePolymarketWebSocket):
-    """WebSocket manager for Polymarket Market channel (public)"""
+    """WebSocket manager for Polymarket Market channel (public)."""
 
     BASE_URL = "wss://ws-subscriptions-clob.polymarket.com/ws/market"
     CHANNEL_NAME = "Market"
 
     async def _send_subscribe(self, asset_ids: list[str]) -> None:
-        await self._send(
+        await self._send_json(
             {
                 "assets_ids": asset_ids,
                 "type": "market",
                 "custom_feature_enabled": True,
             }
         )
-        logger.info("[POLYMARKET_WS] Subscribed to %d assets", len(asset_ids))
+        logger.info("[%s] Subscribed to %d assets", self.LOG_TAG, len(asset_ids))
 
     async def _send_dynamic_subscribe(
         self, asset_ids: list[str], subscribe: bool = True
@@ -261,9 +308,9 @@ class PolymarketMarketWebSocket(BasePolymarketWebSocket):
         }
         if subscribe:
             request["custom_feature_enabled"] = True
-        await self._send(request)
+        await self._send_json(request)
         action = "Subscribed to" if subscribe else "Unsubscribed from"
-        logger.info("[POLYMARKET_WS] %s %d assets", action, len(asset_ids))
+        logger.info("[%s] %s %d assets", self.LOG_TAG, action, len(asset_ids))
 
     def _parse_message(self, data: dict[str, Any]) -> tuple[str, Any | None]:
         event_type = data.get("event_type")
@@ -273,7 +320,7 @@ class PolymarketMarketWebSocket(BasePolymarketWebSocket):
         key_field, model_cls = parser
         return data.get(key_field, ""), model_cls(**data)
 
-    async def _handle_message(self, data: dict[str, Any]) -> None:
+    async def _handle_single(self, data: dict[str, Any]) -> None:
         key, model = self._parse_message(data)
         if not key or not model:
             return
@@ -287,7 +334,7 @@ class PolymarketMarketWebSocket(BasePolymarketWebSocket):
 
 
 class PolymarketUserWebSocket(BasePolymarketWebSocket):
-    """WebSocket manager for Polymarket User channel (authenticated)"""
+    """WebSocket manager for Polymarket User channel (authenticated)."""
 
     BASE_URL = "wss://ws-subscriptions-clob.polymarket.com/ws/user"
     CHANNEL_NAME = "User"
@@ -297,19 +344,19 @@ class PolymarketUserWebSocket(BasePolymarketWebSocket):
         self._auth = auth
 
     async def _send_subscribe(self, market_ids: list[str]) -> None:
-        await self._send(
+        await self._send_json(
             {
                 "auth": self._auth.to_auth_dict(),
                 "markets": market_ids,
                 "type": "user",
             }
         )
-        logger.info("[POLYMARKET_WS] User subscribed to %d markets", len(market_ids))
+        logger.info("[%s] Subscribed to %d markets", self.LOG_TAG, len(market_ids))
 
     async def _send_dynamic_subscribe(
         self, market_ids: list[str], subscribe: bool = True
     ) -> None:
-        await self._send(
+        await self._send_json(
             {
                 "markets": market_ids,
                 "operation": "subscribe" if subscribe else "unsubscribe",
@@ -325,7 +372,7 @@ class PolymarketUserWebSocket(BasePolymarketWebSocket):
             return "", None
         return data.get("market", ""), model_cls(**data)
 
-    async def _handle_message(self, data: dict[str, Any]) -> None:
+    async def _handle_single(self, data: dict[str, Any]) -> None:
         _, model = self._parse_message(data)
         if model:
             await self._dispatch_all_callbacks(model)
