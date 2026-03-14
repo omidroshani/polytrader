@@ -11,6 +11,7 @@ import websockets
 from websockets import ConnectionClosed
 from websockets.asyncio.client import ClientConnection
 
+from polytrader.exceptions import WebSocketError
 from polytrader.models import (
     BestBidAsk,
     Book,
@@ -94,7 +95,9 @@ class BaseWebSocket(ABC):
                 except TimeoutError:
                     logger.debug("[%s] Timeout", self.LOG_TAG)
                 except ConnectionClosed:
-                    logger.warning("[%s] Connection closed, reconnecting...", self.LOG_TAG)
+                    logger.warning(
+                        "[%s] Connection closed, reconnecting...", self.LOG_TAG
+                    )
                     await self._close_ws()
                     await asyncio.sleep(1)
                 except Exception as e:
@@ -124,7 +127,7 @@ class BaseWebSocket(ABC):
 
     async def _send_json(self, data: dict[str, Any]) -> None:
         if not self._ws:
-            raise RuntimeError("WebSocket not connected")
+            raise WebSocketError("WebSocket not connected")
         await self._ws.send(json.dumps(data))
 
     async def _send_ping(self) -> None:
@@ -194,7 +197,7 @@ class BasePolymarketWebSocket(BaseWebSocket, ABC):
     CHANNEL_NAME: str
 
     @property
-    def LOG_TAG(self) -> str:  # noqa: N802
+    def LOG_TAG(self) -> str:  # type: ignore[override]
         return f"POLYMARKET_WS:{self.CHANNEL_NAME}"
 
     async def subscribe(
@@ -244,7 +247,8 @@ class BasePolymarketWebSocket(BaseWebSocket, ABC):
                 logger.debug("[%s] Non-JSON: %s", self.LOG_TAG, msg)
             return None
 
-        return json.loads(msg)
+        result: dict[str, Any] = json.loads(msg)
+        return result
 
     async def _handle_message(self, data: dict[str, Any]) -> None:
         messages = data if isinstance(data, list) else [data]

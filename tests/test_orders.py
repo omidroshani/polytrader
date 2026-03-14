@@ -268,7 +268,7 @@ async def test_fak_order_lifecycle(trader: PolyTrader) -> None:
     # 4. Approve conditional token on-chain if needed
     if not trader.ensure_can_sell(market.up_token_id, sell_size, market.neg_risk):
         tx_hash = trader.approve_token(market.neg_risk)
-        wait_for_tx(tx_hash)
+        await wait_for_tx(tx_hash)
         trader.refresh_token_allowance(market.up_token_id)
 
     # 5. Try to SELL more shares than we own -> expect error

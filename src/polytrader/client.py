@@ -25,6 +25,7 @@ from polytrader.constants import (
     GAMMA_API_HOST,
     TOKEN_DECIMALS,
 )
+from polytrader.exceptions import AuthenticationError, OrderError
 from polytrader.models import (
     ZERO,
     Balance,
@@ -95,7 +96,7 @@ class PolyTrader:
         """Get wallet address (MetaMask) from private key"""
         address = Account.from_key(self._private_key).address
         if not isinstance(address, str):
-            raise ValueError("Invalid private key")
+            raise AuthenticationError("Invalid private key")
         return address
 
     def _get_clob_client(self) -> ClobClient:
@@ -142,7 +143,7 @@ class PolyTrader:
         if self._auth is None:
             self._derive_credentials()
         if self._auth is None:
-            raise RuntimeError("Failed to derive credentials")
+            raise AuthenticationError("Failed to derive credentials")
         return self._auth
 
     # ========================================================================
@@ -198,7 +199,7 @@ class PolyTrader:
         data = resp.json()
 
         if not data:
-            raise ValueError(f"No market found for slug: {slug}")
+            raise OrderError(f"No market found for slug: {slug}")
 
         market_data = data[0] if isinstance(data, list) else data
         tokens = self._parse_token_ids(market_data)
@@ -364,7 +365,8 @@ class PolyTrader:
         cancelled_ids = self._extract_cancelled(resp)
         logger.info(
             "[POLYMARKET] Cancelled %d orders for market %s",
-            len(cancelled_ids), market_id,
+            len(cancelled_ids),
+            market_id,
         )
         return len(cancelled_ids)
 

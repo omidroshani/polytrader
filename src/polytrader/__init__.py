@@ -1,5 +1,13 @@
 from polytrader.binance import BinanceWebSocket
 from polytrader.client import PolyTrader
+from polytrader.exceptions import (
+    AuthenticationError,
+    OrderError,
+    PolytraderError,
+    RPCError,
+    TransactionTimeoutError,
+    WebSocketError,
+)
 from polytrader.models import (
     Balance,
     BestBidAsk,
@@ -96,4 +104,11 @@ __all__ = [
     "UserOrder",
     "UserTrade",
     "crypto_fee",
+    # Exceptions
+    "AuthenticationError",
+    "OrderError",
+    "PolytraderError",
+    "RPCError",
+    "TransactionTimeoutError",
+    "WebSocketError",
 ]

@@ -4,7 +4,7 @@ Supports both direct EOA transactions and Gnosis Safe proxy wallets
 (via Polymarket's Relayer service).
 """
 
-import time
+import asyncio
 from dataclasses import dataclass
 from typing import Any, cast
 
@@ -19,6 +19,7 @@ from py_builder_signing_sdk.sdk_types import BuilderApiKeyCreds
 from py_clob_client.config import get_contract_config
 
 from polytrader.constants import CHAIN_ID, POLYGON_RPC, RELAYER_HOST
+from polytrader.exceptions import RPCError, TransactionTimeoutError
 
 _SET_APPROVAL_FOR_ALL_SELECTOR = keccak(text="setApprovalForAll(address,bool)")[:4]
 _ERC20_APPROVE_SELECTOR = keccak(text="approve(address,uint256)")[:4]
@@ -93,15 +94,15 @@ def approve_all(
     return hashes
 
 
-def wait_for_tx(tx_hash: str, timeout: int = 60) -> dict[str, Any]:
+async def wait_for_tx(tx_hash: str, timeout: int = 60) -> dict[str, Any]:
     """Wait for a transaction to be mined and return the receipt."""
-    with httpx.Client(timeout=30.0) as rpc:
+    async with httpx.AsyncClient(timeout=30.0) as rpc:
         for _ in range(timeout):
-            receipt = _rpc_call(rpc, "eth_getTransactionReceipt", [tx_hash])
+            receipt = await _async_rpc_call(rpc, "eth_getTransactionReceipt", [tx_hash])
             if receipt is not None:
                 return cast(dict[str, Any], receipt)
-            time.sleep(1)
-    raise TimeoutError(f"Transaction {tx_hash} not mined within {timeout}s")
+            await asyncio.sleep(1)
+    raise TransactionTimeoutError(f"Transaction {tx_hash} not mined within {timeout}s")
 
 
 def _send_tx(
@@ -120,9 +121,7 @@ def _send_tx(
 
     if funder and funder.lower() != eoa.lower():
         if builder_creds is None:
-            raise ValueError(
-                "builder_creds required for Safe proxy wallet transactions"
-            )
+            raise RPCError("builder_creds required for Safe proxy wallet transactions")
         return _send_relayer_tx(private_key, builder_creds, to, data)
 
     with httpx.Client(timeout=30.0) as rpc:
@@ -172,7 +171,7 @@ def _send_relayer_tx(
     response = relay_client.execute([safe_tx], "Token approval")
     result = response.wait()
     if result is None:
-        raise RuntimeError("Relayer transaction failed or timed out")
+        raise TransactionTimeoutError("Relayer transaction failed or timed out")
     tx_hash: str = result.get("transactionHash", response.transaction_hash)
     return tx_hash
 
@@ -186,5 +185,18 @@ def _rpc_call(client: httpx.Client, method: str, params: list) -> Any:
     resp.raise_for_status()
     result = resp.json()
     if "error" in result:
-        raise RuntimeError(f"RPC error: {result['error']}")
+        raise RPCError(f"RPC error: {result['error']}")
+    return result["result"]
+
+
+async def _async_rpc_call(client: httpx.AsyncClient, method: str, params: list) -> Any:
+    """Make an async JSON-RPC call to Polygon."""
+    resp = await client.post(
+        POLYGON_RPC,
+        json={"jsonrpc": "2.0", "id": 1, "method": method, "params": params},
+    )
+    resp.raise_for_status()
+    result = resp.json()
+    if "error" in result:
+        raise RPCError(f"RPC error: {result['error']}")
     return result["result"]
