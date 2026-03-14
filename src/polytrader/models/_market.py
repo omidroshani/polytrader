@@ -34,14 +34,16 @@ class Book(StrictStruct):
 
     @property
     def spread(self) -> Decimal | None:
-        if self.best_bid and self.best_ask:
-            return self.best_ask - self.best_bid
+        bid, ask = self.best_bid, self.best_ask
+        if bid is not None and ask is not None:
+            return ask - bid
         return None
 
     @property
     def mid_price(self) -> Decimal | None:
-        if self.best_bid and self.best_ask:
-            return (self.best_bid + self.best_ask) / 2
+        bid, ask = self.best_bid, self.best_ask
+        if bid is not None and ask is not None:
+            return (bid + ask) / 2
         return None
 
 

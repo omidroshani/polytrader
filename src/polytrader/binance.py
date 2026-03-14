@@ -1,5 +1,5 @@
+import itertools
 import logging
-import uuid
 from collections.abc import Callable
 from typing import Any
 
@@ -22,6 +22,7 @@ class BinanceWebSocket(BaseWebSocket):
 
     BASE_URL = "wss://stream.binance.com:9443/ws"
     LOG_TAG = "BINANCE_WS"
+    _id_counter = itertools.count(1)
 
     async def subscribe_agg_trade(
         self, symbol: str, callback: Callable[[BinanceAggTrade], None]
@@ -50,10 +51,10 @@ class BinanceWebSocket(BaseWebSocket):
         assert self._ws is not None
         await self._ws.ping()
 
-    def _filter_message(self, msg: str) -> dict[str, Any] | None:
-        if not msg or not msg.startswith("{"):
+    def _filter_message(self, msg: bytes) -> dict[str, Any] | None:
+        if not msg or not msg.startswith(b"{"):
             return None
-        data: dict[str, Any] = msgspec.json.decode(msg.encode())
+        data: dict[str, Any] = msgspec.json.decode(msg)
         # Skip subscription confirmations
         if "result" in data or "id" in data:
             return None
@@ -99,7 +100,7 @@ class BinanceWebSocket(BaseWebSocket):
             {
                 "method": "SUBSCRIBE" if subscribe else "UNSUBSCRIBE",
                 "params": streams,
-                "id": str(uuid.uuid4())[:8],
+                "id": next(self._id_counter),
             }
         )
 

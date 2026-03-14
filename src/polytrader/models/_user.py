@@ -105,7 +105,7 @@ class PolymarketTrade(StrictStruct):
         """
         fee = self.fee
         if self.side == OrderSide.BUY:
-            return self.size - fee / self.price if self.price else self.size
+            return self.size - fee / self.price if self.price > 0 else self.size
         return self.size * self.price - fee
 
 

@@ -1,5 +1,4 @@
 from enum import StrEnum
-from typing import cast
 
 from py_clob_client.clob_types import OrderType as ClobOrderType
 
@@ -85,10 +84,10 @@ class PolymarketOrderType(StrEnum):
 
 # Mapping from our order types to py_clob_client OrderType
 ORDER_TYPE_MAP: dict[PolymarketOrderType, ClobOrderType] = {
-    PolymarketOrderType.GTC: cast(ClobOrderType, ClobOrderType.GTC),
-    PolymarketOrderType.GTD: cast(ClobOrderType, ClobOrderType.GTD),
-    PolymarketOrderType.FOK: cast(ClobOrderType, ClobOrderType.FOK),
-    PolymarketOrderType.FAK: cast(ClobOrderType, ClobOrderType.FAK),
+    PolymarketOrderType.GTC: ClobOrderType.GTC,
+    PolymarketOrderType.GTD: ClobOrderType.GTD,
+    PolymarketOrderType.FOK: ClobOrderType.FOK,
+    PolymarketOrderType.FAK: ClobOrderType.FAK,
 }
 
 

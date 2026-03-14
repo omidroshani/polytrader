@@ -6,7 +6,6 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 from typing import Any
 
-import msgspec
 import msgspec.json
 import websockets
 from websockets import ConnectionClosed
@@ -84,13 +83,13 @@ class BaseWebSocket(ABC):
                         continue
 
                     raw_msg = await asyncio.wait_for(self._ws.recv(), timeout=30)
-                    msg = (
-                        raw_msg.decode("utf-8")
+                    msg_bytes = (
+                        raw_msg
                         if isinstance(raw_msg, bytes)
-                        else raw_msg
+                        else raw_msg.encode("utf-8")
                     )
 
-                    data = self._filter_message(msg)
+                    data = self._filter_message(msg_bytes)
                     if data is not None:
                         await self._handle_message(data)
 
@@ -173,7 +172,7 @@ class BaseWebSocket(ABC):
         ...
 
     @abstractmethod
-    def _filter_message(self, msg: str) -> dict[str, Any] | None:
+    def _filter_message(self, msg: bytes) -> dict[str, Any] | None:
         """Filter and parse raw message. Return parsed dict or None to skip."""
         ...
 
@@ -198,9 +197,9 @@ class BasePolymarketWebSocket(BaseWebSocket, ABC):
 
     CHANNEL_NAME: str
 
-    @property
-    def LOG_TAG(self) -> str:  # type: ignore[override]
-        return f"POLYMARKET_WS:{self.CHANNEL_NAME}"
+    def __init__(self) -> None:
+        super().__init__()
+        self.LOG_TAG = f"POLYMARKET_WS:{self.CHANNEL_NAME}"
 
     async def subscribe(
         self,
@@ -238,18 +237,20 @@ class BasePolymarketWebSocket(BaseWebSocket, ABC):
         assert self._ws is not None
         await self._ws.send("PING")
 
-    def _filter_message(self, msg: str) -> dict[str, Any] | None:
-        if not msg or msg in ("PONG", "PING", ""):
+    _SKIP_MESSAGES = frozenset((b"PONG", b"PING", b""))
+
+    def _filter_message(self, msg: bytes) -> dict[str, Any] | None:
+        if not msg or msg in self._SKIP_MESSAGES:
             return None
 
-        if not msg.startswith(("{", "[")):
-            if "INVALID" in msg:
+        if not msg.startswith((b"{", b"[")):
+            if b"INVALID" in msg:
                 logger.warning("[%s] Received: %s, reconnecting...", self.LOG_TAG, msg)
             else:
                 logger.debug("[%s] Non-JSON: %s", self.LOG_TAG, msg)
             return None
 
-        result: dict[str, Any] = msgspec.json.decode(msg.encode())
+        result: dict[str, Any] = msgspec.json.decode(msg)
         return result
 
     async def _handle_message(self, data: dict[str, Any]) -> None:

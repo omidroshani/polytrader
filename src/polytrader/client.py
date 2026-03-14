@@ -1,7 +1,7 @@
 import logging
 from datetime import UTC, datetime
 from decimal import Decimal
-from typing import Any, cast
+from typing import Any
 
 import httpx
 import msgspec.json
@@ -191,7 +191,7 @@ class PolyTrader:
             UpDownMarket with token IDs for Up and Down outcomes
 
         Raises:
-            ValueError: If no market found for the given parameters
+            OrderError: If no market found for the given parameters
             httpx.HTTPError: If the API request fails
         """
         slug = f"{coin}-updown-{timeframe}-{timestamp}"
@@ -415,20 +415,18 @@ class PolyTrader:
     def get_balance(self) -> Balance:
         """Get USDC balance and allowance."""
         client = self._get_authenticated_client()
-        params = BalanceAllowanceParams(
-            asset_type=cast(AssetType, AssetType.COLLATERAL)
-        )
-        resp = cast(dict[str, Any], client.get_balance_allowance(params))
+        params = BalanceAllowanceParams(asset_type=AssetType.COLLATERAL)
+        resp: dict[str, Any] = client.get_balance_allowance(params)
         return Balance.from_dict(resp)
 
     def get_token_balance(self, token_id: str) -> Balance:
         """Get conditional token balance and allowance."""
         client = self._get_authenticated_client()
         params = BalanceAllowanceParams(
-            asset_type=cast(AssetType, AssetType.CONDITIONAL),
+            asset_type=AssetType.CONDITIONAL,
             token_id=token_id,
         )
-        resp = cast(dict[str, Any], client.get_balance_allowance(params))
+        resp: dict[str, Any] = client.get_balance_allowance(params)
         return Balance.from_dict(resp)
 
     def get_orderbook(self, token_id: str) -> OrderBookSummary:
@@ -496,7 +494,7 @@ class PolyTrader:
         """
         client = self._get_authenticated_client()
         params = BalanceAllowanceParams(
-            asset_type=cast(AssetType, AssetType.CONDITIONAL),
+            asset_type=AssetType.CONDITIONAL,
             token_id=token_id,
         )
         client.update_balance_allowance(params)
@@ -504,9 +502,7 @@ class PolyTrader:
     def refresh_collateral_allowance(self) -> None:
         """Refresh server's cached balance/allowance for USDC collateral."""
         client = self._get_authenticated_client()
-        params = BalanceAllowanceParams(
-            asset_type=cast(AssetType, AssetType.COLLATERAL),
-        )
+        params = BalanceAllowanceParams(asset_type=AssetType.COLLATERAL)
         client.update_balance_allowance(params)
 
     def approve_token(self, neg_risk: bool = False) -> str:
