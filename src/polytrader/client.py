@@ -4,7 +4,7 @@ from decimal import Decimal
 from typing import Any, cast
 
 import httpx
-import orjson
+import msgspec.json
 from eth_account import Account
 from py_clob_client.client import ApiCreds, ClobClient, OrderBookSummary
 from py_clob_client.clob_types import (
@@ -157,12 +157,12 @@ class PolyTrader:
         outcomes_raw = market_data.get("outcomes", "[]")
 
         token_ids = (
-            orjson.loads(token_ids_raw)
+            msgspec.json.decode(token_ids_raw.encode())
             if isinstance(token_ids_raw, str)
             else token_ids_raw
         )
         outcomes = (
-            orjson.loads(outcomes_raw)
+            msgspec.json.decode(outcomes_raw.encode())
             if isinstance(outcomes_raw, str)
             else outcomes_raw
         )
@@ -320,7 +320,7 @@ class PolyTrader:
             ),
         )
 
-        result = OrderResult.from_dict(resp)
+        result = OrderResult.validate(resp)
 
         logger.info(
             "[POLYMARKET] Order %s: %s %s@%s type=%s id=%s",
@@ -380,7 +380,7 @@ class PolyTrader:
         """Get a single order by ID."""
         client = self._get_authenticated_client()
         resp = client.get_order(order_id)
-        return PolymarketOrder(**resp)
+        return PolymarketOrder.validate(resp)
 
     def get_orders(
         self,
@@ -391,7 +391,7 @@ class PolyTrader:
         client = self._get_authenticated_client()
         params = OpenOrderParams(market=market_id, asset_id=asset_id)
         resp = client.get_orders(params)
-        return [PolymarketOrder(**d) for d in resp]
+        return [PolymarketOrder.validate(d) for d in resp]
 
     def get_trades(
         self,
@@ -402,7 +402,7 @@ class PolyTrader:
         client = self._get_authenticated_client()
         params = TradeParams(market=market_id, asset_id=asset_id)
         resp = client.get_trades(params)
-        return [PolymarketTrade(**d) for d in resp]
+        return [PolymarketTrade.validate(d) for d in resp]
 
     async def get_positions(self) -> list[PolymarketPosition]:
         """Get current positions from the data API."""
@@ -410,7 +410,7 @@ class PolyTrader:
         resp = await self._http.get(url)
         resp.raise_for_status()
         data = resp.json()
-        return [PolymarketPosition.from_dict(pos_data) for pos_data in data]
+        return [PolymarketPosition.validate(pos_data) for pos_data in data]
 
     def get_balance(self) -> Balance:
         """Get USDC balance and allowance."""

@@ -155,7 +155,7 @@ async def test_user_ws_parsing() -> None:
         assert event_type in ("trade", "order")
 
         if event_type == "trade":
-            event = UserTrade(**msg)
+            event = UserTrade.validate(msg)
             assert event.id != ""
             assert event.price > 0
             assert event.size > 0
@@ -173,7 +173,7 @@ async def test_user_ws_parsing() -> None:
                 assert isinstance(mo, MakerOrder)
                 assert mo.matched_amount > 0
         else:
-            order = UserOrder(**msg)
+            order = UserOrder.validate(msg)
             assert order.id != ""
             assert order.price >= 0
             assert order.original_size > 0
@@ -203,7 +203,7 @@ async def test_market_ws_parsing() -> None:
         event_types_seen.add(event_type)
 
         if event_type == "book":
-            book = Book(**msg)
+            book = Book.validate(msg)
             assert book.asset_id != ""
             assert book.market != ""
             assert book.timestamp > 0
@@ -218,7 +218,7 @@ async def test_market_ws_parsing() -> None:
                 assert book.spread >= 0
 
         elif event_type == "price_change":
-            pc = PriceChange(**msg)
+            pc = PriceChange.validate(msg)
             assert pc.market != ""
             assert pc.timestamp > 0
             assert len(pc.price_changes) > 0
@@ -229,7 +229,7 @@ async def test_market_ws_parsing() -> None:
                 assert item.side in (OrderSide.BUY, OrderSide.SELL)
 
         elif event_type == "last_trade_price":
-            ltp = LastTradePrice(**msg)
+            ltp = LastTradePrice.validate(msg)
             assert ltp.asset_id != ""
             assert isinstance(ltp.price, Decimal)
             assert isinstance(ltp.size, Decimal)
@@ -239,7 +239,7 @@ async def test_market_ws_parsing() -> None:
             assert ltp.quote_value == ltp.price * ltp.size
 
         elif event_type == "best_bid_ask":
-            bba = BestBidAsk(**msg)
+            bba = BestBidAsk.validate(msg)
             assert bba.asset_id != ""
             assert isinstance(bba.best_bid, Decimal)
             assert isinstance(bba.best_ask, Decimal)

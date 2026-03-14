@@ -5,7 +5,6 @@ Supports both direct EOA transactions and Gnosis Safe proxy wallets
 """
 
 import asyncio
-from dataclasses import dataclass
 from typing import Any, cast
 
 import httpx
@@ -20,14 +19,14 @@ from py_clob_client.config import get_contract_config
 
 from polytrader.constants import CHAIN_ID, POLYGON_RPC, RELAYER_HOST
 from polytrader.exceptions import RPCError, TransactionTimeoutError
+from polytrader.models._helpers import StrictStruct
 
 _SET_APPROVAL_FOR_ALL_SELECTOR = keccak(text="setApprovalForAll(address,bool)")[:4]
 _ERC20_APPROVE_SELECTOR = keccak(text="approve(address,uint256)")[:4]
 _MAX_UINT256 = 2**256 - 1
 
 
-@dataclass(slots=True)
-class BuilderCreds:
+class BuilderCreds(StrictStruct):
     """Builder API credentials for the Polymarket Relayer."""
 
     key: str

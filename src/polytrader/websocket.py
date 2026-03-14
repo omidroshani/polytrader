@@ -6,7 +6,8 @@ from abc import ABC, abstractmethod
 from collections.abc import Callable
 from typing import Any
 
-import orjson
+import msgspec
+import msgspec.json
 import websockets
 from websockets import ConnectionClosed
 from websockets.asyncio.client import ClientConnection
@@ -20,6 +21,7 @@ from polytrader.models import (
     NewMarket,
     PolymarketAuth,
     PriceChange,
+    StrictStruct,
     TickSizeChange,
     UserOrder,
     UserTrade,
@@ -128,7 +130,7 @@ class BaseWebSocket(ABC):
     async def _send_json(self, data: dict[str, Any]) -> None:
         if not self._ws:
             raise WebSocketError("WebSocket not connected")
-        await self._ws.send(orjson.dumps(data))
+        await self._ws.send(msgspec.json.encode(data))
 
     async def _send_ping(self) -> None:
         while self._running:
@@ -247,7 +249,7 @@ class BasePolymarketWebSocket(BaseWebSocket, ABC):
                 logger.debug("[%s] Non-JSON: %s", self.LOG_TAG, msg)
             return None
 
-        result: dict[str, Any] = orjson.loads(msg)
+        result: dict[str, Any] = msgspec.json.decode(msg.encode())
         return result
 
     async def _handle_message(self, data: dict[str, Any]) -> None:
@@ -278,7 +280,7 @@ class BasePolymarketWebSocket(BaseWebSocket, ABC):
 
 # -- Event type to model/key mappings --
 
-_MARKET_EVENT_PARSERS: dict[str, tuple[str, type]] = {
+_MARKET_EVENT_PARSERS: dict[str, tuple[str, type[StrictStruct]]] = {
     "book": ("asset_id", Book),
     "price_change": ("market", PriceChange),
     "tick_size_change": ("asset_id", TickSizeChange),
@@ -288,7 +290,7 @@ _MARKET_EVENT_PARSERS: dict[str, tuple[str, type]] = {
     "market_resolved": ("market", MarketResolved),
 }
 
-_USER_EVENT_PARSERS: dict[str, type] = {
+_USER_EVENT_PARSERS: dict[str, type[StrictStruct]] = {
     "trade": UserTrade,
     "order": UserOrder,
 }
@@ -329,7 +331,7 @@ class PolymarketMarketWebSocket(BasePolymarketWebSocket):
         if not parser:
             return "", None
         key_field, model_cls = parser
-        return data.get(key_field, ""), model_cls(**data)
+        return data.get(key_field, ""), model_cls.validate(data)
 
     async def _handle_single(self, data: dict[str, Any]) -> None:
         key, model = self._parse_message(data)
@@ -374,14 +376,12 @@ class PolymarketUserWebSocket(BasePolymarketWebSocket):
             }
         )
 
-    def _parse_message(
-        self, data: dict[str, Any]
-    ) -> tuple[str, UserTrade | UserOrder | None]:
+    def _parse_message(self, data: dict[str, Any]) -> tuple[str, StrictStruct | None]:
         event_type = data.get("event_type")
         model_cls = _USER_EVENT_PARSERS.get(event_type or "")
         if not model_cls:
             return "", None
-        return data.get("market", ""), model_cls(**data)
+        return data.get("market", ""), model_cls.validate(data)
 
     async def _handle_single(self, data: dict[str, Any]) -> None:
         _, model = self._parse_message(data)

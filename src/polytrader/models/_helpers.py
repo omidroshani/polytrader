@@ -1,9 +1,22 @@
+from __future__ import annotations
+
 from decimal import Decimal
-from typing import Any
+from typing import Any, Self
+
+import msgspec
 
 from polytrader.constants import CRYPTO_FEE_EXPONENT, CRYPTO_FEE_RATE
 
 ZERO = Decimal("0")
+
+
+class StrictStruct(msgspec.Struct, forbid_unknown_fields=True):
+    """Base struct that rejects unknown fields."""
+
+    @classmethod
+    def validate(cls, data: dict[str, Any]) -> Self:
+        """Convert a raw dict into a typed struct with automatic coercion."""
+        return msgspec.convert(data, cls, strict=False)
 
 
 def crypto_fee(size: Decimal, price: Decimal) -> Decimal:
@@ -15,31 +28,3 @@ def crypto_fee(size: Decimal, price: Decimal) -> Decimal:
     extremes (p -> 0 or p -> 1).
     """
     return size * price * CRYPTO_FEE_RATE * (price * (1 - price)) ** CRYPTO_FEE_EXPONENT
-
-
-def _decimal(v: Any) -> Decimal:
-    if isinstance(v, Decimal):
-        return v
-    return Decimal(str(v))
-
-
-def _decimal_or_none(v: Any) -> Decimal | None:
-    if v is None:
-        return None
-    if isinstance(v, Decimal):
-        return v
-    return Decimal(str(v))
-
-
-def _int(v: Any) -> int:
-    return int(v) if isinstance(v, str) else v
-
-
-def _int_or_none(v: Any) -> int | None:
-    if v is None:
-        return None
-    return int(v) if isinstance(v, str) else v
-
-
-def _float(v: Any) -> float:
-    return float(v) if isinstance(v, str) else v

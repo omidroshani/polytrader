@@ -1,13 +1,14 @@
-from dataclasses import dataclass, field
 from datetime import datetime
 from decimal import Decimal
 from typing import Any
 
+import msgspec
+
 from ._enums import Coin, OrderResultStatus, Outcome, Timeframe
+from ._helpers import StrictStruct
 
 
-@dataclass(slots=True)
-class UpDownMarketToken:
+class UpDownMarketToken(StrictStruct):
     """Token info for an Up/Down market outcome"""
 
     token_id: str
@@ -15,16 +16,14 @@ class UpDownMarketToken:
     price: Decimal | None = None
 
 
-@dataclass(slots=True)
-class TokenIdPair:
+class TokenIdPair(StrictStruct):
     """Up/Down token ID pair for a market"""
 
     up: str = ""
     down: str = ""
 
 
-@dataclass(slots=True)
-class UpDownMarket:
+class UpDownMarket(StrictStruct):
     """Up/Down market info from Gamma API"""
 
     coin: Coin
@@ -50,12 +49,11 @@ class UpDownMarket:
     taker_base_fee: int
 
 
-@dataclass(slots=True)
-class PolymarketPosition:
+class PolymarketPosition(StrictStruct, rename="camel"):
     """User position in a market"""
 
-    proxy_wallet: str
-    asset_id: str
+    proxy_wallet: str = msgspec.field(name="proxyWallet")
+    asset_id: str = msgspec.field(name="asset")
     condition_id: str
     outcome: str
     size: Decimal
@@ -79,67 +77,32 @@ class PolymarketPosition:
     opposite_asset: str
     end_date: str
     negative_risk: bool
-
-    @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "PolymarketPosition":
-        return cls(
-            proxy_wallet=data.get("proxyWallet", ""),
-            asset_id=data.get("asset", ""),
-            condition_id=data.get("conditionId", ""),
-            outcome=data.get("outcome", ""),
-            size=Decimal(str(data.get("size", 0))),
-            avg_price=Decimal(str(data.get("avgPrice", 0))),
-            cur_price=Decimal(str(data.get("curPrice", 0))),
-            initial_value=Decimal(str(data.get("initialValue", 0))),
-            current_value=Decimal(str(data.get("currentValue", 0))),
-            cash_pnl=Decimal(str(data.get("cashPnl", 0))),
-            percent_pnl=Decimal(str(data.get("percentPnl", 0))),
-            total_bought=Decimal(str(data.get("totalBought", 0))),
-            realized_pnl=Decimal(str(data.get("realizedPnl", 0))),
-            percent_realized_pnl=Decimal(str(data.get("percentRealizedPnl", 0))),
-            redeemable=data.get("redeemable", False),
-            mergeable=data.get("mergeable", False),
-            title=data.get("title", ""),
-            slug=data.get("slug", ""),
-            icon=data.get("icon", ""),
-            event_slug=data.get("eventSlug", ""),
-            outcome_index=data.get("outcomeIndex", 0),
-            opposite_outcome=data.get("oppositeOutcome", ""),
-            opposite_asset=data.get("oppositeAsset", ""),
-            end_date=data.get("endDate", ""),
-            negative_risk=data.get("negativeRisk", False),
-        )
+    event_id: str = ""
 
 
-@dataclass(slots=True)
-class OrderResult:
+class OrderResult(StrictStruct):
     """Result of order creation (SendOrderResponse)"""
 
     success: bool
-    order_id: str
-    status: OrderResultStatus
-    making_amount: Decimal = Decimal("0")
-    taking_amount: Decimal = Decimal("0")
-    error_msg: str = ""
-    transaction_hashes: list[str] = field(default_factory=list)
-    trade_ids: list[str] = field(default_factory=list)
+    order_id: str = msgspec.field(name="orderID", default="")
+    status: OrderResultStatus = OrderResultStatus.LIVE
+    making_amount: Decimal = msgspec.field(name="makingAmount", default=Decimal("0"))
+    taking_amount: Decimal = msgspec.field(name="takingAmount", default=Decimal("0"))
+    error_msg: str = msgspec.field(name="errorMsg", default="")
+    transaction_hashes: list[str] = msgspec.field(name="transactionsHashes", default=[])
+    trade_ids: list[str] = msgspec.field(name="tradeIDs", default=[])
 
     @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "OrderResult":
-        return cls(
-            success=data.get("success", False),
-            order_id=data.get("orderID", ""),
-            status=OrderResultStatus(data.get("status", "live")),
-            making_amount=Decimal(str(data.get("makingAmount", 0) or 0)),
-            taking_amount=Decimal(str(data.get("takingAmount", 0) or 0)),
-            error_msg=data.get("errorMsg", ""),
-            transaction_hashes=data.get("transactionsHashes", []),
-            trade_ids=data.get("tradeIDs", []),
-        )
+    def validate(cls, data: dict[str, Any]) -> "OrderResult":
+        """Handle empty-string amounts from the API."""
+        cleaned = data.copy()
+        for key in ("makingAmount", "takingAmount"):
+            if cleaned.get(key) == "":
+                cleaned[key] = "0"
+        return msgspec.convert(cleaned, cls, strict=False)
 
 
-@dataclass(slots=True)
-class Balance:
+class Balance(StrictStruct):
     """Balance and allowance (works for both USDC and conditional tokens).
 
     For USDC (collateral), the API returns ``{"balance": "...", "allowance": "..."}``.

@@ -1,8 +1,7 @@
-from dataclasses import dataclass
+from ._helpers import StrictStruct
 
 
-@dataclass(slots=True)
-class PolymarketAuth:
+class PolymarketAuth(StrictStruct):
     """Polymarket API authentication credentials"""
 
     api_key: str

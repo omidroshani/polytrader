@@ -3,7 +3,7 @@ import uuid
 from collections.abc import Callable
 from typing import Any
 
-import orjson
+import msgspec.json
 
 from .models import (
     BinanceAggTrade,
@@ -53,7 +53,7 @@ class BinanceWebSocket(BaseWebSocket):
     def _filter_message(self, msg: str) -> dict[str, Any] | None:
         if not msg or not msg.startswith("{"):
             return None
-        data: dict[str, Any] = orjson.loads(msg)
+        data: dict[str, Any] = msgspec.json.decode(msg.encode())
         # Skip subscription confirmations
         if "result" in data or "id" in data:
             return None
@@ -108,16 +108,16 @@ class BinanceWebSocket(BaseWebSocket):
 
         if event_type == "aggTrade":
             symbol = data.get("s", "").lower()
-            return f"{symbol}@aggTrade", BinanceAggTrade.from_dict(data)
+            return f"{symbol}@aggTrade", BinanceAggTrade.validate(data)
 
         elif event_type == "kline":
             symbol = data.get("s", "").lower()
             interval = data.get("k", {}).get("i", "1m")
-            event = BinanceKlineEvent.from_dict(data)
+            event = BinanceKlineEvent.validate(data)
             return f"{symbol}@kline_{interval}", event.kline
 
         elif event_type == "depthUpdate":
             symbol = data.get("s", "").lower()
-            return f"{symbol}@depth@100ms", BinanceDepthUpdate.from_dict(data)
+            return f"{symbol}@depth@100ms", BinanceDepthUpdate.validate(data)
 
         return "", None

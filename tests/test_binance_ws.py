@@ -72,7 +72,7 @@ async def test_binance_ws_parsing() -> None:
         event_types_seen.add(event_type)
 
         if event_type == "aggTrade":
-            trade = BinanceAggTrade.from_dict(msg)
+            trade = BinanceAggTrade.validate(msg)
             assert trade.symbol != ""
             assert trade.price > 0
             assert trade.quantity > 0
@@ -83,7 +83,7 @@ async def test_binance_ws_parsing() -> None:
             assert trade.is_taker_buy == (not trade.is_buyer_maker)
 
         elif event_type == "kline":
-            event = BinanceKlineEvent.from_dict(msg)
+            event = BinanceKlineEvent.validate(msg)
             kline = event.kline
             assert isinstance(kline, BinanceKline)
             assert kline.symbol != ""
@@ -99,7 +99,7 @@ async def test_binance_ws_parsing() -> None:
             assert 0 <= kline.taker_buy_ratio <= 1
 
         elif event_type == "depthUpdate":
-            depth = BinanceDepthUpdate.from_dict(msg)
+            depth = BinanceDepthUpdate.validate(msg)
             assert depth.symbol != ""
             assert depth.first_update_id > 0
             assert depth.final_update_id >= depth.first_update_id

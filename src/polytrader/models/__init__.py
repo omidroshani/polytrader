@@ -31,7 +31,7 @@ from ._enums import (
     TradeStatus,
     UserEventType,
 )
-from ._helpers import ZERO, _decimal, _float, _int, crypto_fee
+from ._helpers import ZERO, StrictStruct, crypto_fee
 from ._market import (
     BestBidAsk,
     Book,
@@ -69,9 +69,7 @@ __all__ = [
     "UserEventType",
     # Helpers
     "ZERO",
-    "_decimal",
-    "_float",
-    "_int",
+    "StrictStruct",
     "crypto_fee",
     # Auth
     "PolymarketAuth",

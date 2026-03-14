@@ -1,42 +1,22 @@
-from dataclasses import dataclass, field
-from typing import Any
+import msgspec
 
-from ._helpers import _float
+from ._helpers import StrictStruct
 
 
-@dataclass(slots=True)
-class BinanceAggTrade:
+class BinanceAggTrade(StrictStruct):
     """Aggregate trade data"""
 
-    event: str
-    event_time: int
-    symbol: str
-    agg_trade_id: int
-    price: float
-    quantity: float
-    first_trade_id: int
-    last_trade_id: int
-    trade_time: int
-    is_buyer_maker: bool
-
-    def __post_init__(self) -> None:
-        self.price = _float(self.price)
-        self.quantity = _float(self.quantity)
-
-    @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "BinanceAggTrade":
-        return cls(
-            event=data["e"],
-            event_time=data["E"],
-            symbol=data["s"],
-            agg_trade_id=data["a"],
-            price=data["p"],
-            quantity=data["q"],
-            first_trade_id=data["f"],
-            last_trade_id=data["l"],
-            trade_time=data["T"],
-            is_buyer_maker=data["m"],
-        )
+    event: str = msgspec.field(name="e")
+    event_time: int = msgspec.field(name="E")
+    symbol: str = msgspec.field(name="s")
+    agg_trade_id: int = msgspec.field(name="a")
+    price: float = msgspec.field(name="p")
+    quantity: float = msgspec.field(name="q")
+    first_trade_id: int = msgspec.field(name="f")
+    last_trade_id: int = msgspec.field(name="l")
+    trade_time: int = msgspec.field(name="T")
+    is_buyer_maker: bool = msgspec.field(name="m")
+    is_best_match: bool = msgspec.field(name="M")
 
     @property
     def quote_qty(self) -> float:
@@ -47,57 +27,26 @@ class BinanceAggTrade:
         return not self.is_buyer_maker
 
 
-@dataclass(slots=True)
-class BinanceKline:
+class BinanceKline(StrictStruct):
     """Kline/Candlestick data"""
 
-    open_time: int
-    close_time: int
-    symbol: str
-    interval: str
-    first_trade_id: int
-    last_trade_id: int
-    open: float
-    close: float
-    high: float
-    low: float
-    volume: float
-    num_trades: int
-    is_closed: bool
-    quote_volume: float
-    taker_buy_base_volume: float
-    taker_buy_quote_volume: float
-
-    def __post_init__(self) -> None:
-        self.open = _float(self.open)
-        self.close = _float(self.close)
-        self.high = _float(self.high)
-        self.low = _float(self.low)
-        self.volume = _float(self.volume)
-        self.quote_volume = _float(self.quote_volume)
-        self.taker_buy_base_volume = _float(self.taker_buy_base_volume)
-        self.taker_buy_quote_volume = _float(self.taker_buy_quote_volume)
-
-    @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "BinanceKline":
-        return cls(
-            open_time=data["t"],
-            close_time=data["T"],
-            symbol=data["s"],
-            interval=data["i"],
-            first_trade_id=data["f"],
-            last_trade_id=data["L"],
-            open=data["o"],
-            close=data["c"],
-            high=data["h"],
-            low=data["l"],
-            volume=data["v"],
-            num_trades=data["n"],
-            is_closed=data["x"],
-            quote_volume=data["q"],
-            taker_buy_base_volume=data["V"],
-            taker_buy_quote_volume=data["Q"],
-        )
+    open_time: int = msgspec.field(name="t")
+    close_time: int = msgspec.field(name="T")
+    symbol: str = msgspec.field(name="s")
+    interval: str = msgspec.field(name="i")
+    first_trade_id: int = msgspec.field(name="f")
+    last_trade_id: int = msgspec.field(name="L")
+    open: float = msgspec.field(name="o")
+    close: float = msgspec.field(name="c")
+    high: float = msgspec.field(name="h")
+    low: float = msgspec.field(name="l")
+    volume: float = msgspec.field(name="v")
+    num_trades: int = msgspec.field(name="n")
+    is_closed: bool = msgspec.field(name="x")
+    quote_volume: float = msgspec.field(name="q")
+    taker_buy_base_volume: float = msgspec.field(name="V")
+    taker_buy_quote_volume: float = msgspec.field(name="Q")
+    ignore_quote_asset_volume: str = msgspec.field(name="B")
 
     @property
     def taker_buy_ratio(self) -> float:
@@ -112,83 +61,57 @@ class BinanceKline:
         return self.close > self.open
 
 
-@dataclass(slots=True)
-class BinanceKlineEvent:
+class BinanceKlineEvent(StrictStruct):
     """Kline stream event wrapper"""
 
-    event: str
-    event_time: int
-    symbol: str
-    kline: BinanceKline
-
-    @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "BinanceKlineEvent":
-        return cls(
-            event=data["e"],
-            event_time=data["E"],
-            symbol=data["s"],
-            kline=BinanceKline.from_dict(data["k"]),
-        )
+    event: str = msgspec.field(name="e")
+    event_time: int = msgspec.field(name="E")
+    symbol: str = msgspec.field(name="s")
+    kline: BinanceKline = msgspec.field(name="k")
 
 
-@dataclass(slots=True)
-class BinanceOrderBookLevel:
+class BinanceOrderBookLevel(StrictStruct):
     """Single orderbook level"""
 
     price: float
     quantity: float
 
-    def __post_init__(self) -> None:
-        self.price = _float(self.price)
-        self.quantity = _float(self.quantity)
 
-
-@dataclass(slots=True)
-class BinanceDepthUpdate:
+class BinanceDepthUpdate(StrictStruct):
     """Orderbook depth update"""
 
-    event: str
-    event_time: int
-    symbol: str
-    first_update_id: int
-    final_update_id: int
-    bids: list[list[str]]
-    asks: list[list[str]]
-    bid_levels: list[BinanceOrderBookLevel] = field(default_factory=list)
-    ask_levels: list[BinanceOrderBookLevel] = field(default_factory=list)
+    event: str = msgspec.field(name="e")
+    event_time: int = msgspec.field(name="E")
+    symbol: str = msgspec.field(name="s")
+    first_update_id: int = msgspec.field(name="U")
+    final_update_id: int = msgspec.field(name="u")
+    bids: list[list[str]] = msgspec.field(name="b")
+    asks: list[list[str]] = msgspec.field(name="a")
 
-    @classmethod
-    def from_dict(cls, data: dict[str, Any]) -> "BinanceDepthUpdate":
-        raw_bids = data["b"]
-        raw_asks = data["a"]
-        return cls(
-            event=data["e"],
-            event_time=data["E"],
-            symbol=data["s"],
-            first_update_id=data["U"],
-            final_update_id=data["u"],
-            bids=raw_bids,
-            asks=raw_asks,
-            bid_levels=[
-                BinanceOrderBookLevel(price=float(b[0]), quantity=float(b[1]))
-                for b in raw_bids
-            ],
-            ask_levels=[
-                BinanceOrderBookLevel(price=float(a[0]), quantity=float(a[1]))
-                for a in raw_asks
-            ],
-        )
+    @property
+    def bid_levels(self) -> list[BinanceOrderBookLevel]:
+        return [
+            BinanceOrderBookLevel(price=float(b[0]), quantity=float(b[1]))
+            for b in self.bids
+        ]
+
+    @property
+    def ask_levels(self) -> list[BinanceOrderBookLevel]:
+        return [
+            BinanceOrderBookLevel(price=float(a[0]), quantity=float(a[1]))
+            for a in self.asks
+        ]
 
     @property
     def best_bid(self) -> float | None:
-        return self.bid_levels[0].price if self.bid_levels else None
+        return float(self.bids[0][0]) if self.bids else None
 
     @property
     def best_ask(self) -> float | None:
-        return self.ask_levels[0].price if self.ask_levels else None
+        return float(self.asks[0][0]) if self.asks else None
 
     @property
     def spread(self) -> float | None:
-        if self.bid_levels and self.ask_levels:
-            return self.ask_levels[0].price - self.bid_levels[0].price
+        if self.bids and self.asks:
+            return float(self.asks[0][0]) - float(self.bids[0][0])
         return None
