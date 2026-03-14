@@ -562,3 +562,19 @@ class PolyTrader:
         if self._user_ws is None:
             self._user_ws = PolymarketUserWebSocket(auth=self.get_auth())
         return self._user_ws
+
+    async def close(self) -> None:
+        """Clean up all resources (WebSockets, HTTP client)."""
+        if self._market_ws:
+            await self._market_ws.disconnect()
+        if self._user_ws:
+            await self._user_ws.disconnect()
+        if self._binance_ws:
+            await self._binance_ws.disconnect()
+        await self._http.aclose()
+
+    async def __aenter__(self) -> "PolyTrader":
+        return self
+
+    async def __aexit__(self, *_exc: Any) -> None:
+        await self.close()

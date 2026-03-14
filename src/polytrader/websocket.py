@@ -59,6 +59,13 @@ class BaseWebSocket(ABC):
         await self._close_ws()
         logger.info("[%s] Disconnected", self.LOG_TAG)
 
+    async def __aenter__(self) -> "BaseWebSocket":
+        await self.connect()
+        return self
+
+    async def __aexit__(self, *_exc: Any) -> None:
+        await self.disconnect()
+
     async def run(self) -> None:
         """Main loop to receive and process messages."""
         try:
