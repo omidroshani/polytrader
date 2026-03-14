@@ -135,7 +135,7 @@ class PolyTrader:
             passphrase=resp.api_passphrase,
         )
 
-        logger.info(f"[POLYMARKET] Credentials derived, funder: {self.funder}")
+        logger.info("[POLYMARKET] Credentials derived, funder: %s", self.funder)
 
     def get_auth(self) -> PolymarketAuth:
         """Get API credentials (cached)"""
@@ -346,7 +346,7 @@ class PolyTrader:
             or resp.get("canceled", resp.get("cancelled", False))
         )
         if cancelled:
-            logger.info(f"[POLYMARKET] Order cancelled: {order_id}")
+            logger.info("[POLYMARKET] Order cancelled: %s", order_id)
         return cancelled
 
     def cancel_all_orders(self) -> int:
@@ -354,7 +354,7 @@ class PolyTrader:
         client = self._get_authenticated_client()
         resp = client.cancel_all()
         cancelled_ids = self._extract_cancelled(resp)
-        logger.info(f"[POLYMARKET] Cancelled {len(cancelled_ids)} orders")
+        logger.info("[POLYMARKET] Cancelled %d orders", len(cancelled_ids))
         return len(cancelled_ids)
 
     def cancel_orders_for_market(self, market_id: str) -> int:
@@ -363,7 +363,8 @@ class PolyTrader:
         resp = client.cancel_market_orders(market_id)
         cancelled_ids = self._extract_cancelled(resp)
         logger.info(
-            f"[POLYMARKET] Cancelled {len(cancelled_ids)} orders for market {market_id}"
+            "[POLYMARKET] Cancelled %d orders for market %s",
+            len(cancelled_ids), market_id,
         )
         return len(cancelled_ids)
 

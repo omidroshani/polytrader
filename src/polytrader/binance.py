@@ -31,7 +31,7 @@ class BinanceWebSocket:
     def __init__(self) -> None:
         self._ws: ClientConnection | None = None
         self._subscriptions: set[str] = set()
-        self._callbacks: dict[str, list[Callable[..., Any]]] = {}
+        self._callbacks: dict[str, list[tuple[Callable[..., Any], bool]]] = {}
         self._running = False
         self._lock = asyncio.Lock()
         self._ping_task: asyncio.Task[None] | None = None
@@ -112,7 +112,7 @@ class BinanceWebSocket:
                     await self._close_ws()
                     await asyncio.sleep(1)
                 except Exception as e:
-                    logger.error(f"[BINANCE_WS] Error: {e}")
+                    logger.error("[BINANCE_WS] Error: %s", e)
                     await asyncio.sleep(1)
         finally:
             await self.disconnect()
@@ -139,7 +139,7 @@ class BinanceWebSocket:
             except asyncio.CancelledError:
                 return
             except Exception as e:
-                logger.error(f"[BINANCE_WS] Ping error: {e}")
+                logger.error("[BINANCE_WS] Ping error: %s", e)
                 break
 
     async def _reconnect(self) -> None:
@@ -168,8 +168,10 @@ class BinanceWebSocket:
             if stream not in self._subscriptions:
                 await self._send_subscribe([stream])
                 self._subscriptions.add(stream)
-            self._callbacks.setdefault(stream, []).append(callback)
-        logger.info(f"[BINANCE_WS] Subscribed to {stream}")
+            self._callbacks.setdefault(stream, []).append(
+                (callback, inspect.iscoroutinefunction(callback))
+            )
+        logger.info("[BINANCE_WS] Subscribed to %s", stream)
 
     async def _send_subscribe(self, streams: list[str], subscribe: bool = True) -> None:
         """Send subscribe/unsubscribe request"""
@@ -207,11 +209,11 @@ class BinanceWebSocket:
         return "", None
 
     async def _dispatch_callbacks(self, key: str, model: Any) -> None:
-        for cb in self._callbacks.get(key, []):
+        for cb, is_async in self._callbacks.get(key, []):
             try:
-                if inspect.iscoroutinefunction(cb):
+                if is_async:
                     await cb(model)
                 else:
                     cb(model)
             except Exception as e:
-                logger.error(f"[BINANCE_WS] Callback error: {e}")
+                logger.error("[BINANCE_WS] Callback error: %s", e)

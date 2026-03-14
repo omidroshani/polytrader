@@ -128,6 +128,6 @@ async def test_binance_ws_parsing() -> None:
     for msg in messages:
         stream, model = ws._parse_message(msg)
         if stream and model:
-            ws._callbacks.setdefault(stream, []).append(received.append)
+            ws._callbacks.setdefault(stream, []).append((received.append, False))
             await ws._dispatch_callbacks(stream, model)
     assert len(received) > 0

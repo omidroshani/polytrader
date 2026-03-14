@@ -148,7 +148,7 @@ def _int_or_none(v: Any) -> int | None:
 # ============================================================================
 
 
-@dataclass
+@dataclass(slots=True)
 class OrderBookLevel:
     """Single orderbook level"""
 
@@ -160,7 +160,7 @@ class OrderBookLevel:
         self.size = _decimal(self.size)
 
 
-@dataclass
+@dataclass(slots=True)
 class Book:
     """Full orderbook snapshot"""
 
@@ -208,7 +208,7 @@ class Book:
         return None
 
 
-@dataclass
+@dataclass(slots=True)
 class PriceChangeItem:
     """Single price change item"""
 
@@ -227,7 +227,7 @@ class PriceChangeItem:
         self.best_ask = _decimal_or_none(self.best_ask)
 
 
-@dataclass
+@dataclass(slots=True)
 class PriceChange:
     """Price level updates"""
 
@@ -244,7 +244,7 @@ class PriceChange:
         ]
 
 
-@dataclass
+@dataclass(slots=True)
 class TickSizeChange:
     """Tick size change event"""
 
@@ -261,7 +261,7 @@ class TickSizeChange:
         self.timestamp = _int(self.timestamp)
 
 
-@dataclass
+@dataclass(slots=True)
 class LastTradePrice:
     """Trade execution event"""
 
@@ -291,7 +291,7 @@ class LastTradePrice:
         return self.side == OrderSide.BUY
 
 
-@dataclass
+@dataclass(slots=True)
 class BestBidAsk:
     """Best bid/ask update"""
 
@@ -314,7 +314,7 @@ class BestBidAsk:
         return (self.best_bid + self.best_ask) / 2
 
 
-@dataclass
+@dataclass(slots=True)
 class EventMessage:
     """Event message embedded in new_market/market_resolved"""
 
@@ -325,7 +325,7 @@ class EventMessage:
     description: str
 
 
-@dataclass
+@dataclass(slots=True)
 class NewMarket:
     """New market created event"""
 
@@ -346,7 +346,7 @@ class NewMarket:
             self.event_message = EventMessage(**self.event_message)
 
 
-@dataclass
+@dataclass(slots=True)
 class MarketResolved:
     """Market resolution event"""
 
@@ -374,7 +374,7 @@ class MarketResolved:
 # ============================================================================
 
 
-@dataclass
+@dataclass(slots=True)
 class MakerOrder:
     """Maker order in a trade"""
 
@@ -401,7 +401,7 @@ class MakerOrder:
 # ============================================================================
 
 
-@dataclass
+@dataclass(slots=True)
 class UpDownMarketToken:
     """Token info for an Up/Down market outcome"""
 
@@ -410,7 +410,7 @@ class UpDownMarketToken:
     price: Decimal | None = None
 
 
-@dataclass
+@dataclass(slots=True)
 class TokenIdPair:
     """Up/Down token ID pair for a market"""
 
@@ -418,7 +418,7 @@ class TokenIdPair:
     down: str = ""
 
 
-@dataclass
+@dataclass(slots=True)
 class UpDownMarket:
     """Up/Down market info from Gamma API"""
 
@@ -445,7 +445,7 @@ class UpDownMarket:
     taker_base_fee: int
 
 
-@dataclass
+@dataclass(slots=True)
 class PolymarketPosition:
     """User position in a market"""
 
@@ -506,7 +506,7 @@ class PolymarketPosition:
         )
 
 
-@dataclass
+@dataclass(slots=True)
 class PolymarketOrder:
     """Order info from CLOB API or WebSocket."""
 
@@ -548,7 +548,7 @@ class PolymarketOrder:
         )
 
 
-@dataclass
+@dataclass(slots=True)
 class UserOrder(PolymarketOrder):
     """Order event from the User WebSocket channel.
 
@@ -561,11 +561,11 @@ class UserOrder(PolymarketOrder):
     order_owner: str = ""
 
     def __post_init__(self) -> None:
-        super().__post_init__()
+        PolymarketOrder.__post_init__(self)
         self.timestamp = _int(self.timestamp)
 
 
-@dataclass
+@dataclass(slots=True)
 class PolymarketTrade:
     """Trade info from CLOB API or WebSocket."""
 
@@ -629,7 +629,7 @@ class PolymarketTrade:
         return self.size * self.price - fee
 
 
-@dataclass
+@dataclass(slots=True)
 class UserTrade(PolymarketTrade):
     """Trade event from the User WebSocket channel.
 
@@ -642,7 +642,7 @@ class UserTrade(PolymarketTrade):
     trade_owner: str | None = None
 
     def __post_init__(self) -> None:
-        super().__post_init__()
+        PolymarketTrade.__post_init__(self)
         self.timestamp = _int(self.timestamp)
 
 
@@ -653,7 +653,7 @@ class OrderResultStatus(StrEnum):
     UNMATCHED = "unmatched"
 
 
-@dataclass
+@dataclass(slots=True)
 class OrderResult:
     """Result of order creation (SendOrderResponse)"""
 
@@ -680,7 +680,7 @@ class OrderResult:
         )
 
 
-@dataclass
+@dataclass(slots=True)
 class Balance:
     """Balance and allowance (works for both USDC and conditional tokens).
 
@@ -718,7 +718,7 @@ class Balance:
 # ============================================================================
 
 
-@dataclass
+@dataclass(slots=True)
 class PolymarketAuth:
     """Polymarket API authentication credentials"""
 
@@ -750,7 +750,7 @@ def _float(v: Any) -> float:
     return float(v) if isinstance(v, str) else v
 
 
-@dataclass
+@dataclass(slots=True)
 class BinanceAggTrade:
     """Aggregate trade data"""
 
@@ -793,7 +793,7 @@ class BinanceAggTrade:
         return not self.is_buyer_maker
 
 
-@dataclass
+@dataclass(slots=True)
 class BinanceKline:
     """Kline/Candlestick data"""
 
@@ -815,17 +815,14 @@ class BinanceKline:
     taker_buy_quote_volume: float
 
     def __post_init__(self) -> None:
-        for f in (
-            "open",
-            "close",
-            "high",
-            "low",
-            "volume",
-            "quote_volume",
-            "taker_buy_base_volume",
-            "taker_buy_quote_volume",
-        ):
-            setattr(self, f, _float(getattr(self, f)))
+        self.open = _float(self.open)
+        self.close = _float(self.close)
+        self.high = _float(self.high)
+        self.low = _float(self.low)
+        self.volume = _float(self.volume)
+        self.quote_volume = _float(self.quote_volume)
+        self.taker_buy_base_volume = _float(self.taker_buy_base_volume)
+        self.taker_buy_quote_volume = _float(self.taker_buy_quote_volume)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "BinanceKline":
@@ -861,7 +858,7 @@ class BinanceKline:
         return self.close > self.open
 
 
-@dataclass
+@dataclass(slots=True)
 class BinanceKlineEvent:
     """Kline stream event wrapper"""
 
@@ -880,7 +877,7 @@ class BinanceKlineEvent:
         )
 
 
-@dataclass
+@dataclass(slots=True)
 class BinanceOrderBookLevel:
     """Single orderbook level"""
 
@@ -892,7 +889,7 @@ class BinanceOrderBookLevel:
         self.quantity = _float(self.quantity)
 
 
-@dataclass
+@dataclass(slots=True)
 class BinanceDepthUpdate:
     """Orderbook depth update"""
 

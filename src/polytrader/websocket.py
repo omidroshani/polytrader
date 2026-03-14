@@ -37,7 +37,7 @@ class BasePolymarketWebSocket(ABC):
     def __init__(self) -> None:
         self._ws: ClientConnection | None = None
         self._subscriptions: set[str] = set()
-        self._callbacks: dict[str, list[Callable[..., Any]]] = {}
+        self._callbacks: dict[str, list[tuple[Callable[..., Any], bool]]] = {}
         self._running = False
         self._lock = asyncio.Lock()
         self._ping_task: asyncio.Task[None] | None = None
@@ -47,14 +47,14 @@ class BasePolymarketWebSocket(ABC):
         await self._close_ws()
         self._ws = await websockets.connect(self.BASE_URL)
         self._running = True
-        logger.info(f"[POLYMARKET_WS] {self.CHANNEL_NAME} connected")
+        logger.info("[POLYMARKET_WS] %s connected", self.CHANNEL_NAME)
 
     async def disconnect(self) -> None:
         """Disconnect from WebSocket"""
         self._running = False
         await self._stop_ping()
         await self._close_ws()
-        logger.info(f"[POLYMARKET_WS] {self.CHANNEL_NAME} disconnected")
+        logger.info("[POLYMARKET_WS] %s disconnected", self.CHANNEL_NAME)
 
     async def subscribe(
         self,
@@ -74,7 +74,9 @@ class BasePolymarketWebSocket(ABC):
 
             for id_ in new_ids:
                 self._subscriptions.add(id_)
-                self._callbacks.setdefault(id_, []).append(callback)
+                self._callbacks.setdefault(id_, []).append(
+                    (callback, inspect.iscoroutinefunction(callback))
+                )
 
     async def unsubscribe(self, ids: list[str]) -> None:
         """Unsubscribe from IDs"""
@@ -115,13 +117,15 @@ class BasePolymarketWebSocket(ABC):
                     if not msg.startswith(("{", "[")):
                         if "INVALID" in msg:
                             logger.warning(
-                                f"[POLYMARKET_WS] {self.CHANNEL_NAME} received: {msg}, reconnecting..."
+                                "[POLYMARKET_WS] %s received: %s, reconnecting...",
+                                self.CHANNEL_NAME, msg,
                             )
                             await self._close_ws()
                             await asyncio.sleep(1)
                         else:
                             logger.debug(
-                                f"[POLYMARKET_WS] {self.CHANNEL_NAME} non-JSON: {msg}"
+                                "[POLYMARKET_WS] %s non-JSON: %s",
+                                self.CHANNEL_NAME, msg,
                             )
                         continue
 
@@ -131,15 +135,16 @@ class BasePolymarketWebSocket(ABC):
                         await self._handle_message(item)
 
                 except TimeoutError:
-                    logger.debug(f"[POLYMARKET_WS] {self.CHANNEL_NAME} timeout")
+                    logger.debug("[POLYMARKET_WS] %s timeout", self.CHANNEL_NAME)
                 except ConnectionClosed:
                     logger.warning(
-                        f"[POLYMARKET_WS] {self.CHANNEL_NAME} connection closed, reconnecting..."
+                        "[POLYMARKET_WS] %s connection closed, reconnecting...",
+                        self.CHANNEL_NAME,
                     )
                     await self._close_ws()
                     await asyncio.sleep(1)
                 except Exception as e:
-                    logger.error(f"[POLYMARKET_WS] {self.CHANNEL_NAME} error: {e}")
+                    logger.error("[POLYMARKET_WS] %s error: %s", self.CHANNEL_NAME, e)
                     await asyncio.sleep(1)
         finally:
             await self.disconnect()
@@ -178,18 +183,18 @@ class BasePolymarketWebSocket(ABC):
             except asyncio.CancelledError:
                 return
             except Exception as e:
-                logger.error(f"[POLYMARKET_WS] {self.CHANNEL_NAME} ping error: {e}")
+                logger.error("[POLYMARKET_WS] %s ping error: %s", self.CHANNEL_NAME, e)
                 break
 
     async def _dispatch_callbacks(self, key: str, model: Any) -> None:
-        for cb in self._callbacks.get(key, []):
+        for cb, is_async in self._callbacks.get(key, []):
             try:
-                if inspect.iscoroutinefunction(cb):
+                if is_async:
                     await cb(model)
                 else:
                     cb(model)
             except Exception as e:
-                logger.error(f"[POLYMARKET_WS] {self.CHANNEL_NAME} callback error: {e}")
+                logger.error("[POLYMARKET_WS] %s callback error: %s", self.CHANNEL_NAME, e)
 
     async def _dispatch_all_callbacks(self, model: Any) -> None:
         """Dispatch to all registered callbacks regardless of key"""
@@ -245,7 +250,7 @@ class PolymarketMarketWebSocket(BasePolymarketWebSocket):
                 "custom_feature_enabled": True,
             }
         )
-        logger.info(f"[POLYMARKET_WS] Subscribed to {len(asset_ids)} assets")
+        logger.info("[POLYMARKET_WS] Subscribed to %d assets", len(asset_ids))
 
     async def _send_dynamic_subscribe(
         self, asset_ids: list[str], subscribe: bool = True
@@ -258,7 +263,7 @@ class PolymarketMarketWebSocket(BasePolymarketWebSocket):
             request["custom_feature_enabled"] = True
         await self._send(request)
         action = "Subscribed to" if subscribe else "Unsubscribed from"
-        logger.info(f"[POLYMARKET_WS] {action} {len(asset_ids)} assets")
+        logger.info("[POLYMARKET_WS] %s %d assets", action, len(asset_ids))
 
     def _parse_message(self, data: dict[str, Any]) -> tuple[str, Any | None]:
         event_type = data.get("event_type")
@@ -299,7 +304,7 @@ class PolymarketUserWebSocket(BasePolymarketWebSocket):
                 "type": "user",
             }
         )
-        logger.info(f"[POLYMARKET_WS] User subscribed to {len(market_ids)} markets")
+        logger.info("[POLYMARKET_WS] User subscribed to %d markets", len(market_ids))
 
     async def _send_dynamic_subscribe(
         self, market_ids: list[str], subscribe: bool = True

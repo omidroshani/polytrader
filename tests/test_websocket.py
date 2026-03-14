@@ -186,7 +186,7 @@ async def test_user_ws_parsing() -> None:
     auth.to_auth_dict.return_value = {}
     ws = PolymarketUserWebSocket(auth)
     received: list = []
-    ws._callbacks["any"] = [received.append]
+    ws._callbacks["any"] = [(received.append, False)]
     for msg in messages:
         await ws._handle_message(msg)
     assert len(received) == len(messages)
@@ -259,7 +259,7 @@ async def test_market_ws_parsing() -> None:
             if key_field in msg:
                 keys.add(msg[key_field])
     for key in keys:
-        ws._callbacks[key] = [received.append]
+        ws._callbacks[key] = [(received.append, False)]
     for msg in messages:
         await ws._handle_message(msg)
     assert len(received) > 0

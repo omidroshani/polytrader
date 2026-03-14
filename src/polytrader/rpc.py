@@ -25,7 +25,7 @@ _ERC20_APPROVE_SELECTOR = keccak(text="approve(address,uint256)")[:4]
 _MAX_UINT256 = 2**256 - 1
 
 
-@dataclass
+@dataclass(slots=True)
 class BuilderCreds:
     """Builder API credentials for the Polymarket Relayer."""
 
