@@ -900,43 +900,41 @@ class BinanceDepthUpdate:
     final_update_id: int
     bids: list[list[str]]
     asks: list[list[str]]
+    bid_levels: list[BinanceOrderBookLevel] = field(default_factory=list)
+    ask_levels: list[BinanceOrderBookLevel] = field(default_factory=list)
 
     @classmethod
     def from_dict(cls, data: dict[str, Any]) -> "BinanceDepthUpdate":
+        raw_bids = data["b"]
+        raw_asks = data["a"]
         return cls(
             event=data["e"],
             event_time=data["E"],
             symbol=data["s"],
             first_update_id=data["U"],
             final_update_id=data["u"],
-            bids=data["b"],
-            asks=data["a"],
+            bids=raw_bids,
+            asks=raw_asks,
+            bid_levels=[
+                BinanceOrderBookLevel(price=float(b[0]), quantity=float(b[1]))
+                for b in raw_bids
+            ],
+            ask_levels=[
+                BinanceOrderBookLevel(price=float(a[0]), quantity=float(a[1]))
+                for a in raw_asks
+            ],
         )
 
     @property
-    def bid_levels(self) -> list[BinanceOrderBookLevel]:
-        return [
-            BinanceOrderBookLevel(price=float(b[0]), quantity=float(b[1]))
-            for b in self.bids
-        ]
-
-    @property
-    def ask_levels(self) -> list[BinanceOrderBookLevel]:
-        return [
-            BinanceOrderBookLevel(price=float(a[0]), quantity=float(a[1]))
-            for a in self.asks
-        ]
-
-    @property
     def best_bid(self) -> float | None:
-        return float(self.bids[0][0]) if self.bids else None
+        return self.bid_levels[0].price if self.bid_levels else None
 
     @property
     def best_ask(self) -> float | None:
-        return float(self.asks[0][0]) if self.asks else None
+        return self.ask_levels[0].price if self.ask_levels else None
 
     @property
     def spread(self) -> float | None:
-        if self.best_bid and self.best_ask:
-            return self.best_ask - self.best_bid
+        if self.bid_levels and self.ask_levels:
+            return self.ask_levels[0].price - self.bid_levels[0].price
         return None
