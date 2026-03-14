@@ -1,11 +1,20 @@
+import os
 from decimal import Decimal
 
-CLOB_HOST = "https://clob.polymarket.com"
-GAMMA_API_HOST = "https://gamma-api.polymarket.com"
-DATA_API_HOST = "https://data-api.polymarket.com"
-CHAIN_ID = 137  # Polygon mainnet
-POLYGON_RPC = "https://polygon-bor-rpc.publicnode.com"
-RELAYER_HOST = "https://relayer-v2.polymarket.com"
+CLOB_HOST = os.environ.get("POLYTRADER_CLOB_HOST", "https://clob.polymarket.com")
+GAMMA_API_HOST = os.environ.get(
+    "POLYTRADER_GAMMA_API_HOST", "https://gamma-api.polymarket.com"
+)
+DATA_API_HOST = os.environ.get(
+    "POLYTRADER_DATA_API_HOST", "https://data-api.polymarket.com"
+)
+CHAIN_ID = int(os.environ.get("POLYTRADER_CHAIN_ID", "137"))  # Polygon mainnet
+POLYGON_RPC = os.environ.get(
+    "POLYTRADER_POLYGON_RPC", "https://polygon-bor-rpc.publicnode.com"
+)
+RELAYER_HOST = os.environ.get(
+    "POLYTRADER_RELAYER_HOST", "https://relayer-v2.polymarket.com"
+)
 
 # Conditional tokens and USDC on Polygon both use 6 decimals.
 # The CLOB balance API returns raw values; create_order expects human-readable.
