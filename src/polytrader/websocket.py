@@ -99,6 +99,7 @@ class BaseWebSocket(ABC):
                     logger.warning(
                         "[%s] Connection closed, reconnecting...", self.LOG_TAG
                     )
+                    await self._stop_ping()
                     await self._close_ws()
                     await asyncio.sleep(1)
                 except Exception as e:
@@ -123,13 +124,15 @@ class BaseWebSocket(ABC):
             self._ws = None
 
     async def _reconnect(self) -> None:
+        await self._stop_ping()
         await self.connect()
+        self._ping_task = asyncio.create_task(self._send_ping())
         await self._resubscribe()
 
     async def _send_json(self, data: dict[str, Any]) -> None:
         if not self._ws:
             raise WebSocketError("WebSocket not connected")
-        await self._ws.send(msgspec.json.encode(data))
+        await self._ws.send(msgspec.json.encode(data).decode())
 
     async def _send_ping(self) -> None:
         while self._running:
@@ -140,8 +143,7 @@ class BaseWebSocket(ABC):
             except asyncio.CancelledError:
                 return
             except Exception as e:
-                logger.error("[%s] Ping error: %s", self.LOG_TAG, e)
-                break
+                logger.debug("[%s] Ping skipped (disconnected): %s", self.LOG_TAG, e)
 
     async def _dispatch_callbacks(self, key: str, model: Any) -> None:
         for cb, is_async in self._callbacks.get(key, []):
@@ -155,8 +157,15 @@ class BaseWebSocket(ABC):
 
     async def _dispatch_all_callbacks(self, model: Any) -> None:
         """Dispatch to all registered callbacks regardless of key."""
-        for key in self._callbacks:
-            await self._dispatch_callbacks(key, model)
+        for cb_list in self._callbacks.values():
+            for cb, is_async in cb_list:
+                try:
+                    if is_async:
+                        await cb(model)
+                    else:
+                        cb(model)
+                except Exception as e:
+                    logger.error("[%s] Callback error: %s", self.LOG_TAG, e)
 
     def _register_callback(self, key: str, callback: Callable[..., Any]) -> None:
         """Register a callback with cached async status."""
@@ -172,12 +181,12 @@ class BaseWebSocket(ABC):
         ...
 
     @abstractmethod
-    def _filter_message(self, msg: bytes) -> dict[str, Any] | None:
+    def _filter_message(self, msg: bytes) -> dict[str, Any] | list[Any] | None:
         """Filter and parse raw message. Return parsed dict or None to skip."""
         ...
 
     @abstractmethod
-    async def _handle_message(self, data: dict[str, Any]) -> None:
+    async def _handle_message(self, data: dict[str, Any] | list[Any]) -> None:
         """Handle a parsed message dict."""
         ...
 
@@ -200,6 +209,7 @@ class BasePolymarketWebSocket(BaseWebSocket, ABC):
     def __init__(self) -> None:
         super().__init__()
         self.LOG_TAG = f"POLYMARKET_WS:{self.CHANNEL_NAME}"
+        self._has_subscribed = False
 
     async def subscribe(
         self,
@@ -212,10 +222,11 @@ class BasePolymarketWebSocket(BaseWebSocket, ABC):
             if not new_ids:
                 return
 
-            if self._subscriptions:
+            if self._has_subscribed:
                 await self._send_dynamic_subscribe(new_ids, subscribe=True)
             else:
                 await self._send_subscribe(new_ids)
+                self._has_subscribed = True
 
             for id_ in new_ids:
                 self._subscriptions.add(id_)
@@ -239,8 +250,8 @@ class BasePolymarketWebSocket(BaseWebSocket, ABC):
 
     _SKIP_MESSAGES = frozenset((b"PONG", b"PING", b""))
 
-    def _filter_message(self, msg: bytes) -> dict[str, Any] | None:
-        if not msg or msg in self._SKIP_MESSAGES:
+    def _filter_message(self, msg: bytes) -> dict[str, Any] | list[Any] | None:
+        if msg in self._SKIP_MESSAGES:
             return None
 
         if not msg.startswith((b"{", b"[")):
@@ -250,10 +261,10 @@ class BasePolymarketWebSocket(BaseWebSocket, ABC):
                 logger.debug("[%s] Non-JSON: %s", self.LOG_TAG, msg)
             return None
 
-        result: dict[str, Any] = msgspec.json.decode(msg)
+        result: dict[str, Any] | list[Any] = msgspec.json.decode(msg)
         return result
 
-    async def _handle_message(self, data: dict[str, Any]) -> None:
+    async def _handle_message(self, data: dict[str, Any] | list[Any]) -> None:
         messages = data if isinstance(data, list) else [data]
         for item in messages:
             await self._handle_single(item)
@@ -264,8 +275,10 @@ class BasePolymarketWebSocket(BaseWebSocket, ABC):
             await self._dispatch_callbacks(key, model)
 
     async def _resubscribe(self) -> None:
+        self._has_subscribed = False
         if self._subscriptions:
             await self._send_subscribe(list(self._subscriptions))
+            self._has_subscribed = True
 
     @abstractmethod
     async def _send_subscribe(self, ids: list[str]) -> None: ...
