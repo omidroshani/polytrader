@@ -1,4 +1,4 @@
-.PHONY: lint format typecheck check test audit security
+.PHONY: lint format typecheck check test audit security docs docs-serve
 
 lint:
 	ruff check . --fix
@@ -19,3 +19,9 @@ audit:
 
 security:
 	bandit -r polytrader/
+
+docs:
+	mkdocs build
+
+docs-serve:
+	mkdocs serve

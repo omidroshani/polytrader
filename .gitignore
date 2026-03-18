@@ -1,4 +1,4 @@
-docs
+dev-docs
 logs
 .claude
 .mypy_cache
@@ -9,3 +9,4 @@ __pycache__
 **/**.egg-info
 .pytest_cache
 dist
+site
