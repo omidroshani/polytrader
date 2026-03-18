@@ -40,4 +40,6 @@ dev = [
     "rich>=14.3.3",
     "ruff>=0.15.5",
     "freezegun>=1.5.0",
+    "bandit>=1.9.4",
+    "pip-audit>=2.10.0",
 ]
