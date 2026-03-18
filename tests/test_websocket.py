@@ -11,6 +11,7 @@ import contextlib
 import json
 from decimal import Decimal
 from pathlib import Path
+from typing import Any
 from unittest.mock import AsyncMock
 
 import pytest
@@ -45,10 +46,10 @@ async def test_capture_user_ws(trader) -> None:
     auth = trader.get_auth()
 
     ws = PolymarketUserWebSocket(auth)
-    messages: list[dict] = []
+    messages: list[dict[str, Any] | list[Any]] = []
     _orig = ws._handle_message
 
-    async def _capture(data: dict) -> None:
+    async def _capture(data: dict[str, Any] | list[Any]) -> None:
         messages.append(data)
         await _orig(data)
 
@@ -118,10 +119,10 @@ async def test_capture_market_ws(trader) -> None:
     market = await trader.get_current_updown_market(Coin.BTC, Timeframe.M5)
 
     ws = PolymarketMarketWebSocket()
-    messages: list[dict] = []
+    messages: list[dict[str, Any] | list[Any]] = []
     _orig = ws._handle_message
 
-    async def _capture(data: dict) -> None:
+    async def _capture(data: dict[str, Any] | list[Any]) -> None:
         messages.append(data)
         await _orig(data)
 

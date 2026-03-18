@@ -51,7 +51,7 @@ class BinanceWebSocket(BaseWebSocket):
         assert self._ws is not None
         await self._ws.ping()
 
-    def _filter_message(self, msg: bytes) -> dict[str, Any] | None:
+    def _filter_message(self, msg: bytes) -> dict[str, Any] | list[Any] | None:
         if not msg or not msg.startswith(b"{"):
             return None
         data: dict[str, Any] = msgspec.json.decode(msg)
@@ -60,7 +60,9 @@ class BinanceWebSocket(BaseWebSocket):
             return None
         return data
 
-    async def _handle_message(self, data: dict[str, Any]) -> None:
+    async def _handle_message(self, data: dict[str, Any] | list[Any]) -> None:
+        if not isinstance(data, dict):
+            return
         stream, model = self._parse_message(data)
         if stream and model:
             await self._dispatch_callbacks(stream, model)

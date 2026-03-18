@@ -140,6 +140,7 @@ class NewMarket(StrictStruct):
     outcomes: list[str]
     event_message: EventMessage
     timestamp: int
+    tags: list[str] | None = None
 
 
 class MarketResolved(StrictStruct):
