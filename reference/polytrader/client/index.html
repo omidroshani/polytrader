@@ -1,0 +1,2847 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="A Python trading client for Polymarket">
+      
+      
+        <meta name="author" content="Omid Roshani">
+      
+      
+        <link rel="canonical" href="https://omidroshani.github.io/polytrader/reference/polytrader/client/">
+      
+      
+        <link rel="prev" href="../binance/">
+      
+      
+        <link rel="next" href="../constants/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../assets/images/favicon.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.5">
+    
+    
+      
+        <title>client - PolyTrader</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,300i,400,400i,700,700i%7CJetBrains+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Inter";--md-code-font:"JetBrains Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/_mkdocstrings.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+      
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#polytrader.client" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+  
+
+<header class="md-header md-header--shadow md-header--lifted" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="PolyTrader" class="md-header__button md-logo" aria-label="PolyTrader" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            PolyTrader
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              client
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+        <form class="md-header__option" data-md-component="palette">
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="default" data-md-color-primary="deep-purple" data-md-color-accent="deep-purple"  aria-label="Switch to dark mode"  type="radio" name="__palette" id="__palette_0">
+    
+      <label class="md-header__button md-icon" title="Switch to dark mode" for="__palette_1" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4 4 4 0 0 0 4-4 4 4 0 0 0-4-4m0 10a6 6 0 0 1-6-6 6 6 0 0 1 6-6 6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+    
+    
+    
+    <input class="md-option" data-md-color-media="" data-md-color-scheme="slate" data-md-color-primary="deep-purple" data-md-color-accent="deep-purple"  aria-label="Switch to light mode"  type="radio" name="__palette" id="__palette_1">
+    
+      <label class="md-header__button md-icon" title="Switch to light mode" for="__palette_0" hidden>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 18c-.89 0-1.74-.2-2.5-.55C11.56 16.5 13 14.42 13 12s-1.44-4.5-3.5-5.45C10.26 6.2 11.11 6 12 6a6 6 0 0 1 6 6 6 6 0 0 1-6 6m8-9.31V4h-4.69L12 .69 8.69 4H4v4.69L.69 12 4 15.31V20h4.69L12 23.31 15.31 20H20v-4.69L23.31 12z"/></svg>
+      </label>
+    
+  
+</form>
+      
+    
+    
+      <script>var palette=__md_get("__palette");if(palette&&palette.color){if("(prefers-color-scheme)"===palette.color.media){var media=matchMedia("(prefers-color-scheme: light)"),input=document.querySelector(media.matches?"[data-md-color-media='(prefers-color-scheme: light)']":"[data-md-color-media='(prefers-color-scheme: dark)']");palette.color.media=input.getAttribute("data-md-color-media"),palette.color.scheme=input.getAttribute("data-md-color-scheme"),palette.color.primary=input.getAttribute("data-md-color-primary"),palette.color.accent=input.getAttribute("data-md-color-accent")}for(var[key,value]of Object.entries(palette.color))document.body.setAttribute("data-md-color-"+key,value)}</script>
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+        <div class="md-search__suggest" data-md-component="search-suggest"></div>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+      <div class="md-header__source">
+        <a href="https://github.com/omidroshani/polytrader" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    omidroshani/polytrader
+  </div>
+</a>
+      </div>
+    
+  </nav>
+  
+    
+      
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  Home
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../getting-started/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Getting Started
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../guide/client/" class="md-tabs__link">
+          
+  
+  
+    
+  
+  Guide
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../" class="md-tabs__link">
+          
+  
+  
+    
+  
+  API Reference
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+    
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="PolyTrader" class="md-nav__button md-logo" aria-label="PolyTrader" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    PolyTrader
+  </label>
+  
+    <div class="md-nav__source">
+      <a href="https://github.com/omidroshani/polytrader" title="Go to repository" class="md-source" data-md-component="source">
+  <div class="md-source__icon md-icon">
+    
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.6 236.1 244 40.5c-5.4-5.5-12.8-8.5-20.4-8.5s-15 3-20.4 8.4L162.5 81l51.5 51.5c27.1-9.1 52.7 16.8 43.4 43.7l49.7 49.7c34.2-11.8 61.2 31 35.5 56.7-26.5 26.5-70.2-2.9-56-37.3L240.3 199v121.9c25.3 12.5 22.3 41.8 9.1 55-6.4 6.4-15.2 10.1-24.3 10.1s-17.8-3.6-24.3-10.1c-17.6-17.6-11.1-46.9 11.2-56v-123c-20.8-8.5-24.6-30.7-18.6-45L142.6 101 8.5 235.1C3 240.6 0 247.9 0 255.5s3 15 8.5 20.4l195.6 195.7c5.4 5.4 12.7 8.4 20.4 8.4s15-3 20.4-8.4l194.7-194.7c5.4-5.4 8.4-12.8 8.4-20.4s-3-15-8.4-20.4"/></svg>
+  </div>
+  <div class="md-source__repository">
+    omidroshani/polytrader
+  </div>
+</a>
+    </div>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Home
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../getting-started/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Getting Started
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+      
+        
+      
+        
+      
+        
+      
+        
+      
+        
+      
+    
+    
+    
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Guide
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Guide
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guide/client/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Trading Client
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guide/websockets/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    WebSockets
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guide/binance/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Binance Integration
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guide/on-chain/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    On-Chain Operations
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../guide/errors/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Error Handling
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+      
+        
+          
+        
+      
+    
+    
+    
+      
+        
+        
+      
+      
+        
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" checked>
+        
+          
+          <div class="md-nav__link md-nav__container">
+            <a href="../" class="md-nav__link ">
+              
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    API Reference
+  
+
+    
+  </span>
+  
+  
+
+            </a>
+            
+              
+              <label class="md-nav__link " for="__nav_4" id="__nav_4_label" tabindex="">
+                <span class="md-nav__icon md-icon"></span>
+              </label>
+            
+          </div>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    API Reference
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#polytrader.client" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-module"></code>&nbsp;client
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label=" client">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#polytrader.client.PolyTrader" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        <code class="doc-symbol doc-symbol-toc doc-symbol-class"></code>&nbsp;PolyTrader
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+  
+  
+
+
+  <h1>client</h1>
+
+<div class="doc doc-object doc-module">
+
+
+
+<h2 id="polytrader.client" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-module"></code>            <span class="doc doc-object-name doc-module-name">client</span>
+
+
+<a href="#polytrader.client" class="headerlink" title="Permanent link">&para;</a></h2>
+
+    <div class="doc doc-contents first">
+
+
+
+
+
+
+
+
+
+
+<p><span class="doc-section-title">Classes:</span></p>
+    <ul>
+        <li class="doc-section-item field-body">
+          <b><code><a class="autorefs autorefs-internal" title="            PolyTrader (polytrader.client.PolyTrader)" href="#polytrader.client.PolyTrader">PolyTrader</a></code></b>
+          –
+          <div class="doc-md-description">
+            <p>Polymarket client for API credential management and WebSocket connections</p>
+          </div>
+        </li>
+    </ul>
+
+
+
+
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+
+
+<div class="doc doc-object doc-class">
+
+
+
+<h3 id="polytrader.client.PolyTrader" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-class"></code>            <span class="doc doc-object-name doc-class-name">PolyTrader</span>
+
+
+<a href="#polytrader.client.PolyTrader" class="headerlink" title="Permanent link">&para;</a></h3>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">PolyTrader</span><span class="p">(</span><span class="n">private_key</span><span class="p">:</span> <span class="n"><span title="str">str</span></span><span class="p">,</span> <span class="n">funder</span><span class="p">:</span> <span class="n"><span title="str">str</span></span><span class="p">,</span> <span class="n">signature_type</span><span class="p">:</span> <span class="n"><span title="int">int</span></span><span class="p">,</span> <span class="n">builder_key</span><span class="p">:</span> <span class="n"><span title="str">str</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">builder_secret</span><span class="p">:</span> <span class="n"><span title="str">str</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">builder_passphrase</span><span class="p">:</span> <span class="n"><span title="str">str</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+
+
+        <p>Polymarket client for API credential management and WebSocket connections</p>
+
+
+
+
+
+
+
+
+
+
+
+
+<p><span class="doc-section-title">Methods:</span></p>
+    <ul>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            get_auth (polytrader.client.PolyTrader.get_auth)" href="#polytrader.client.PolyTrader.get_auth">get_auth</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Get API credentials (cached)</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            get_updown_market
+
+
+  
+      async
+   (polytrader.client.PolyTrader.get_updown_market)" href="#polytrader.client.PolyTrader.get_updown_market">get_updown_market</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Get Up/Down market by coin, timeframe, and Unix timestamp.</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            get_current_updown_market
+
+
+  
+      async
+   (polytrader.client.PolyTrader.get_current_updown_market)" href="#polytrader.client.PolyTrader.get_current_updown_market">get_current_updown_market</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Get current Up/Down market for a coin and timeframe.</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            create_order (polytrader.client.PolyTrader.create_order)" href="#polytrader.client.PolyTrader.create_order">create_order</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Create and post an order.</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            cancel_order (polytrader.client.PolyTrader.cancel_order)" href="#polytrader.client.PolyTrader.cancel_order">cancel_order</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Cancel a specific order.</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            cancel_all_orders (polytrader.client.PolyTrader.cancel_all_orders)" href="#polytrader.client.PolyTrader.cancel_all_orders">cancel_all_orders</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Cancel all open orders.</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            cancel_orders_for_market (polytrader.client.PolyTrader.cancel_orders_for_market)" href="#polytrader.client.PolyTrader.cancel_orders_for_market">cancel_orders_for_market</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Cancel all orders for a specific market.</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            get_order (polytrader.client.PolyTrader.get_order)" href="#polytrader.client.PolyTrader.get_order">get_order</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Get a single order by ID.</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            get_orders (polytrader.client.PolyTrader.get_orders)" href="#polytrader.client.PolyTrader.get_orders">get_orders</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Get open orders, optionally filtered by market or asset.</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            get_trades (polytrader.client.PolyTrader.get_trades)" href="#polytrader.client.PolyTrader.get_trades">get_trades</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Get trade history.</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            get_positions
+
+
+  
+      async
+   (polytrader.client.PolyTrader.get_positions)" href="#polytrader.client.PolyTrader.get_positions">get_positions</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Get current positions from the data API.</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            get_balance (polytrader.client.PolyTrader.get_balance)" href="#polytrader.client.PolyTrader.get_balance">get_balance</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Get USDC balance and allowance.</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            get_token_balance (polytrader.client.PolyTrader.get_token_balance)" href="#polytrader.client.PolyTrader.get_token_balance">get_token_balance</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Get conditional token balance and allowance.</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            get_orderbook (polytrader.client.PolyTrader.get_orderbook)" href="#polytrader.client.PolyTrader.get_orderbook">get_orderbook</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Get orderbook for a token.</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            ensure_can_sell (polytrader.client.PolyTrader.ensure_can_sell)" href="#polytrader.client.PolyTrader.ensure_can_sell">ensure_can_sell</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Check if a sell order is possible, auto-approving if needed.</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            refresh_token_allowance (polytrader.client.PolyTrader.refresh_token_allowance)" href="#polytrader.client.PolyTrader.refresh_token_allowance">refresh_token_allowance</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Refresh server's cached balance/allowance for a conditional token.</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            refresh_collateral_allowance (polytrader.client.PolyTrader.refresh_collateral_allowance)" href="#polytrader.client.PolyTrader.refresh_collateral_allowance">refresh_collateral_allowance</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Refresh server's cached balance/allowance for USDC collateral.</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            approve_token (polytrader.client.PolyTrader.approve_token)" href="#polytrader.client.PolyTrader.approve_token">approve_token</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Approve the CTF conditional tokens for the exchange on-chain.</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            approve_collateral (polytrader.client.PolyTrader.approve_collateral)" href="#polytrader.client.PolyTrader.approve_collateral">approve_collateral</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Approve USDC for the exchange contract on-chain.</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            approve_all (polytrader.client.PolyTrader.approve_all)" href="#polytrader.client.PolyTrader.approve_all">approve_all</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Approve both exchanges (neg_risk + non-neg_risk) for tokens and USDC.</p>
+            </div>
+          </li>
+          <li class="doc-section-item field-body">
+            <b><code><a class="autorefs autorefs-internal" title="            close
+
+
+  
+      async
+   (polytrader.client.PolyTrader.close)" href="#polytrader.client.PolyTrader.close">close</a></code></b>
+            –
+            <div class="doc-md-description">
+              <p>Clean up all resources (WebSockets, HTTP client).</p>
+            </div>
+          </li>
+    </ul>
+
+
+
+
+<p><span class="doc-section-title">Attributes:</span></p>
+    <ul>
+        <li class="doc-section-item field-body">
+          <b><code><a class="autorefs autorefs-internal" title="            private_key
+
+
+  
+      property
+   (polytrader.client.PolyTrader.private_key)" href="#polytrader.client.PolyTrader.private_key">private_key</a></code></b>
+              (<code><span title="str">str</span></code>)
+          –
+          <div class="doc-md-description">
+            <p>Get private key without 0x prefix</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
+          <b><code><a class="autorefs autorefs-internal" title="            wallet_address
+
+
+  
+      property
+   (polytrader.client.PolyTrader.wallet_address)" href="#polytrader.client.PolyTrader.wallet_address">wallet_address</a></code></b>
+              (<code><span title="str">str</span></code>)
+          –
+          <div class="doc-md-description">
+            <p>Get wallet address (MetaMask) from private key</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
+          <b><code><a class="autorefs autorefs-internal" title="            binance_ws
+
+
+  
+      property
+   (polytrader.client.PolyTrader.binance_ws)" href="#polytrader.client.PolyTrader.binance_ws">binance_ws</a></code></b>
+              (<code><a class="autorefs autorefs-internal" title="            BinanceWebSocket (polytrader.binance.BinanceWebSocket)" href="../binance/#polytrader.binance.BinanceWebSocket">BinanceWebSocket</a></code>)
+          –
+          <div class="doc-md-description">
+            <p>Lazy-initialized Binance WebSocket (public, subscribes by symbol stream).</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
+          <b><code><a class="autorefs autorefs-internal" title="            market_ws
+
+
+  
+      property
+   (polytrader.client.PolyTrader.market_ws)" href="#polytrader.client.PolyTrader.market_ws">market_ws</a></code></b>
+              (<code><a class="autorefs autorefs-internal" title="            PolymarketMarketWebSocket (polytrader.websocket.PolymarketMarketWebSocket)" href="../websocket/#polytrader.websocket.PolymarketMarketWebSocket">PolymarketMarketWebSocket</a></code>)
+          –
+          <div class="doc-md-description">
+            <p>Lazy-initialized market WebSocket (public, subscribes by asset_id).</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
+          <b><code><a class="autorefs autorefs-internal" title="            user_ws
+
+
+  
+      property
+   (polytrader.client.PolyTrader.user_ws)" href="#polytrader.client.PolyTrader.user_ws">user_ws</a></code></b>
+              (<code><a class="autorefs autorefs-internal" title="            PolymarketUserWebSocket (polytrader.websocket.PolymarketUserWebSocket)" href="../websocket/#polytrader.websocket.PolymarketUserWebSocket">PolymarketUserWebSocket</a></code>)
+          –
+          <div class="doc-md-description">
+            <p>Lazy-initialized user WebSocket (authenticated, subscribes by market_id).</p>
+          </div>
+        </li>
+    </ul>
+
+                  <details class="mkdocstrings-source">
+                    <summary>Source code in <code>src/polytrader/client.py</code></summary>
+                    <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-64">64</a></span>
+<span class="normal"><a href="#__codelineno-0-65">65</a></span>
+<span class="normal"><a href="#__codelineno-0-66">66</a></span>
+<span class="normal"><a href="#__codelineno-0-67">67</a></span>
+<span class="normal"><a href="#__codelineno-0-68">68</a></span>
+<span class="normal"><a href="#__codelineno-0-69">69</a></span>
+<span class="normal"><a href="#__codelineno-0-70">70</a></span>
+<span class="normal"><a href="#__codelineno-0-71">71</a></span>
+<span class="normal"><a href="#__codelineno-0-72">72</a></span>
+<span class="normal"><a href="#__codelineno-0-73">73</a></span>
+<span class="normal"><a href="#__codelineno-0-74">74</a></span>
+<span class="normal"><a href="#__codelineno-0-75">75</a></span>
+<span class="normal"><a href="#__codelineno-0-76">76</a></span>
+<span class="normal"><a href="#__codelineno-0-77">77</a></span>
+<span class="normal"><a href="#__codelineno-0-78">78</a></span>
+<span class="normal"><a href="#__codelineno-0-79">79</a></span>
+<span class="normal"><a href="#__codelineno-0-80">80</a></span>
+<span class="normal"><a href="#__codelineno-0-81">81</a></span>
+<span class="normal"><a href="#__codelineno-0-82">82</a></span>
+<span class="normal"><a href="#__codelineno-0-83">83</a></span>
+<span class="normal"><a href="#__codelineno-0-84">84</a></span>
+<span class="normal"><a href="#__codelineno-0-85">85</a></span>
+<span class="normal"><a href="#__codelineno-0-86">86</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-64" name="__codelineno-0-64"></a><span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+<a id="__codelineno-0-65" name="__codelineno-0-65"></a>    <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-0-66" name="__codelineno-0-66"></a>    <span class="n">private_key</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-67" name="__codelineno-0-67"></a>    <span class="n">funder</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-68" name="__codelineno-0-68"></a>    <span class="n">signature_type</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+<a id="__codelineno-0-69" name="__codelineno-0-69"></a>    <span class="n">builder_key</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-70" name="__codelineno-0-70"></a>    <span class="n">builder_secret</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-71" name="__codelineno-0-71"></a>    <span class="n">builder_passphrase</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-72" name="__codelineno-0-72"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-73" name="__codelineno-0-73"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_private_key</span> <span class="o">=</span> <span class="n">private_key</span>
+<a id="__codelineno-0-74" name="__codelineno-0-74"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">funder</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="n">funder</span>
+<a id="__codelineno-0-75" name="__codelineno-0-75"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_signature_type</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="n">signature_type</span>
+<a id="__codelineno-0-76" name="__codelineno-0-76"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_builder_creds</span><span class="p">:</span> <span class="n">_BuilderCreds</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-0-77" name="__codelineno-0-77"></a>    <span class="k">if</span> <span class="n">builder_key</span> <span class="ow">and</span> <span class="n">builder_secret</span> <span class="ow">and</span> <span class="n">builder_passphrase</span><span class="p">:</span>
+<a id="__codelineno-0-78" name="__codelineno-0-78"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_builder_creds</span> <span class="o">=</span> <span class="n">_BuilderCreds</span><span class="p">(</span>
+<a id="__codelineno-0-79" name="__codelineno-0-79"></a>            <span class="n">key</span><span class="o">=</span><span class="n">builder_key</span><span class="p">,</span> <span class="n">secret</span><span class="o">=</span><span class="n">builder_secret</span><span class="p">,</span> <span class="n">passphrase</span><span class="o">=</span><span class="n">builder_passphrase</span>
+<a id="__codelineno-0-80" name="__codelineno-0-80"></a>        <span class="p">)</span>
+<a id="__codelineno-0-81" name="__codelineno-0-81"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_clob_client</span><span class="p">:</span> <span class="n">ClobClient</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-0-82" name="__codelineno-0-82"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_auth</span><span class="p">:</span> <span class="n">PolymarketAuth</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-0-83" name="__codelineno-0-83"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_market_ws</span><span class="p">:</span> <span class="n">PolymarketMarketWebSocket</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-0-84" name="__codelineno-0-84"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_user_ws</span><span class="p">:</span> <span class="n">PolymarketUserWebSocket</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-0-85" name="__codelineno-0-85"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_binance_ws</span><span class="p">:</span> <span class="n">BinanceWebSocket</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<a id="__codelineno-0-86" name="__codelineno-0-86"></a>    <span class="bp">self</span><span class="o">.</span><span class="n">_http</span> <span class="o">=</span> <span class="n">httpx</span><span class="o">.</span><span class="n">AsyncClient</span><span class="p">(</span><span class="n">timeout</span><span class="o">=</span><span class="mf">10.0</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+                  </details>
+
+
+
+<div class="doc doc-children">
+
+
+
+
+
+
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="polytrader.client.PolyTrader.private_key" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">private_key</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#polytrader.client.PolyTrader.private_key" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">private_key</span><span class="p">:</span> <span class="n"><span title="str">str</span></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Get private key without 0x prefix</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="polytrader.client.PolyTrader.wallet_address" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">wallet_address</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#polytrader.client.PolyTrader.wallet_address" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">wallet_address</span><span class="p">:</span> <span class="n"><span title="str">str</span></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Get wallet address (MetaMask) from private key</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="polytrader.client.PolyTrader.binance_ws" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">binance_ws</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#polytrader.client.PolyTrader.binance_ws" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">binance_ws</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="            BinanceWebSocket (polytrader.binance.BinanceWebSocket)" href="../binance/#polytrader.binance.BinanceWebSocket">BinanceWebSocket</a></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Lazy-initialized Binance WebSocket (public, subscribes by symbol stream).</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="polytrader.client.PolyTrader.market_ws" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">market_ws</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#polytrader.client.PolyTrader.market_ws" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">market_ws</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="            PolymarketMarketWebSocket (polytrader.websocket.PolymarketMarketWebSocket)" href="../websocket/#polytrader.websocket.PolymarketMarketWebSocket">PolymarketMarketWebSocket</a></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Lazy-initialized market WebSocket (public, subscribes by asset_id).</p>
+
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-attribute">
+
+
+
+<h4 id="polytrader.client.PolyTrader.user_ws" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-attribute"></code>            <span class="doc doc-object-name doc-attribute-name">user_ws</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-property"><code>property</code></small>
+  </span>
+
+<a href="#polytrader.client.PolyTrader.user_ws" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="n">user_ws</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="            PolymarketUserWebSocket (polytrader.websocket.PolymarketUserWebSocket)" href="../websocket/#polytrader.websocket.PolymarketUserWebSocket">PolymarketUserWebSocket</a></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Lazy-initialized user WebSocket (authenticated, subscribes by market_id).</p>
+
+    </div>
+
+</div>
+
+
+
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.get_auth" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">get_auth</span>
+
+
+<a href="#polytrader.client.PolyTrader.get_auth" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">get_auth</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="            PolymarketAuth (polytrader.models.PolymarketAuth)" href="../models/#polytrader.models.PolymarketAuth">PolymarketAuth</a></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Get API credentials (cached)</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-141">141</a></span>
+<span class="normal"><a href="#__codelineno-0-142">142</a></span>
+<span class="normal"><a href="#__codelineno-0-143">143</a></span>
+<span class="normal"><a href="#__codelineno-0-144">144</a></span>
+<span class="normal"><a href="#__codelineno-0-145">145</a></span>
+<span class="normal"><a href="#__codelineno-0-146">146</a></span>
+<span class="normal"><a href="#__codelineno-0-147">147</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-141" name="__codelineno-0-141"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_auth</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PolymarketAuth</span><span class="p">:</span>
+<a id="__codelineno-0-142" name="__codelineno-0-142"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get API credentials (cached)&quot;&quot;&quot;</span>
+<a id="__codelineno-0-143" name="__codelineno-0-143"></a>    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auth</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-144" name="__codelineno-0-144"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_derive_credentials</span><span class="p">()</span>
+<a id="__codelineno-0-145" name="__codelineno-0-145"></a>    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auth</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-146" name="__codelineno-0-146"></a>        <span class="k">raise</span> <span class="n">AuthenticationError</span><span class="p">(</span><span class="s2">&quot;Failed to derive credentials&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-147" name="__codelineno-0-147"></a>    <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">_auth</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.get_updown_market" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">get_updown_market</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#polytrader.client.PolyTrader.get_updown_market" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">get_updown_market</span><span class="p">(</span><span class="n">coin</span><span class="p">:</span> <span class="n"><span title="polytrader.models.Coin">Coin</span></span><span class="p">,</span> <span class="n">timeframe</span><span class="p">:</span> <span class="n"><span title="polytrader.models.Timeframe">Timeframe</span></span><span class="p">,</span> <span class="n">timestamp</span><span class="p">:</span> <span class="n"><span title="int">int</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="            UpDownMarket (polytrader.models.UpDownMarket)" href="../models/#polytrader.models.UpDownMarket">UpDownMarket</a></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Get Up/Down market by coin, timeframe, and Unix timestamp.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <ul>
+        <li class="doc-section-item field-body">
+            <b><code>coin</code></b>
+              (<code><span title="polytrader.models.Coin">Coin</span></code>)
+          –
+          <div class="doc-md-description">
+            <p>Coin enum (BTC, ETH, SOL, XRP)</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
+            <b><code>timeframe</code></b>
+              (<code><span title="polytrader.models.Timeframe">Timeframe</span></code>)
+          –
+          <div class="doc-md-description">
+            <p>Timeframe enum (M5, M15)</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
+            <b><code>timestamp</code></b>
+              (<code><span title="int">int</span></code>)
+          –
+          <div class="doc-md-description">
+            <p>Unix timestamp for the market period</p>
+          </div>
+        </li>
+    </ul>
+
+
+<p><span class="doc-section-title">Returns:</span></p>
+    <ul>
+        <li class="doc-section-item field-body">
+              <code><a class="autorefs autorefs-internal" title="            UpDownMarket (polytrader.models.UpDownMarket)" href="../models/#polytrader.models.UpDownMarket">UpDownMarket</a></code>
+          –
+          <div class="doc-md-description">
+            <p>UpDownMarket with token IDs for Up and Down outcomes</p>
+          </div>
+        </li>
+    </ul>
+
+
+<p><span class="doc-section-title">Raises:</span></p>
+    <ul>
+        <li class="doc-section-item field-body">
+              <code><a class="autorefs autorefs-internal" title="            OrderError (polytrader.exceptions.OrderError)" href="../exceptions/#polytrader.exceptions.OrderError">OrderError</a></code>
+            –
+          <div class="doc-md-description">
+            <p>If no market found for the given parameters</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
+              <code><span title="httpx.HTTPError">HTTPError</span></code>
+            –
+          <div class="doc-md-description">
+            <p>If the API request fails</p>
+          </div>
+        </li>
+    </ul>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-179">179</a></span>
+<span class="normal"><a href="#__codelineno-0-180">180</a></span>
+<span class="normal"><a href="#__codelineno-0-181">181</a></span>
+<span class="normal"><a href="#__codelineno-0-182">182</a></span>
+<span class="normal"><a href="#__codelineno-0-183">183</a></span>
+<span class="normal"><a href="#__codelineno-0-184">184</a></span>
+<span class="normal"><a href="#__codelineno-0-185">185</a></span>
+<span class="normal"><a href="#__codelineno-0-186">186</a></span>
+<span class="normal"><a href="#__codelineno-0-187">187</a></span>
+<span class="normal"><a href="#__codelineno-0-188">188</a></span>
+<span class="normal"><a href="#__codelineno-0-189">189</a></span>
+<span class="normal"><a href="#__codelineno-0-190">190</a></span>
+<span class="normal"><a href="#__codelineno-0-191">191</a></span>
+<span class="normal"><a href="#__codelineno-0-192">192</a></span>
+<span class="normal"><a href="#__codelineno-0-193">193</a></span>
+<span class="normal"><a href="#__codelineno-0-194">194</a></span>
+<span class="normal"><a href="#__codelineno-0-195">195</a></span>
+<span class="normal"><a href="#__codelineno-0-196">196</a></span>
+<span class="normal"><a href="#__codelineno-0-197">197</a></span>
+<span class="normal"><a href="#__codelineno-0-198">198</a></span>
+<span class="normal"><a href="#__codelineno-0-199">199</a></span>
+<span class="normal"><a href="#__codelineno-0-200">200</a></span>
+<span class="normal"><a href="#__codelineno-0-201">201</a></span>
+<span class="normal"><a href="#__codelineno-0-202">202</a></span>
+<span class="normal"><a href="#__codelineno-0-203">203</a></span>
+<span class="normal"><a href="#__codelineno-0-204">204</a></span>
+<span class="normal"><a href="#__codelineno-0-205">205</a></span>
+<span class="normal"><a href="#__codelineno-0-206">206</a></span>
+<span class="normal"><a href="#__codelineno-0-207">207</a></span>
+<span class="normal"><a href="#__codelineno-0-208">208</a></span>
+<span class="normal"><a href="#__codelineno-0-209">209</a></span>
+<span class="normal"><a href="#__codelineno-0-210">210</a></span>
+<span class="normal"><a href="#__codelineno-0-211">211</a></span>
+<span class="normal"><a href="#__codelineno-0-212">212</a></span>
+<span class="normal"><a href="#__codelineno-0-213">213</a></span>
+<span class="normal"><a href="#__codelineno-0-214">214</a></span>
+<span class="normal"><a href="#__codelineno-0-215">215</a></span>
+<span class="normal"><a href="#__codelineno-0-216">216</a></span>
+<span class="normal"><a href="#__codelineno-0-217">217</a></span>
+<span class="normal"><a href="#__codelineno-0-218">218</a></span>
+<span class="normal"><a href="#__codelineno-0-219">219</a></span>
+<span class="normal"><a href="#__codelineno-0-220">220</a></span>
+<span class="normal"><a href="#__codelineno-0-221">221</a></span>
+<span class="normal"><a href="#__codelineno-0-222">222</a></span>
+<span class="normal"><a href="#__codelineno-0-223">223</a></span>
+<span class="normal"><a href="#__codelineno-0-224">224</a></span>
+<span class="normal"><a href="#__codelineno-0-225">225</a></span>
+<span class="normal"><a href="#__codelineno-0-226">226</a></span>
+<span class="normal"><a href="#__codelineno-0-227">227</a></span>
+<span class="normal"><a href="#__codelineno-0-228">228</a></span>
+<span class="normal"><a href="#__codelineno-0-229">229</a></span>
+<span class="normal"><a href="#__codelineno-0-230">230</a></span>
+<span class="normal"><a href="#__codelineno-0-231">231</a></span>
+<span class="normal"><a href="#__codelineno-0-232">232</a></span>
+<span class="normal"><a href="#__codelineno-0-233">233</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-179" name="__codelineno-0-179"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_updown_market</span><span class="p">(</span>
+<a id="__codelineno-0-180" name="__codelineno-0-180"></a>    <span class="bp">self</span><span class="p">,</span> <span class="n">coin</span><span class="p">:</span> <span class="n">Coin</span><span class="p">,</span> <span class="n">timeframe</span><span class="p">:</span> <span class="n">Timeframe</span><span class="p">,</span> <span class="n">timestamp</span><span class="p">:</span> <span class="nb">int</span>
+<a id="__codelineno-0-181" name="__codelineno-0-181"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UpDownMarket</span><span class="p">:</span>
+<a id="__codelineno-0-182" name="__codelineno-0-182"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-0-183" name="__codelineno-0-183"></a><span class="sd">    Get Up/Down market by coin, timeframe, and Unix timestamp.</span>
+<a id="__codelineno-0-184" name="__codelineno-0-184"></a>
+<a id="__codelineno-0-185" name="__codelineno-0-185"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-186" name="__codelineno-0-186"></a><span class="sd">        coin: Coin enum (BTC, ETH, SOL, XRP)</span>
+<a id="__codelineno-0-187" name="__codelineno-0-187"></a><span class="sd">        timeframe: Timeframe enum (M5, M15)</span>
+<a id="__codelineno-0-188" name="__codelineno-0-188"></a><span class="sd">        timestamp: Unix timestamp for the market period</span>
+<a id="__codelineno-0-189" name="__codelineno-0-189"></a>
+<a id="__codelineno-0-190" name="__codelineno-0-190"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-191" name="__codelineno-0-191"></a><span class="sd">        UpDownMarket with token IDs for Up and Down outcomes</span>
+<a id="__codelineno-0-192" name="__codelineno-0-192"></a>
+<a id="__codelineno-0-193" name="__codelineno-0-193"></a><span class="sd">    Raises:</span>
+<a id="__codelineno-0-194" name="__codelineno-0-194"></a><span class="sd">        OrderError: If no market found for the given parameters</span>
+<a id="__codelineno-0-195" name="__codelineno-0-195"></a><span class="sd">        httpx.HTTPError: If the API request fails</span>
+<a id="__codelineno-0-196" name="__codelineno-0-196"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-197" name="__codelineno-0-197"></a>    <span class="n">slug</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">coin</span><span class="si">}</span><span class="s2">-updown-</span><span class="si">{</span><span class="n">timeframe</span><span class="si">}</span><span class="s2">-</span><span class="si">{</span><span class="n">timestamp</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-198" name="__codelineno-0-198"></a>    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">GAMMA_API_HOST</span><span class="si">}</span><span class="s2">/markets?slug=</span><span class="si">{</span><span class="n">slug</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-199" name="__codelineno-0-199"></a>    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_http</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<a id="__codelineno-0-200" name="__codelineno-0-200"></a>    <span class="n">resp</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+<a id="__codelineno-0-201" name="__codelineno-0-201"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<a id="__codelineno-0-202" name="__codelineno-0-202"></a>
+<a id="__codelineno-0-203" name="__codelineno-0-203"></a>    <span class="k">if</span> <span class="ow">not</span> <span class="n">data</span><span class="p">:</span>
+<a id="__codelineno-0-204" name="__codelineno-0-204"></a>        <span class="k">raise</span> <span class="n">OrderError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;No market found for slug: </span><span class="si">{</span><span class="n">slug</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-205" name="__codelineno-0-205"></a>
+<a id="__codelineno-0-206" name="__codelineno-0-206"></a>    <span class="n">market_data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="k">else</span> <span class="n">data</span>
+<a id="__codelineno-0-207" name="__codelineno-0-207"></a>    <span class="n">tokens</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_token_ids</span><span class="p">(</span><span class="n">market_data</span><span class="p">)</span>
+<a id="__codelineno-0-208" name="__codelineno-0-208"></a>
+<a id="__codelineno-0-209" name="__codelineno-0-209"></a>    <span class="k">return</span> <span class="n">UpDownMarket</span><span class="p">(</span>
+<a id="__codelineno-0-210" name="__codelineno-0-210"></a>        <span class="n">coin</span><span class="o">=</span><span class="n">coin</span><span class="p">,</span>
+<a id="__codelineno-0-211" name="__codelineno-0-211"></a>        <span class="n">timeframe</span><span class="o">=</span><span class="n">timeframe</span><span class="p">,</span>
+<a id="__codelineno-0-212" name="__codelineno-0-212"></a>        <span class="n">condition_id</span><span class="o">=</span><span class="n">market_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;conditionId&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+<a id="__codelineno-0-213" name="__codelineno-0-213"></a>        <span class="n">question_id</span><span class="o">=</span><span class="n">market_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;questionID&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+<a id="__codelineno-0-214" name="__codelineno-0-214"></a>        <span class="n">slug</span><span class="o">=</span><span class="n">market_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;slug&quot;</span><span class="p">,</span> <span class="n">slug</span><span class="p">),</span>
+<a id="__codelineno-0-215" name="__codelineno-0-215"></a>        <span class="n">title</span><span class="o">=</span><span class="n">market_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;question&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">),</span>
+<a id="__codelineno-0-216" name="__codelineno-0-216"></a>        <span class="n">up_token_id</span><span class="o">=</span><span class="n">tokens</span><span class="o">.</span><span class="n">up</span><span class="p">,</span>
+<a id="__codelineno-0-217" name="__codelineno-0-217"></a>        <span class="n">down_token_id</span><span class="o">=</span><span class="n">tokens</span><span class="o">.</span><span class="n">down</span><span class="p">,</span>
+<a id="__codelineno-0-218" name="__codelineno-0-218"></a>        <span class="n">end_date</span><span class="o">=</span><span class="n">datetime</span><span class="o">.</span><span class="n">fromisoformat</span><span class="p">(</span><span class="n">market_data</span><span class="p">[</span><span class="s2">&quot;endDate&quot;</span><span class="p">]),</span>
+<a id="__codelineno-0-219" name="__codelineno-0-219"></a>        <span class="n">active</span><span class="o">=</span><span class="n">market_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;active&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+<a id="__codelineno-0-220" name="__codelineno-0-220"></a>        <span class="n">closed</span><span class="o">=</span><span class="n">market_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;closed&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+<a id="__codelineno-0-221" name="__codelineno-0-221"></a>        <span class="n">order_price_min_tick_size</span><span class="o">=</span><span class="n">Decimal</span><span class="p">(</span>
+<a id="__codelineno-0-222" name="__codelineno-0-222"></a>            <span class="nb">str</span><span class="p">(</span><span class="n">market_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;orderPriceMinTickSize&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))</span>
+<a id="__codelineno-0-223" name="__codelineno-0-223"></a>        <span class="p">),</span>
+<a id="__codelineno-0-224" name="__codelineno-0-224"></a>        <span class="n">order_min_size</span><span class="o">=</span><span class="n">Decimal</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">market_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;orderMinSize&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))),</span>
+<a id="__codelineno-0-225" name="__codelineno-0-225"></a>        <span class="n">neg_risk</span><span class="o">=</span><span class="n">market_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;negRisk&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+<a id="__codelineno-0-226" name="__codelineno-0-226"></a>        <span class="n">accepting_orders</span><span class="o">=</span><span class="n">market_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;acceptingOrders&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">),</span>
+<a id="__codelineno-0-227" name="__codelineno-0-227"></a>        <span class="n">best_bid</span><span class="o">=</span><span class="n">Decimal</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">market_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bestBid&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))),</span>
+<a id="__codelineno-0-228" name="__codelineno-0-228"></a>        <span class="n">best_ask</span><span class="o">=</span><span class="n">Decimal</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">market_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;bestAsk&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))),</span>
+<a id="__codelineno-0-229" name="__codelineno-0-229"></a>        <span class="n">last_trade_price</span><span class="o">=</span><span class="n">Decimal</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">market_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;lastTradePrice&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))),</span>
+<a id="__codelineno-0-230" name="__codelineno-0-230"></a>        <span class="n">spread</span><span class="o">=</span><span class="n">Decimal</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">market_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;spread&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">))),</span>
+<a id="__codelineno-0-231" name="__codelineno-0-231"></a>        <span class="n">maker_base_fee</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">market_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;makerBaseFee&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+<a id="__codelineno-0-232" name="__codelineno-0-232"></a>        <span class="n">taker_base_fee</span><span class="o">=</span><span class="nb">int</span><span class="p">(</span><span class="n">market_data</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;takerBaseFee&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)),</span>
+<a id="__codelineno-0-233" name="__codelineno-0-233"></a>    <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.get_current_updown_market" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">get_current_updown_market</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#polytrader.client.PolyTrader.get_current_updown_market" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">get_current_updown_market</span><span class="p">(</span><span class="n">coin</span><span class="p">:</span> <span class="n"><span title="polytrader.models.Coin">Coin</span></span><span class="p">,</span> <span class="n">timeframe</span><span class="p">:</span> <span class="n"><span title="polytrader.models.Timeframe">Timeframe</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="            UpDownMarket (polytrader.models.UpDownMarket)" href="../models/#polytrader.models.UpDownMarket">UpDownMarket</a></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Get current Up/Down market for a coin and timeframe.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-235">235</a></span>
+<span class="normal"><a href="#__codelineno-0-236">236</a></span>
+<span class="normal"><a href="#__codelineno-0-237">237</a></span>
+<span class="normal"><a href="#__codelineno-0-238">238</a></span>
+<span class="normal"><a href="#__codelineno-0-239">239</a></span>
+<span class="normal"><a href="#__codelineno-0-240">240</a></span>
+<span class="normal"><a href="#__codelineno-0-241">241</a></span>
+<span class="normal"><a href="#__codelineno-0-242">242</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-235" name="__codelineno-0-235"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_current_updown_market</span><span class="p">(</span>
+<a id="__codelineno-0-236" name="__codelineno-0-236"></a>    <span class="bp">self</span><span class="p">,</span> <span class="n">coin</span><span class="p">:</span> <span class="n">Coin</span><span class="p">,</span> <span class="n">timeframe</span><span class="p">:</span> <span class="n">Timeframe</span>
+<a id="__codelineno-0-237" name="__codelineno-0-237"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">UpDownMarket</span><span class="p">:</span>
+<a id="__codelineno-0-238" name="__codelineno-0-238"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get current Up/Down market for a coin and timeframe.&quot;&quot;&quot;</span>
+<a id="__codelineno-0-239" name="__codelineno-0-239"></a>    <span class="n">now</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">(</span><span class="n">UTC</span><span class="p">)</span>
+<a id="__codelineno-0-240" name="__codelineno-0-240"></a>    <span class="n">interval</span> <span class="o">=</span> <span class="mi">300</span> <span class="k">if</span> <span class="n">timeframe</span> <span class="o">==</span> <span class="n">Timeframe</span><span class="o">.</span><span class="n">M5</span> <span class="k">else</span> <span class="mi">900</span>
+<a id="__codelineno-0-241" name="__codelineno-0-241"></a>    <span class="n">rounded_ts</span> <span class="o">=</span> <span class="p">(</span><span class="nb">int</span><span class="p">(</span><span class="n">now</span><span class="o">.</span><span class="n">timestamp</span><span class="p">())</span> <span class="o">//</span> <span class="n">interval</span><span class="p">)</span> <span class="o">*</span> <span class="n">interval</span>
+<a id="__codelineno-0-242" name="__codelineno-0-242"></a>    <span class="k">return</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_updown_market</span><span class="p">(</span><span class="n">coin</span><span class="p">,</span> <span class="n">timeframe</span><span class="p">,</span> <span class="n">rounded_ts</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.create_order" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">create_order</span>
+
+
+<a href="#polytrader.client.PolyTrader.create_order" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">create_order</span><span class="p">(</span><span class="n">token_id</span><span class="p">:</span> <span class="n"><span title="str">str</span></span><span class="p">,</span> <span class="n">side</span><span class="p">:</span> <span class="n"><span title="polytrader.models.OrderSide">OrderSide</span></span><span class="p">,</span> <span class="n">price</span><span class="p">:</span> <span class="n"><span title="decimal.Decimal">Decimal</span></span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="n"><span title="decimal.Decimal">Decimal</span></span><span class="p">,</span> <span class="n">tick_size</span><span class="p">:</span> <span class="n"><span title="str">str</span></span> <span class="o">=</span> <span class="s1">&#39;0.01&#39;</span><span class="p">,</span> <span class="n">neg_risk</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span> <span class="n">order_type</span><span class="p">:</span> <span class="n"><a class="autorefs autorefs-internal" title="            PolymarketOrderType (polytrader.models.PolymarketOrderType)" href="../models/#polytrader.models.PolymarketOrderType">PolymarketOrderType</a></span> <span class="o">=</span> <span class="n"><span title="polytrader.models.PolymarketOrderType.GTC">GTC</span></span><span class="p">,</span> <span class="n">expiration</span><span class="p">:</span> <span class="n"><span title="int">int</span></span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span> <span class="n">post_only</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="            OrderResult (polytrader.models.OrderResult)" href="../models/#polytrader.models.OrderResult">OrderResult</a></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Create and post an order.</p>
+<p>For limit orders (GTC, GTD): specify price and size.
+For market orders (FOK, FAK): size is the dollar amount for BUY,
+    or number of shares for SELL. Price acts as worst-price limit.
+For MARKET pseudo-type: converted to FOK with aggressive price.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <ul>
+        <li class="doc-section-item field-body">
+            <b><code>token_id</code></b>
+              (<code><span title="str">str</span></code>)
+          –
+          <div class="doc-md-description">
+            <p>The token ID (asset ID) to trade</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
+            <b><code>side</code></b>
+              (<code><span title="polytrader.models.OrderSide">OrderSide</span></code>)
+          –
+          <div class="doc-md-description">
+            <p>BUY or SELL</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
+            <b><code>price</code></b>
+              (<code><span title="decimal.Decimal">Decimal</span></code>)
+          –
+          <div class="doc-md-description">
+            <p>Limit price (slippage protection for FOK/FAK)</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
+            <b><code>size</code></b>
+              (<code><span title="decimal.Decimal">Decimal</span></code>)
+          –
+          <div class="doc-md-description">
+            <p>Shares for limit/SELL, dollar amount for FOK/FAK BUY</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
+            <b><code>tick_size</code></b>
+              (<code><span title="str">str</span></code>, default:
+                  <code>&#39;0.01&#39;</code>
+)
+          –
+          <div class="doc-md-description">
+            <p>Market tick size ("0.1", "0.01", "0.001", "0.0001")</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
+            <b><code>neg_risk</code></b>
+              (<code><span title="bool">bool</span></code>, default:
+                  <code>False</code>
+)
+          –
+          <div class="doc-md-description">
+            <p>Whether this is a negative risk market (3+ outcomes)</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
+            <b><code>order_type</code></b>
+              (<code><a class="autorefs autorefs-internal" title="            PolymarketOrderType (polytrader.models.PolymarketOrderType)" href="../models/#polytrader.models.PolymarketOrderType">PolymarketOrderType</a></code>, default:
+                  <code><span title="polytrader.models.PolymarketOrderType.GTC">GTC</span></code>
+)
+          –
+          <div class="doc-md-description">
+            <p>GTC, GTD, FOK, FAK, or MARKET</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
+            <b><code>expiration</code></b>
+              (<code><span title="int">int</span></code>, default:
+                  <code>0</code>
+)
+          –
+          <div class="doc-md-description">
+            <p>Unix timestamp for GTD orders (add 60s security buffer)</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
+            <b><code>post_only</code></b>
+              (<code><span title="bool">bool</span></code>, default:
+                  <code>False</code>
+)
+          –
+          <div class="doc-md-description">
+            <p>Reject if order would match immediately (GTC/GTD only)</p>
+          </div>
+        </li>
+    </ul>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-248">248</a></span>
+<span class="normal"><a href="#__codelineno-0-249">249</a></span>
+<span class="normal"><a href="#__codelineno-0-250">250</a></span>
+<span class="normal"><a href="#__codelineno-0-251">251</a></span>
+<span class="normal"><a href="#__codelineno-0-252">252</a></span>
+<span class="normal"><a href="#__codelineno-0-253">253</a></span>
+<span class="normal"><a href="#__codelineno-0-254">254</a></span>
+<span class="normal"><a href="#__codelineno-0-255">255</a></span>
+<span class="normal"><a href="#__codelineno-0-256">256</a></span>
+<span class="normal"><a href="#__codelineno-0-257">257</a></span>
+<span class="normal"><a href="#__codelineno-0-258">258</a></span>
+<span class="normal"><a href="#__codelineno-0-259">259</a></span>
+<span class="normal"><a href="#__codelineno-0-260">260</a></span>
+<span class="normal"><a href="#__codelineno-0-261">261</a></span>
+<span class="normal"><a href="#__codelineno-0-262">262</a></span>
+<span class="normal"><a href="#__codelineno-0-263">263</a></span>
+<span class="normal"><a href="#__codelineno-0-264">264</a></span>
+<span class="normal"><a href="#__codelineno-0-265">265</a></span>
+<span class="normal"><a href="#__codelineno-0-266">266</a></span>
+<span class="normal"><a href="#__codelineno-0-267">267</a></span>
+<span class="normal"><a href="#__codelineno-0-268">268</a></span>
+<span class="normal"><a href="#__codelineno-0-269">269</a></span>
+<span class="normal"><a href="#__codelineno-0-270">270</a></span>
+<span class="normal"><a href="#__codelineno-0-271">271</a></span>
+<span class="normal"><a href="#__codelineno-0-272">272</a></span>
+<span class="normal"><a href="#__codelineno-0-273">273</a></span>
+<span class="normal"><a href="#__codelineno-0-274">274</a></span>
+<span class="normal"><a href="#__codelineno-0-275">275</a></span>
+<span class="normal"><a href="#__codelineno-0-276">276</a></span>
+<span class="normal"><a href="#__codelineno-0-277">277</a></span>
+<span class="normal"><a href="#__codelineno-0-278">278</a></span>
+<span class="normal"><a href="#__codelineno-0-279">279</a></span>
+<span class="normal"><a href="#__codelineno-0-280">280</a></span>
+<span class="normal"><a href="#__codelineno-0-281">281</a></span>
+<span class="normal"><a href="#__codelineno-0-282">282</a></span>
+<span class="normal"><a href="#__codelineno-0-283">283</a></span>
+<span class="normal"><a href="#__codelineno-0-284">284</a></span>
+<span class="normal"><a href="#__codelineno-0-285">285</a></span>
+<span class="normal"><a href="#__codelineno-0-286">286</a></span>
+<span class="normal"><a href="#__codelineno-0-287">287</a></span>
+<span class="normal"><a href="#__codelineno-0-288">288</a></span>
+<span class="normal"><a href="#__codelineno-0-289">289</a></span>
+<span class="normal"><a href="#__codelineno-0-290">290</a></span>
+<span class="normal"><a href="#__codelineno-0-291">291</a></span>
+<span class="normal"><a href="#__codelineno-0-292">292</a></span>
+<span class="normal"><a href="#__codelineno-0-293">293</a></span>
+<span class="normal"><a href="#__codelineno-0-294">294</a></span>
+<span class="normal"><a href="#__codelineno-0-295">295</a></span>
+<span class="normal"><a href="#__codelineno-0-296">296</a></span>
+<span class="normal"><a href="#__codelineno-0-297">297</a></span>
+<span class="normal"><a href="#__codelineno-0-298">298</a></span>
+<span class="normal"><a href="#__codelineno-0-299">299</a></span>
+<span class="normal"><a href="#__codelineno-0-300">300</a></span>
+<span class="normal"><a href="#__codelineno-0-301">301</a></span>
+<span class="normal"><a href="#__codelineno-0-302">302</a></span>
+<span class="normal"><a href="#__codelineno-0-303">303</a></span>
+<span class="normal"><a href="#__codelineno-0-304">304</a></span>
+<span class="normal"><a href="#__codelineno-0-305">305</a></span>
+<span class="normal"><a href="#__codelineno-0-306">306</a></span>
+<span class="normal"><a href="#__codelineno-0-307">307</a></span>
+<span class="normal"><a href="#__codelineno-0-308">308</a></span>
+<span class="normal"><a href="#__codelineno-0-309">309</a></span>
+<span class="normal"><a href="#__codelineno-0-310">310</a></span>
+<span class="normal"><a href="#__codelineno-0-311">311</a></span>
+<span class="normal"><a href="#__codelineno-0-312">312</a></span>
+<span class="normal"><a href="#__codelineno-0-313">313</a></span>
+<span class="normal"><a href="#__codelineno-0-314">314</a></span>
+<span class="normal"><a href="#__codelineno-0-315">315</a></span>
+<span class="normal"><a href="#__codelineno-0-316">316</a></span>
+<span class="normal"><a href="#__codelineno-0-317">317</a></span>
+<span class="normal"><a href="#__codelineno-0-318">318</a></span>
+<span class="normal"><a href="#__codelineno-0-319">319</a></span>
+<span class="normal"><a href="#__codelineno-0-320">320</a></span>
+<span class="normal"><a href="#__codelineno-0-321">321</a></span>
+<span class="normal"><a href="#__codelineno-0-322">322</a></span>
+<span class="normal"><a href="#__codelineno-0-323">323</a></span>
+<span class="normal"><a href="#__codelineno-0-324">324</a></span>
+<span class="normal"><a href="#__codelineno-0-325">325</a></span>
+<span class="normal"><a href="#__codelineno-0-326">326</a></span>
+<span class="normal"><a href="#__codelineno-0-327">327</a></span>
+<span class="normal"><a href="#__codelineno-0-328">328</a></span>
+<span class="normal"><a href="#__codelineno-0-329">329</a></span>
+<span class="normal"><a href="#__codelineno-0-330">330</a></span>
+<span class="normal"><a href="#__codelineno-0-331">331</a></span>
+<span class="normal"><a href="#__codelineno-0-332">332</a></span>
+<span class="normal"><a href="#__codelineno-0-333">333</a></span>
+<span class="normal"><a href="#__codelineno-0-334">334</a></span>
+<span class="normal"><a href="#__codelineno-0-335">335</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-248" name="__codelineno-0-248"></a><span class="k">def</span><span class="w"> </span><span class="nf">create_order</span><span class="p">(</span>
+<a id="__codelineno-0-249" name="__codelineno-0-249"></a>    <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-0-250" name="__codelineno-0-250"></a>    <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span>
+<a id="__codelineno-0-251" name="__codelineno-0-251"></a>    <span class="n">side</span><span class="p">:</span> <span class="n">OrderSide</span><span class="p">,</span>
+<a id="__codelineno-0-252" name="__codelineno-0-252"></a>    <span class="n">price</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span>
+<a id="__codelineno-0-253" name="__codelineno-0-253"></a>    <span class="n">size</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span>
+<a id="__codelineno-0-254" name="__codelineno-0-254"></a>    <span class="n">tick_size</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s2">&quot;0.01&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-255" name="__codelineno-0-255"></a>    <span class="n">neg_risk</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-0-256" name="__codelineno-0-256"></a>    <span class="n">order_type</span><span class="p">:</span> <span class="n">PolymarketOrderType</span> <span class="o">=</span> <span class="n">PolymarketOrderType</span><span class="o">.</span><span class="n">GTC</span><span class="p">,</span>
+<a id="__codelineno-0-257" name="__codelineno-0-257"></a>    <span class="n">expiration</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+<a id="__codelineno-0-258" name="__codelineno-0-258"></a>    <span class="n">post_only</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">,</span>
+<a id="__codelineno-0-259" name="__codelineno-0-259"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OrderResult</span><span class="p">:</span>
+<a id="__codelineno-0-260" name="__codelineno-0-260"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-0-261" name="__codelineno-0-261"></a><span class="sd">    Create and post an order.</span>
+<a id="__codelineno-0-262" name="__codelineno-0-262"></a>
+<a id="__codelineno-0-263" name="__codelineno-0-263"></a><span class="sd">    For limit orders (GTC, GTD): specify price and size.</span>
+<a id="__codelineno-0-264" name="__codelineno-0-264"></a><span class="sd">    For market orders (FOK, FAK): size is the dollar amount for BUY,</span>
+<a id="__codelineno-0-265" name="__codelineno-0-265"></a><span class="sd">        or number of shares for SELL. Price acts as worst-price limit.</span>
+<a id="__codelineno-0-266" name="__codelineno-0-266"></a><span class="sd">    For MARKET pseudo-type: converted to FOK with aggressive price.</span>
+<a id="__codelineno-0-267" name="__codelineno-0-267"></a>
+<a id="__codelineno-0-268" name="__codelineno-0-268"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-269" name="__codelineno-0-269"></a><span class="sd">        token_id: The token ID (asset ID) to trade</span>
+<a id="__codelineno-0-270" name="__codelineno-0-270"></a><span class="sd">        side: BUY or SELL</span>
+<a id="__codelineno-0-271" name="__codelineno-0-271"></a><span class="sd">        price: Limit price (slippage protection for FOK/FAK)</span>
+<a id="__codelineno-0-272" name="__codelineno-0-272"></a><span class="sd">        size: Shares for limit/SELL, dollar amount for FOK/FAK BUY</span>
+<a id="__codelineno-0-273" name="__codelineno-0-273"></a><span class="sd">        tick_size: Market tick size (&quot;0.1&quot;, &quot;0.01&quot;, &quot;0.001&quot;, &quot;0.0001&quot;)</span>
+<a id="__codelineno-0-274" name="__codelineno-0-274"></a><span class="sd">        neg_risk: Whether this is a negative risk market (3+ outcomes)</span>
+<a id="__codelineno-0-275" name="__codelineno-0-275"></a><span class="sd">        order_type: GTC, GTD, FOK, FAK, or MARKET</span>
+<a id="__codelineno-0-276" name="__codelineno-0-276"></a><span class="sd">        expiration: Unix timestamp for GTD orders (add 60s security buffer)</span>
+<a id="__codelineno-0-277" name="__codelineno-0-277"></a><span class="sd">        post_only: Reject if order would match immediately (GTC/GTD only)</span>
+<a id="__codelineno-0-278" name="__codelineno-0-278"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-279" name="__codelineno-0-279"></a>    <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_authenticated_client</span><span class="p">()</span>
+<a id="__codelineno-0-280" name="__codelineno-0-280"></a>    <span class="n">options</span> <span class="o">=</span> <span class="n">PartialCreateOrderOptions</span><span class="p">(</span><span class="n">tick_size</span><span class="o">=</span><span class="n">tick_size</span><span class="p">,</span> <span class="n">neg_risk</span><span class="o">=</span><span class="n">neg_risk</span><span class="p">)</span>
+<a id="__codelineno-0-281" name="__codelineno-0-281"></a>
+<a id="__codelineno-0-282" name="__codelineno-0-282"></a>    <span class="n">actual_order_type</span> <span class="o">=</span> <span class="n">order_type</span>
+<a id="__codelineno-0-283" name="__codelineno-0-283"></a>    <span class="k">if</span> <span class="n">order_type</span> <span class="o">==</span> <span class="n">PolymarketOrderType</span><span class="o">.</span><span class="n">MARKET</span><span class="p">:</span>
+<a id="__codelineno-0-284" name="__codelineno-0-284"></a>        <span class="n">actual_order_type</span> <span class="o">=</span> <span class="n">PolymarketOrderType</span><span class="o">.</span><span class="n">FOK</span>
+<a id="__codelineno-0-285" name="__codelineno-0-285"></a>
+<a id="__codelineno-0-286" name="__codelineno-0-286"></a>    <span class="k">if</span> <span class="n">actual_order_type</span> <span class="ow">in</span> <span class="p">(</span><span class="n">PolymarketOrderType</span><span class="o">.</span><span class="n">FOK</span><span class="p">,</span> <span class="n">PolymarketOrderType</span><span class="o">.</span><span class="n">FAK</span><span class="p">):</span>
+<a id="__codelineno-0-287" name="__codelineno-0-287"></a>        <span class="c1"># Market orders: use create_market_order</span>
+<a id="__codelineno-0-288" name="__codelineno-0-288"></a>        <span class="n">market_price</span> <span class="o">=</span> <span class="n">price</span>
+<a id="__codelineno-0-289" name="__codelineno-0-289"></a>        <span class="k">if</span> <span class="n">order_type</span> <span class="o">==</span> <span class="n">PolymarketOrderType</span><span class="o">.</span><span class="n">MARKET</span><span class="p">:</span>
+<a id="__codelineno-0-290" name="__codelineno-0-290"></a>            <span class="n">market_price</span> <span class="o">=</span> <span class="p">(</span>
+<a id="__codelineno-0-291" name="__codelineno-0-291"></a>                <span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;0.99&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="n">side</span> <span class="o">==</span> <span class="n">OrderSide</span><span class="o">.</span><span class="n">BUY</span> <span class="k">else</span> <span class="n">Decimal</span><span class="p">(</span><span class="s2">&quot;0.01&quot;</span><span class="p">)</span>
+<a id="__codelineno-0-292" name="__codelineno-0-292"></a>            <span class="p">)</span>
+<a id="__codelineno-0-293" name="__codelineno-0-293"></a>
+<a id="__codelineno-0-294" name="__codelineno-0-294"></a>        <span class="n">market_args</span> <span class="o">=</span> <span class="n">MarketOrderArgs</span><span class="p">(</span>
+<a id="__codelineno-0-295" name="__codelineno-0-295"></a>            <span class="n">token_id</span><span class="o">=</span><span class="n">token_id</span><span class="p">,</span>
+<a id="__codelineno-0-296" name="__codelineno-0-296"></a>            <span class="n">amount</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">size</span><span class="p">),</span>
+<a id="__codelineno-0-297" name="__codelineno-0-297"></a>            <span class="n">side</span><span class="o">=</span><span class="n">side</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+<a id="__codelineno-0-298" name="__codelineno-0-298"></a>            <span class="n">price</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">market_price</span><span class="p">),</span>
+<a id="__codelineno-0-299" name="__codelineno-0-299"></a>        <span class="p">)</span>
+<a id="__codelineno-0-300" name="__codelineno-0-300"></a>        <span class="n">signed_order</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">create_market_order</span><span class="p">(</span><span class="n">market_args</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+<a id="__codelineno-0-301" name="__codelineno-0-301"></a>    <span class="k">else</span><span class="p">:</span>
+<a id="__codelineno-0-302" name="__codelineno-0-302"></a>        <span class="c1"># Limit orders: GTC or GTD</span>
+<a id="__codelineno-0-303" name="__codelineno-0-303"></a>        <span class="n">order_args</span> <span class="o">=</span> <span class="n">OrderArgs</span><span class="p">(</span>
+<a id="__codelineno-0-304" name="__codelineno-0-304"></a>            <span class="n">token_id</span><span class="o">=</span><span class="n">token_id</span><span class="p">,</span>
+<a id="__codelineno-0-305" name="__codelineno-0-305"></a>            <span class="n">price</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">price</span><span class="p">),</span>
+<a id="__codelineno-0-306" name="__codelineno-0-306"></a>            <span class="n">size</span><span class="o">=</span><span class="nb">float</span><span class="p">(</span><span class="n">size</span><span class="p">),</span>
+<a id="__codelineno-0-307" name="__codelineno-0-307"></a>            <span class="n">side</span><span class="o">=</span><span class="n">side</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+<a id="__codelineno-0-308" name="__codelineno-0-308"></a>            <span class="n">expiration</span><span class="o">=</span><span class="n">expiration</span><span class="p">,</span>
+<a id="__codelineno-0-309" name="__codelineno-0-309"></a>        <span class="p">)</span>
+<a id="__codelineno-0-310" name="__codelineno-0-310"></a>        <span class="n">signed_order</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">create_order</span><span class="p">(</span><span class="n">order_args</span><span class="p">,</span> <span class="n">options</span><span class="p">)</span>
+<a id="__codelineno-0-311" name="__codelineno-0-311"></a>
+<a id="__codelineno-0-312" name="__codelineno-0-312"></a>    <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">post_order</span><span class="p">(</span>
+<a id="__codelineno-0-313" name="__codelineno-0-313"></a>        <span class="n">signed_order</span><span class="p">,</span>
+<a id="__codelineno-0-314" name="__codelineno-0-314"></a>        <span class="n">orderType</span><span class="o">=</span><span class="n">actual_order_type</span><span class="o">.</span><span class="n">to_clob_order_type</span><span class="p">(),</span>
+<a id="__codelineno-0-315" name="__codelineno-0-315"></a>        <span class="n">post_only</span><span class="o">=</span><span class="n">post_only</span>
+<a id="__codelineno-0-316" name="__codelineno-0-316"></a>        <span class="ow">and</span> <span class="n">actual_order_type</span>
+<a id="__codelineno-0-317" name="__codelineno-0-317"></a>        <span class="ow">in</span> <span class="p">(</span>
+<a id="__codelineno-0-318" name="__codelineno-0-318"></a>            <span class="n">PolymarketOrderType</span><span class="o">.</span><span class="n">GTC</span><span class="p">,</span>
+<a id="__codelineno-0-319" name="__codelineno-0-319"></a>            <span class="n">PolymarketOrderType</span><span class="o">.</span><span class="n">GTD</span><span class="p">,</span>
+<a id="__codelineno-0-320" name="__codelineno-0-320"></a>        <span class="p">),</span>
+<a id="__codelineno-0-321" name="__codelineno-0-321"></a>    <span class="p">)</span>
+<a id="__codelineno-0-322" name="__codelineno-0-322"></a>
+<a id="__codelineno-0-323" name="__codelineno-0-323"></a>    <span class="n">result</span> <span class="o">=</span> <span class="n">OrderResult</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+<a id="__codelineno-0-324" name="__codelineno-0-324"></a>
+<a id="__codelineno-0-325" name="__codelineno-0-325"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+<a id="__codelineno-0-326" name="__codelineno-0-326"></a>        <span class="s2">&quot;[POLYMARKET] Order </span><span class="si">%s</span><span class="s2">: </span><span class="si">%s</span><span class="s2"> </span><span class="si">%s</span><span class="s2">@</span><span class="si">%s</span><span class="s2"> type=</span><span class="si">%s</span><span class="s2"> id=</span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-327" name="__codelineno-0-327"></a>        <span class="n">result</span><span class="o">.</span><span class="n">status</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+<a id="__codelineno-0-328" name="__codelineno-0-328"></a>        <span class="n">side</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+<a id="__codelineno-0-329" name="__codelineno-0-329"></a>        <span class="n">size</span><span class="p">,</span>
+<a id="__codelineno-0-330" name="__codelineno-0-330"></a>        <span class="n">price</span><span class="p">,</span>
+<a id="__codelineno-0-331" name="__codelineno-0-331"></a>        <span class="n">order_type</span><span class="o">.</span><span class="n">value</span><span class="p">,</span>
+<a id="__codelineno-0-332" name="__codelineno-0-332"></a>        <span class="n">result</span><span class="o">.</span><span class="n">order_id</span><span class="p">,</span>
+<a id="__codelineno-0-333" name="__codelineno-0-333"></a>    <span class="p">)</span>
+<a id="__codelineno-0-334" name="__codelineno-0-334"></a>
+<a id="__codelineno-0-335" name="__codelineno-0-335"></a>    <span class="k">return</span> <span class="n">result</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.cancel_order" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">cancel_order</span>
+
+
+<a href="#polytrader.client.PolyTrader.cancel_order" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">cancel_order</span><span class="p">(</span><span class="n">order_id</span><span class="p">:</span> <span class="n"><span title="str">str</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="bool">bool</span></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Cancel a specific order.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-343">343</a></span>
+<span class="normal"><a href="#__codelineno-0-344">344</a></span>
+<span class="normal"><a href="#__codelineno-0-345">345</a></span>
+<span class="normal"><a href="#__codelineno-0-346">346</a></span>
+<span class="normal"><a href="#__codelineno-0-347">347</a></span>
+<span class="normal"><a href="#__codelineno-0-348">348</a></span>
+<span class="normal"><a href="#__codelineno-0-349">349</a></span>
+<span class="normal"><a href="#__codelineno-0-350">350</a></span>
+<span class="normal"><a href="#__codelineno-0-351">351</a></span>
+<span class="normal"><a href="#__codelineno-0-352">352</a></span>
+<span class="normal"><a href="#__codelineno-0-353">353</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-343" name="__codelineno-0-343"></a><span class="k">def</span><span class="w"> </span><span class="nf">cancel_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-0-344" name="__codelineno-0-344"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Cancel a specific order.&quot;&quot;&quot;</span>
+<a id="__codelineno-0-345" name="__codelineno-0-345"></a>    <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_authenticated_client</span><span class="p">()</span>
+<a id="__codelineno-0-346" name="__codelineno-0-346"></a>    <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">cancel</span><span class="p">(</span><span class="n">order_id</span><span class="p">)</span>
+<a id="__codelineno-0-347" name="__codelineno-0-347"></a>    <span class="n">cancelled</span> <span class="o">=</span> <span class="nb">bool</span><span class="p">(</span>
+<a id="__codelineno-0-348" name="__codelineno-0-348"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_extract_cancelled</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+<a id="__codelineno-0-349" name="__codelineno-0-349"></a>        <span class="ow">or</span> <span class="n">resp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;canceled&quot;</span><span class="p">,</span> <span class="n">resp</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;cancelled&quot;</span><span class="p">,</span> <span class="kc">False</span><span class="p">))</span>
+<a id="__codelineno-0-350" name="__codelineno-0-350"></a>    <span class="p">)</span>
+<a id="__codelineno-0-351" name="__codelineno-0-351"></a>    <span class="k">if</span> <span class="n">cancelled</span><span class="p">:</span>
+<a id="__codelineno-0-352" name="__codelineno-0-352"></a>        <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;[POLYMARKET] Order cancelled: </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">order_id</span><span class="p">)</span>
+<a id="__codelineno-0-353" name="__codelineno-0-353"></a>    <span class="k">return</span> <span class="n">cancelled</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.cancel_all_orders" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">cancel_all_orders</span>
+
+
+<a href="#polytrader.client.PolyTrader.cancel_all_orders" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">cancel_all_orders</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><span title="int">int</span></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Cancel all open orders.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-355">355</a></span>
+<span class="normal"><a href="#__codelineno-0-356">356</a></span>
+<span class="normal"><a href="#__codelineno-0-357">357</a></span>
+<span class="normal"><a href="#__codelineno-0-358">358</a></span>
+<span class="normal"><a href="#__codelineno-0-359">359</a></span>
+<span class="normal"><a href="#__codelineno-0-360">360</a></span>
+<span class="normal"><a href="#__codelineno-0-361">361</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-355" name="__codelineno-0-355"></a><span class="k">def</span><span class="w"> </span><span class="nf">cancel_all_orders</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-0-356" name="__codelineno-0-356"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Cancel all open orders.&quot;&quot;&quot;</span>
+<a id="__codelineno-0-357" name="__codelineno-0-357"></a>    <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_authenticated_client</span><span class="p">()</span>
+<a id="__codelineno-0-358" name="__codelineno-0-358"></a>    <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">cancel_all</span><span class="p">()</span>
+<a id="__codelineno-0-359" name="__codelineno-0-359"></a>    <span class="n">cancelled_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_cancelled</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+<a id="__codelineno-0-360" name="__codelineno-0-360"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span><span class="s2">&quot;[POLYMARKET] Cancelled </span><span class="si">%d</span><span class="s2"> orders&quot;</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">cancelled_ids</span><span class="p">))</span>
+<a id="__codelineno-0-361" name="__codelineno-0-361"></a>    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">cancelled_ids</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.cancel_orders_for_market" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">cancel_orders_for_market</span>
+
+
+<a href="#polytrader.client.PolyTrader.cancel_orders_for_market" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">cancel_orders_for_market</span><span class="p">(</span><span class="n">market_id</span><span class="p">:</span> <span class="n"><span title="str">str</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="int">int</span></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Cancel all orders for a specific market.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-363">363</a></span>
+<span class="normal"><a href="#__codelineno-0-364">364</a></span>
+<span class="normal"><a href="#__codelineno-0-365">365</a></span>
+<span class="normal"><a href="#__codelineno-0-366">366</a></span>
+<span class="normal"><a href="#__codelineno-0-367">367</a></span>
+<span class="normal"><a href="#__codelineno-0-368">368</a></span>
+<span class="normal"><a href="#__codelineno-0-369">369</a></span>
+<span class="normal"><a href="#__codelineno-0-370">370</a></span>
+<span class="normal"><a href="#__codelineno-0-371">371</a></span>
+<span class="normal"><a href="#__codelineno-0-372">372</a></span>
+<span class="normal"><a href="#__codelineno-0-373">373</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-363" name="__codelineno-0-363"></a><span class="k">def</span><span class="w"> </span><span class="nf">cancel_orders_for_market</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">market_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<a id="__codelineno-0-364" name="__codelineno-0-364"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Cancel all orders for a specific market.&quot;&quot;&quot;</span>
+<a id="__codelineno-0-365" name="__codelineno-0-365"></a>    <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_authenticated_client</span><span class="p">()</span>
+<a id="__codelineno-0-366" name="__codelineno-0-366"></a>    <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">cancel_market_orders</span><span class="p">(</span><span class="n">market_id</span><span class="p">)</span>
+<a id="__codelineno-0-367" name="__codelineno-0-367"></a>    <span class="n">cancelled_ids</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_extract_cancelled</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+<a id="__codelineno-0-368" name="__codelineno-0-368"></a>    <span class="n">logger</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+<a id="__codelineno-0-369" name="__codelineno-0-369"></a>        <span class="s2">&quot;[POLYMARKET] Cancelled </span><span class="si">%d</span><span class="s2"> orders for market </span><span class="si">%s</span><span class="s2">&quot;</span><span class="p">,</span>
+<a id="__codelineno-0-370" name="__codelineno-0-370"></a>        <span class="nb">len</span><span class="p">(</span><span class="n">cancelled_ids</span><span class="p">),</span>
+<a id="__codelineno-0-371" name="__codelineno-0-371"></a>        <span class="n">market_id</span><span class="p">,</span>
+<a id="__codelineno-0-372" name="__codelineno-0-372"></a>    <span class="p">)</span>
+<a id="__codelineno-0-373" name="__codelineno-0-373"></a>    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="n">cancelled_ids</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.get_order" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">get_order</span>
+
+
+<a href="#polytrader.client.PolyTrader.get_order" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">get_order</span><span class="p">(</span><span class="n">order_id</span><span class="p">:</span> <span class="n"><span title="str">str</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="            PolymarketOrder (polytrader.models.PolymarketOrder)" href="../models/#polytrader.models.PolymarketOrder">PolymarketOrder</a></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Get a single order by ID.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-379">379</a></span>
+<span class="normal"><a href="#__codelineno-0-380">380</a></span>
+<span class="normal"><a href="#__codelineno-0-381">381</a></span>
+<span class="normal"><a href="#__codelineno-0-382">382</a></span>
+<span class="normal"><a href="#__codelineno-0-383">383</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-379" name="__codelineno-0-379"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_order</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">order_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">PolymarketOrder</span><span class="p">:</span>
+<a id="__codelineno-0-380" name="__codelineno-0-380"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get a single order by ID.&quot;&quot;&quot;</span>
+<a id="__codelineno-0-381" name="__codelineno-0-381"></a>    <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_authenticated_client</span><span class="p">()</span>
+<a id="__codelineno-0-382" name="__codelineno-0-382"></a>    <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_order</span><span class="p">(</span><span class="n">order_id</span><span class="p">)</span>
+<a id="__codelineno-0-383" name="__codelineno-0-383"></a>    <span class="k">return</span> <span class="n">PolymarketOrder</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.get_orders" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">get_orders</span>
+
+
+<a href="#polytrader.client.PolyTrader.get_orders" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">get_orders</span><span class="p">(</span><span class="n">market_id</span><span class="p">:</span> <span class="n"><span title="str">str</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">asset_id</span><span class="p">:</span> <span class="n"><span title="str">str</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="list">list</span></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-internal" title="            PolymarketOrder (polytrader.models.PolymarketOrder)" href="../models/#polytrader.models.PolymarketOrder">PolymarketOrder</a></span><span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Get open orders, optionally filtered by market or asset.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-385">385</a></span>
+<span class="normal"><a href="#__codelineno-0-386">386</a></span>
+<span class="normal"><a href="#__codelineno-0-387">387</a></span>
+<span class="normal"><a href="#__codelineno-0-388">388</a></span>
+<span class="normal"><a href="#__codelineno-0-389">389</a></span>
+<span class="normal"><a href="#__codelineno-0-390">390</a></span>
+<span class="normal"><a href="#__codelineno-0-391">391</a></span>
+<span class="normal"><a href="#__codelineno-0-392">392</a></span>
+<span class="normal"><a href="#__codelineno-0-393">393</a></span>
+<span class="normal"><a href="#__codelineno-0-394">394</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-385" name="__codelineno-0-385"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_orders</span><span class="p">(</span>
+<a id="__codelineno-0-386" name="__codelineno-0-386"></a>    <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-0-387" name="__codelineno-0-387"></a>    <span class="n">market_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-388" name="__codelineno-0-388"></a>    <span class="n">asset_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-389" name="__codelineno-0-389"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">PolymarketOrder</span><span class="p">]:</span>
+<a id="__codelineno-0-390" name="__codelineno-0-390"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get open orders, optionally filtered by market or asset.&quot;&quot;&quot;</span>
+<a id="__codelineno-0-391" name="__codelineno-0-391"></a>    <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_authenticated_client</span><span class="p">()</span>
+<a id="__codelineno-0-392" name="__codelineno-0-392"></a>    <span class="n">params</span> <span class="o">=</span> <span class="n">OpenOrderParams</span><span class="p">(</span><span class="n">market</span><span class="o">=</span><span class="n">market_id</span><span class="p">,</span> <span class="n">asset_id</span><span class="o">=</span><span class="n">asset_id</span><span class="p">)</span>
+<a id="__codelineno-0-393" name="__codelineno-0-393"></a>    <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_orders</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<a id="__codelineno-0-394" name="__codelineno-0-394"></a>    <span class="k">return</span> <span class="p">[</span><span class="n">PolymarketOrder</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">resp</span><span class="p">]</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.get_trades" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">get_trades</span>
+
+
+<a href="#polytrader.client.PolyTrader.get_trades" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">get_trades</span><span class="p">(</span><span class="n">market_id</span><span class="p">:</span> <span class="n"><span title="str">str</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="n">asset_id</span><span class="p">:</span> <span class="n"><span title="str">str</span></span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="list">list</span></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-internal" title="            PolymarketTrade (polytrader.models.PolymarketTrade)" href="../models/#polytrader.models.PolymarketTrade">PolymarketTrade</a></span><span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Get trade history.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-396">396</a></span>
+<span class="normal"><a href="#__codelineno-0-397">397</a></span>
+<span class="normal"><a href="#__codelineno-0-398">398</a></span>
+<span class="normal"><a href="#__codelineno-0-399">399</a></span>
+<span class="normal"><a href="#__codelineno-0-400">400</a></span>
+<span class="normal"><a href="#__codelineno-0-401">401</a></span>
+<span class="normal"><a href="#__codelineno-0-402">402</a></span>
+<span class="normal"><a href="#__codelineno-0-403">403</a></span>
+<span class="normal"><a href="#__codelineno-0-404">404</a></span>
+<span class="normal"><a href="#__codelineno-0-405">405</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-396" name="__codelineno-0-396"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_trades</span><span class="p">(</span>
+<a id="__codelineno-0-397" name="__codelineno-0-397"></a>    <span class="bp">self</span><span class="p">,</span>
+<a id="__codelineno-0-398" name="__codelineno-0-398"></a>    <span class="n">market_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-399" name="__codelineno-0-399"></a>    <span class="n">asset_id</span><span class="p">:</span> <span class="nb">str</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span>
+<a id="__codelineno-0-400" name="__codelineno-0-400"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">PolymarketTrade</span><span class="p">]:</span>
+<a id="__codelineno-0-401" name="__codelineno-0-401"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get trade history.&quot;&quot;&quot;</span>
+<a id="__codelineno-0-402" name="__codelineno-0-402"></a>    <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_authenticated_client</span><span class="p">()</span>
+<a id="__codelineno-0-403" name="__codelineno-0-403"></a>    <span class="n">params</span> <span class="o">=</span> <span class="n">TradeParams</span><span class="p">(</span><span class="n">market</span><span class="o">=</span><span class="n">market_id</span><span class="p">,</span> <span class="n">asset_id</span><span class="o">=</span><span class="n">asset_id</span><span class="p">)</span>
+<a id="__codelineno-0-404" name="__codelineno-0-404"></a>    <span class="n">resp</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_trades</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<a id="__codelineno-0-405" name="__codelineno-0-405"></a>    <span class="k">return</span> <span class="p">[</span><span class="n">PolymarketTrade</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">d</span><span class="p">)</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">resp</span><span class="p">]</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.get_positions" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">get_positions</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#polytrader.client.PolyTrader.get_positions" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">get_positions</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><span title="list">list</span></span><span class="p">[</span><span class="n"><a class="autorefs autorefs-internal" title="            PolymarketPosition (polytrader.models.PolymarketPosition)" href="../models/#polytrader.models.PolymarketPosition">PolymarketPosition</a></span><span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Get current positions from the data API.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-407">407</a></span>
+<span class="normal"><a href="#__codelineno-0-408">408</a></span>
+<span class="normal"><a href="#__codelineno-0-409">409</a></span>
+<span class="normal"><a href="#__codelineno-0-410">410</a></span>
+<span class="normal"><a href="#__codelineno-0-411">411</a></span>
+<span class="normal"><a href="#__codelineno-0-412">412</a></span>
+<span class="normal"><a href="#__codelineno-0-413">413</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-407" name="__codelineno-0-407"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">get_positions</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="n">PolymarketPosition</span><span class="p">]:</span>
+<a id="__codelineno-0-408" name="__codelineno-0-408"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get current positions from the data API.&quot;&quot;&quot;</span>
+<a id="__codelineno-0-409" name="__codelineno-0-409"></a>    <span class="n">url</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">DATA_API_HOST</span><span class="si">}</span><span class="s2">/positions?user=</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">funder</span><span class="si">}</span><span class="s2">&quot;</span>
+<a id="__codelineno-0-410" name="__codelineno-0-410"></a>    <span class="n">resp</span> <span class="o">=</span> <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_http</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="p">)</span>
+<a id="__codelineno-0-411" name="__codelineno-0-411"></a>    <span class="n">resp</span><span class="o">.</span><span class="n">raise_for_status</span><span class="p">()</span>
+<a id="__codelineno-0-412" name="__codelineno-0-412"></a>    <span class="n">data</span> <span class="o">=</span> <span class="n">resp</span><span class="o">.</span><span class="n">json</span><span class="p">()</span>
+<a id="__codelineno-0-413" name="__codelineno-0-413"></a>    <span class="k">return</span> <span class="p">[</span><span class="n">PolymarketPosition</span><span class="o">.</span><span class="n">validate</span><span class="p">(</span><span class="n">pos_data</span><span class="p">)</span> <span class="k">for</span> <span class="n">pos_data</span> <span class="ow">in</span> <span class="n">data</span><span class="p">]</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.get_balance" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">get_balance</span>
+
+
+<a href="#polytrader.client.PolyTrader.get_balance" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">get_balance</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="            Balance (polytrader.models.Balance)" href="../models/#polytrader.models.Balance">Balance</a></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Get USDC balance and allowance.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-415">415</a></span>
+<span class="normal"><a href="#__codelineno-0-416">416</a></span>
+<span class="normal"><a href="#__codelineno-0-417">417</a></span>
+<span class="normal"><a href="#__codelineno-0-418">418</a></span>
+<span class="normal"><a href="#__codelineno-0-419">419</a></span>
+<span class="normal"><a href="#__codelineno-0-420">420</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-415" name="__codelineno-0-415"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_balance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Balance</span><span class="p">:</span>
+<a id="__codelineno-0-416" name="__codelineno-0-416"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get USDC balance and allowance.&quot;&quot;&quot;</span>
+<a id="__codelineno-0-417" name="__codelineno-0-417"></a>    <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_authenticated_client</span><span class="p">()</span>
+<a id="__codelineno-0-418" name="__codelineno-0-418"></a>    <span class="n">params</span> <span class="o">=</span> <span class="n">BalanceAllowanceParams</span><span class="p">(</span><span class="n">asset_type</span><span class="o">=</span><span class="n">AssetType</span><span class="o">.</span><span class="n">COLLATERAL</span><span class="p">)</span>
+<a id="__codelineno-0-419" name="__codelineno-0-419"></a>    <span class="n">resp</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_balance_allowance</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<a id="__codelineno-0-420" name="__codelineno-0-420"></a>    <span class="k">return</span> <span class="n">Balance</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.get_token_balance" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">get_token_balance</span>
+
+
+<a href="#polytrader.client.PolyTrader.get_token_balance" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">get_token_balance</span><span class="p">(</span><span class="n">token_id</span><span class="p">:</span> <span class="n"><span title="str">str</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><a class="autorefs autorefs-internal" title="            Balance (polytrader.models.Balance)" href="../models/#polytrader.models.Balance">Balance</a></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Get conditional token balance and allowance.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-422">422</a></span>
+<span class="normal"><a href="#__codelineno-0-423">423</a></span>
+<span class="normal"><a href="#__codelineno-0-424">424</a></span>
+<span class="normal"><a href="#__codelineno-0-425">425</a></span>
+<span class="normal"><a href="#__codelineno-0-426">426</a></span>
+<span class="normal"><a href="#__codelineno-0-427">427</a></span>
+<span class="normal"><a href="#__codelineno-0-428">428</a></span>
+<span class="normal"><a href="#__codelineno-0-429">429</a></span>
+<span class="normal"><a href="#__codelineno-0-430">430</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-422" name="__codelineno-0-422"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_token_balance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">Balance</span><span class="p">:</span>
+<a id="__codelineno-0-423" name="__codelineno-0-423"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get conditional token balance and allowance.&quot;&quot;&quot;</span>
+<a id="__codelineno-0-424" name="__codelineno-0-424"></a>    <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_authenticated_client</span><span class="p">()</span>
+<a id="__codelineno-0-425" name="__codelineno-0-425"></a>    <span class="n">params</span> <span class="o">=</span> <span class="n">BalanceAllowanceParams</span><span class="p">(</span>
+<a id="__codelineno-0-426" name="__codelineno-0-426"></a>        <span class="n">asset_type</span><span class="o">=</span><span class="n">AssetType</span><span class="o">.</span><span class="n">CONDITIONAL</span><span class="p">,</span>
+<a id="__codelineno-0-427" name="__codelineno-0-427"></a>        <span class="n">token_id</span><span class="o">=</span><span class="n">token_id</span><span class="p">,</span>
+<a id="__codelineno-0-428" name="__codelineno-0-428"></a>    <span class="p">)</span>
+<a id="__codelineno-0-429" name="__codelineno-0-429"></a>    <span class="n">resp</span><span class="p">:</span> <span class="nb">dict</span><span class="p">[</span><span class="nb">str</span><span class="p">,</span> <span class="n">Any</span><span class="p">]</span> <span class="o">=</span> <span class="n">client</span><span class="o">.</span><span class="n">get_balance_allowance</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+<a id="__codelineno-0-430" name="__codelineno-0-430"></a>    <span class="k">return</span> <span class="n">Balance</span><span class="o">.</span><span class="n">from_dict</span><span class="p">(</span><span class="n">resp</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.get_orderbook" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">get_orderbook</span>
+
+
+<a href="#polytrader.client.PolyTrader.get_orderbook" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">get_orderbook</span><span class="p">(</span><span class="n">token_id</span><span class="p">:</span> <span class="n"><span title="str">str</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="py_clob_client.client.OrderBookSummary">OrderBookSummary</span></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Get orderbook for a token.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-432">432</a></span>
+<span class="normal"><a href="#__codelineno-0-433">433</a></span>
+<span class="normal"><a href="#__codelineno-0-434">434</a></span>
+<span class="normal"><a href="#__codelineno-0-435">435</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-432" name="__codelineno-0-432"></a><span class="k">def</span><span class="w"> </span><span class="nf">get_orderbook</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">OrderBookSummary</span><span class="p">:</span>
+<a id="__codelineno-0-433" name="__codelineno-0-433"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Get orderbook for a token.&quot;&quot;&quot;</span>
+<a id="__codelineno-0-434" name="__codelineno-0-434"></a>    <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_clob_client</span><span class="p">()</span>
+<a id="__codelineno-0-435" name="__codelineno-0-435"></a>    <span class="k">return</span> <span class="n">client</span><span class="o">.</span><span class="n">get_order_book</span><span class="p">(</span><span class="n">token_id</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.ensure_can_sell" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">ensure_can_sell</span>
+
+
+<a href="#polytrader.client.PolyTrader.ensure_can_sell" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">ensure_can_sell</span><span class="p">(</span><span class="n">token_id</span><span class="p">:</span> <span class="n"><span title="str">str</span></span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="n"><span title="decimal.Decimal">Decimal</span></span><span class="p">,</span> <span class="n">neg_risk</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="bool">bool</span></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Check if a sell order is possible, auto-approving if needed.</p>
+<p>Verifies token balance, on-chain allowance, and available (unlocked)
+shares.  If allowance is zero, sends an on-chain <code>setApprovalForAll</code>
+transaction and refreshes the server cache.</p>
+
+
+<p><span class="doc-section-title">Parameters:</span></p>
+    <ul>
+        <li class="doc-section-item field-body">
+            <b><code>token_id</code></b>
+              (<code><span title="str">str</span></code>)
+          –
+          <div class="doc-md-description">
+            <p>Conditional token to sell.</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
+            <b><code>size</code></b>
+              (<code><span title="decimal.Decimal">Decimal</span></code>)
+          –
+          <div class="doc-md-description">
+            <p>Number of shares to sell (human-readable, e.g. <code>5.0</code>).</p>
+          </div>
+        </li>
+        <li class="doc-section-item field-body">
+            <b><code>neg_risk</code></b>
+              (<code><span title="bool">bool</span></code>, default:
+                  <code>False</code>
+)
+          –
+          <div class="doc-md-description">
+            <p>Whether this is a neg-risk market.</p>
+          </div>
+        </li>
+    </ul>
+
+
+<p><span class="doc-section-title">Returns:</span></p>
+    <ul>
+        <li class="doc-section-item field-body">
+              <code><span title="bool">bool</span></code>
+          –
+          <div class="doc-md-description">
+            <p>True if sell of given size is possible.</p>
+          </div>
+        </li>
+    </ul>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-441">441</a></span>
+<span class="normal"><a href="#__codelineno-0-442">442</a></span>
+<span class="normal"><a href="#__codelineno-0-443">443</a></span>
+<span class="normal"><a href="#__codelineno-0-444">444</a></span>
+<span class="normal"><a href="#__codelineno-0-445">445</a></span>
+<span class="normal"><a href="#__codelineno-0-446">446</a></span>
+<span class="normal"><a href="#__codelineno-0-447">447</a></span>
+<span class="normal"><a href="#__codelineno-0-448">448</a></span>
+<span class="normal"><a href="#__codelineno-0-449">449</a></span>
+<span class="normal"><a href="#__codelineno-0-450">450</a></span>
+<span class="normal"><a href="#__codelineno-0-451">451</a></span>
+<span class="normal"><a href="#__codelineno-0-452">452</a></span>
+<span class="normal"><a href="#__codelineno-0-453">453</a></span>
+<span class="normal"><a href="#__codelineno-0-454">454</a></span>
+<span class="normal"><a href="#__codelineno-0-455">455</a></span>
+<span class="normal"><a href="#__codelineno-0-456">456</a></span>
+<span class="normal"><a href="#__codelineno-0-457">457</a></span>
+<span class="normal"><a href="#__codelineno-0-458">458</a></span>
+<span class="normal"><a href="#__codelineno-0-459">459</a></span>
+<span class="normal"><a href="#__codelineno-0-460">460</a></span>
+<span class="normal"><a href="#__codelineno-0-461">461</a></span>
+<span class="normal"><a href="#__codelineno-0-462">462</a></span>
+<span class="normal"><a href="#__codelineno-0-463">463</a></span>
+<span class="normal"><a href="#__codelineno-0-464">464</a></span>
+<span class="normal"><a href="#__codelineno-0-465">465</a></span>
+<span class="normal"><a href="#__codelineno-0-466">466</a></span>
+<span class="normal"><a href="#__codelineno-0-467">467</a></span>
+<span class="normal"><a href="#__codelineno-0-468">468</a></span>
+<span class="normal"><a href="#__codelineno-0-469">469</a></span>
+<span class="normal"><a href="#__codelineno-0-470">470</a></span>
+<span class="normal"><a href="#__codelineno-0-471">471</a></span>
+<span class="normal"><a href="#__codelineno-0-472">472</a></span>
+<span class="normal"><a href="#__codelineno-0-473">473</a></span>
+<span class="normal"><a href="#__codelineno-0-474">474</a></span>
+<span class="normal"><a href="#__codelineno-0-475">475</a></span>
+<span class="normal"><a href="#__codelineno-0-476">476</a></span>
+<span class="normal"><a href="#__codelineno-0-477">477</a></span>
+<span class="normal"><a href="#__codelineno-0-478">478</a></span>
+<span class="normal"><a href="#__codelineno-0-479">479</a></span>
+<span class="normal"><a href="#__codelineno-0-480">480</a></span>
+<span class="normal"><a href="#__codelineno-0-481">481</a></span>
+<span class="normal"><a href="#__codelineno-0-482">482</a></span>
+<span class="normal"><a href="#__codelineno-0-483">483</a></span>
+<span class="normal"><a href="#__codelineno-0-484">484</a></span>
+<span class="normal"><a href="#__codelineno-0-485">485</a></span>
+<span class="normal"><a href="#__codelineno-0-486">486</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-441" name="__codelineno-0-441"></a><span class="k">def</span><span class="w"> </span><span class="nf">ensure_can_sell</span><span class="p">(</span>
+<a id="__codelineno-0-442" name="__codelineno-0-442"></a>    <span class="bp">self</span><span class="p">,</span> <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">,</span> <span class="n">size</span><span class="p">:</span> <span class="n">Decimal</span><span class="p">,</span> <span class="n">neg_risk</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span>
+<a id="__codelineno-0-443" name="__codelineno-0-443"></a><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+<a id="__codelineno-0-444" name="__codelineno-0-444"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<a id="__codelineno-0-445" name="__codelineno-0-445"></a><span class="sd">    Check if a sell order is possible, auto-approving if needed.</span>
+<a id="__codelineno-0-446" name="__codelineno-0-446"></a>
+<a id="__codelineno-0-447" name="__codelineno-0-447"></a><span class="sd">    Verifies token balance, on-chain allowance, and available (unlocked)</span>
+<a id="__codelineno-0-448" name="__codelineno-0-448"></a><span class="sd">    shares.  If allowance is zero, sends an on-chain ``setApprovalForAll``</span>
+<a id="__codelineno-0-449" name="__codelineno-0-449"></a><span class="sd">    transaction and refreshes the server cache.</span>
+<a id="__codelineno-0-450" name="__codelineno-0-450"></a>
+<a id="__codelineno-0-451" name="__codelineno-0-451"></a><span class="sd">    Args:</span>
+<a id="__codelineno-0-452" name="__codelineno-0-452"></a><span class="sd">        token_id: Conditional token to sell.</span>
+<a id="__codelineno-0-453" name="__codelineno-0-453"></a><span class="sd">        size: Number of shares to sell (human-readable, e.g. ``5.0``).</span>
+<a id="__codelineno-0-454" name="__codelineno-0-454"></a><span class="sd">        neg_risk: Whether this is a neg-risk market.</span>
+<a id="__codelineno-0-455" name="__codelineno-0-455"></a>
+<a id="__codelineno-0-456" name="__codelineno-0-456"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-457" name="__codelineno-0-457"></a><span class="sd">        True if sell of given size is possible.</span>
+<a id="__codelineno-0-458" name="__codelineno-0-458"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-459" name="__codelineno-0-459"></a>    <span class="n">token_bal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_token_balance</span><span class="p">(</span><span class="n">token_id</span><span class="p">)</span>
+<a id="__codelineno-0-460" name="__codelineno-0-460"></a>
+<a id="__codelineno-0-461" name="__codelineno-0-461"></a>    <span class="c1"># Balance &amp; allowance from the CLOB API are in raw 6-decimal units;</span>
+<a id="__codelineno-0-462" name="__codelineno-0-462"></a>    <span class="c1"># *size* is human-readable (create_order multiplies by 1e6 internally).</span>
+<a id="__codelineno-0-463" name="__codelineno-0-463"></a>    <span class="n">raw_size</span> <span class="o">=</span> <span class="n">size</span> <span class="o">*</span> <span class="n">TOKEN_DECIMALS</span>
+<a id="__codelineno-0-464" name="__codelineno-0-464"></a>
+<a id="__codelineno-0-465" name="__codelineno-0-465"></a>    <span class="k">if</span> <span class="n">token_bal</span><span class="o">.</span><span class="n">balance</span> <span class="o">&lt;</span> <span class="n">raw_size</span><span class="p">:</span>
+<a id="__codelineno-0-466" name="__codelineno-0-466"></a>        <span class="k">return</span> <span class="kc">False</span>
+<a id="__codelineno-0-467" name="__codelineno-0-467"></a>
+<a id="__codelineno-0-468" name="__codelineno-0-468"></a>    <span class="k">if</span> <span class="n">token_bal</span><span class="o">.</span><span class="n">allowance</span> <span class="o">&lt;</span> <span class="n">raw_size</span><span class="p">:</span>
+<a id="__codelineno-0-469" name="__codelineno-0-469"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">approve_token</span><span class="p">(</span><span class="n">neg_risk</span><span class="p">)</span>
+<a id="__codelineno-0-470" name="__codelineno-0-470"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">refresh_token_allowance</span><span class="p">(</span><span class="n">token_id</span><span class="p">)</span>
+<a id="__codelineno-0-471" name="__codelineno-0-471"></a>        <span class="n">token_bal</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_token_balance</span><span class="p">(</span><span class="n">token_id</span><span class="p">)</span>
+<a id="__codelineno-0-472" name="__codelineno-0-472"></a>        <span class="k">if</span> <span class="n">token_bal</span><span class="o">.</span><span class="n">allowance</span> <span class="o">&lt;</span> <span class="n">raw_size</span><span class="p">:</span>
+<a id="__codelineno-0-473" name="__codelineno-0-473"></a>            <span class="k">return</span> <span class="kc">False</span>
+<a id="__codelineno-0-474" name="__codelineno-0-474"></a>
+<a id="__codelineno-0-475" name="__codelineno-0-475"></a>    <span class="c1"># Account for tokens locked in open sell orders (human-readable sizes)</span>
+<a id="__codelineno-0-476" name="__codelineno-0-476"></a>    <span class="n">open_orders</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_orders</span><span class="p">(</span><span class="n">asset_id</span><span class="o">=</span><span class="n">token_id</span><span class="p">)</span>
+<a id="__codelineno-0-477" name="__codelineno-0-477"></a>    <span class="n">locked_raw</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">(</span>
+<a id="__codelineno-0-478" name="__codelineno-0-478"></a>        <span class="p">(</span>
+<a id="__codelineno-0-479" name="__codelineno-0-479"></a>            <span class="n">o</span><span class="o">.</span><span class="n">size_remaining</span> <span class="o">*</span> <span class="n">TOKEN_DECIMALS</span>
+<a id="__codelineno-0-480" name="__codelineno-0-480"></a>            <span class="k">for</span> <span class="n">o</span> <span class="ow">in</span> <span class="n">open_orders</span>
+<a id="__codelineno-0-481" name="__codelineno-0-481"></a>            <span class="k">if</span> <span class="n">o</span><span class="o">.</span><span class="n">side</span> <span class="o">==</span> <span class="n">OrderSide</span><span class="o">.</span><span class="n">SELL</span>
+<a id="__codelineno-0-482" name="__codelineno-0-482"></a>        <span class="p">),</span>
+<a id="__codelineno-0-483" name="__codelineno-0-483"></a>        <span class="n">ZERO</span><span class="p">,</span>
+<a id="__codelineno-0-484" name="__codelineno-0-484"></a>    <span class="p">)</span>
+<a id="__codelineno-0-485" name="__codelineno-0-485"></a>    <span class="n">available</span> <span class="o">=</span> <span class="n">token_bal</span><span class="o">.</span><span class="n">balance</span> <span class="o">-</span> <span class="n">locked_raw</span>
+<a id="__codelineno-0-486" name="__codelineno-0-486"></a>    <span class="k">return</span> <span class="n">available</span> <span class="o">&gt;=</span> <span class="n">raw_size</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.refresh_token_allowance" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">refresh_token_allowance</span>
+
+
+<a href="#polytrader.client.PolyTrader.refresh_token_allowance" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">refresh_token_allowance</span><span class="p">(</span><span class="n">token_id</span><span class="p">:</span> <span class="n"><span title="str">str</span></span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Refresh server's cached balance/allowance for a conditional token.</p>
+<p>This does NOT perform on-chain approval. It tells the CLOB server to
+re-read on-chain state. For first-time token approval, use the
+Polymarket UI or send a setApprovalForAll transaction on-chain.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-488">488</a></span>
+<span class="normal"><a href="#__codelineno-0-489">489</a></span>
+<span class="normal"><a href="#__codelineno-0-490">490</a></span>
+<span class="normal"><a href="#__codelineno-0-491">491</a></span>
+<span class="normal"><a href="#__codelineno-0-492">492</a></span>
+<span class="normal"><a href="#__codelineno-0-493">493</a></span>
+<span class="normal"><a href="#__codelineno-0-494">494</a></span>
+<span class="normal"><a href="#__codelineno-0-495">495</a></span>
+<span class="normal"><a href="#__codelineno-0-496">496</a></span>
+<span class="normal"><a href="#__codelineno-0-497">497</a></span>
+<span class="normal"><a href="#__codelineno-0-498">498</a></span>
+<span class="normal"><a href="#__codelineno-0-499">499</a></span>
+<span class="normal"><a href="#__codelineno-0-500">500</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-488" name="__codelineno-0-488"></a><span class="k">def</span><span class="w"> </span><span class="nf">refresh_token_allowance</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">token_id</span><span class="p">:</span> <span class="nb">str</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-489" name="__codelineno-0-489"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Refresh server&#39;s cached balance/allowance for a conditional token.</span>
+<a id="__codelineno-0-490" name="__codelineno-0-490"></a>
+<a id="__codelineno-0-491" name="__codelineno-0-491"></a><span class="sd">    This does NOT perform on-chain approval. It tells the CLOB server to</span>
+<a id="__codelineno-0-492" name="__codelineno-0-492"></a><span class="sd">    re-read on-chain state. For first-time token approval, use the</span>
+<a id="__codelineno-0-493" name="__codelineno-0-493"></a><span class="sd">    Polymarket UI or send a setApprovalForAll transaction on-chain.</span>
+<a id="__codelineno-0-494" name="__codelineno-0-494"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-495" name="__codelineno-0-495"></a>    <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_authenticated_client</span><span class="p">()</span>
+<a id="__codelineno-0-496" name="__codelineno-0-496"></a>    <span class="n">params</span> <span class="o">=</span> <span class="n">BalanceAllowanceParams</span><span class="p">(</span>
+<a id="__codelineno-0-497" name="__codelineno-0-497"></a>        <span class="n">asset_type</span><span class="o">=</span><span class="n">AssetType</span><span class="o">.</span><span class="n">CONDITIONAL</span><span class="p">,</span>
+<a id="__codelineno-0-498" name="__codelineno-0-498"></a>        <span class="n">token_id</span><span class="o">=</span><span class="n">token_id</span><span class="p">,</span>
+<a id="__codelineno-0-499" name="__codelineno-0-499"></a>    <span class="p">)</span>
+<a id="__codelineno-0-500" name="__codelineno-0-500"></a>    <span class="n">client</span><span class="o">.</span><span class="n">update_balance_allowance</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.refresh_collateral_allowance" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">refresh_collateral_allowance</span>
+
+
+<a href="#polytrader.client.PolyTrader.refresh_collateral_allowance" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">refresh_collateral_allowance</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Refresh server's cached balance/allowance for USDC collateral.</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-502">502</a></span>
+<span class="normal"><a href="#__codelineno-0-503">503</a></span>
+<span class="normal"><a href="#__codelineno-0-504">504</a></span>
+<span class="normal"><a href="#__codelineno-0-505">505</a></span>
+<span class="normal"><a href="#__codelineno-0-506">506</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-502" name="__codelineno-0-502"></a><span class="k">def</span><span class="w"> </span><span class="nf">refresh_collateral_allowance</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-503" name="__codelineno-0-503"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Refresh server&#39;s cached balance/allowance for USDC collateral.&quot;&quot;&quot;</span>
+<a id="__codelineno-0-504" name="__codelineno-0-504"></a>    <span class="n">client</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_get_authenticated_client</span><span class="p">()</span>
+<a id="__codelineno-0-505" name="__codelineno-0-505"></a>    <span class="n">params</span> <span class="o">=</span> <span class="n">BalanceAllowanceParams</span><span class="p">(</span><span class="n">asset_type</span><span class="o">=</span><span class="n">AssetType</span><span class="o">.</span><span class="n">COLLATERAL</span><span class="p">)</span>
+<a id="__codelineno-0-506" name="__codelineno-0-506"></a>    <span class="n">client</span><span class="o">.</span><span class="n">update_balance_allowance</span><span class="p">(</span><span class="n">params</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.approve_token" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">approve_token</span>
+
+
+<a href="#polytrader.client.PolyTrader.approve_token" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">approve_token</span><span class="p">(</span><span class="n">neg_risk</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="str">str</span></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Approve the CTF conditional tokens for the exchange on-chain.</p>
+<p>Sends a setApprovalForAll transaction on the CTF ERC1155 contract.
+One-time setup per exchange (neg_risk vs non-neg_risk).</p>
+
+
+<p><span class="doc-section-title">Returns:</span></p>
+    <ul>
+        <li class="doc-section-item field-body">
+              <code><span title="str">str</span></code>
+          –
+          <div class="doc-md-description">
+            <p>Transaction hash.</p>
+          </div>
+        </li>
+    </ul>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-508">508</a></span>
+<span class="normal"><a href="#__codelineno-0-509">509</a></span>
+<span class="normal"><a href="#__codelineno-0-510">510</a></span>
+<span class="normal"><a href="#__codelineno-0-511">511</a></span>
+<span class="normal"><a href="#__codelineno-0-512">512</a></span>
+<span class="normal"><a href="#__codelineno-0-513">513</a></span>
+<span class="normal"><a href="#__codelineno-0-514">514</a></span>
+<span class="normal"><a href="#__codelineno-0-515">515</a></span>
+<span class="normal"><a href="#__codelineno-0-516">516</a></span>
+<span class="normal"><a href="#__codelineno-0-517">517</a></span>
+<span class="normal"><a href="#__codelineno-0-518">518</a></span>
+<span class="normal"><a href="#__codelineno-0-519">519</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-508" name="__codelineno-0-508"></a><span class="k">def</span><span class="w"> </span><span class="nf">approve_token</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">neg_risk</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-0-509" name="__codelineno-0-509"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Approve the CTF conditional tokens for the exchange on-chain.</span>
+<a id="__codelineno-0-510" name="__codelineno-0-510"></a>
+<a id="__codelineno-0-511" name="__codelineno-0-511"></a><span class="sd">    Sends a setApprovalForAll transaction on the CTF ERC1155 contract.</span>
+<a id="__codelineno-0-512" name="__codelineno-0-512"></a><span class="sd">    One-time setup per exchange (neg_risk vs non-neg_risk).</span>
+<a id="__codelineno-0-513" name="__codelineno-0-513"></a>
+<a id="__codelineno-0-514" name="__codelineno-0-514"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-515" name="__codelineno-0-515"></a><span class="sd">        Transaction hash.</span>
+<a id="__codelineno-0-516" name="__codelineno-0-516"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-517" name="__codelineno-0-517"></a>    <span class="k">return</span> <span class="n">_approve_token</span><span class="p">(</span>
+<a id="__codelineno-0-518" name="__codelineno-0-518"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_private_key</span><span class="p">,</span> <span class="n">neg_risk</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">funder</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_builder_creds</span>
+<a id="__codelineno-0-519" name="__codelineno-0-519"></a>    <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.approve_collateral" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">approve_collateral</span>
+
+
+<a href="#polytrader.client.PolyTrader.approve_collateral" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">approve_collateral</span><span class="p">(</span><span class="n">neg_risk</span><span class="p">:</span> <span class="n"><span title="bool">bool</span></span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n"><span title="str">str</span></span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Approve USDC for the exchange contract on-chain.</p>
+<p>Sends an ERC20 approve transaction for max uint256.</p>
+
+
+<p><span class="doc-section-title">Returns:</span></p>
+    <ul>
+        <li class="doc-section-item field-body">
+              <code><span title="str">str</span></code>
+          –
+          <div class="doc-md-description">
+            <p>Transaction hash.</p>
+          </div>
+        </li>
+    </ul>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-521">521</a></span>
+<span class="normal"><a href="#__codelineno-0-522">522</a></span>
+<span class="normal"><a href="#__codelineno-0-523">523</a></span>
+<span class="normal"><a href="#__codelineno-0-524">524</a></span>
+<span class="normal"><a href="#__codelineno-0-525">525</a></span>
+<span class="normal"><a href="#__codelineno-0-526">526</a></span>
+<span class="normal"><a href="#__codelineno-0-527">527</a></span>
+<span class="normal"><a href="#__codelineno-0-528">528</a></span>
+<span class="normal"><a href="#__codelineno-0-529">529</a></span>
+<span class="normal"><a href="#__codelineno-0-530">530</a></span>
+<span class="normal"><a href="#__codelineno-0-531">531</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-521" name="__codelineno-0-521"></a><span class="k">def</span><span class="w"> </span><span class="nf">approve_collateral</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">neg_risk</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">False</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">str</span><span class="p">:</span>
+<a id="__codelineno-0-522" name="__codelineno-0-522"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Approve USDC for the exchange contract on-chain.</span>
+<a id="__codelineno-0-523" name="__codelineno-0-523"></a>
+<a id="__codelineno-0-524" name="__codelineno-0-524"></a><span class="sd">    Sends an ERC20 approve transaction for max uint256.</span>
+<a id="__codelineno-0-525" name="__codelineno-0-525"></a>
+<a id="__codelineno-0-526" name="__codelineno-0-526"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-527" name="__codelineno-0-527"></a><span class="sd">        Transaction hash.</span>
+<a id="__codelineno-0-528" name="__codelineno-0-528"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-529" name="__codelineno-0-529"></a>    <span class="k">return</span> <span class="n">_approve_collateral</span><span class="p">(</span>
+<a id="__codelineno-0-530" name="__codelineno-0-530"></a>        <span class="bp">self</span><span class="o">.</span><span class="n">_private_key</span><span class="p">,</span> <span class="n">neg_risk</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">funder</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_builder_creds</span>
+<a id="__codelineno-0-531" name="__codelineno-0-531"></a>    <span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.approve_all" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">approve_all</span>
+
+
+<a href="#polytrader.client.PolyTrader.approve_all" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">approve_all</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="n"><span title="list">list</span></span><span class="p">[</span><span class="n"><span title="str">str</span></span><span class="p">]</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Approve both exchanges (neg_risk + non-neg_risk) for tokens and USDC.</p>
+
+
+<p><span class="doc-section-title">Returns:</span></p>
+    <ul>
+        <li class="doc-section-item field-body">
+              <code><span title="list">list</span>[<span title="str">str</span>]</code>
+          –
+          <div class="doc-md-description">
+            <p>List of transaction hashes.</p>
+          </div>
+        </li>
+    </ul>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-533">533</a></span>
+<span class="normal"><a href="#__codelineno-0-534">534</a></span>
+<span class="normal"><a href="#__codelineno-0-535">535</a></span>
+<span class="normal"><a href="#__codelineno-0-536">536</a></span>
+<span class="normal"><a href="#__codelineno-0-537">537</a></span>
+<span class="normal"><a href="#__codelineno-0-538">538</a></span>
+<span class="normal"><a href="#__codelineno-0-539">539</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-533" name="__codelineno-0-533"></a><span class="k">def</span><span class="w"> </span><span class="nf">approve_all</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]:</span>
+<a id="__codelineno-0-534" name="__codelineno-0-534"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Approve both exchanges (neg_risk + non-neg_risk) for tokens and USDC.</span>
+<a id="__codelineno-0-535" name="__codelineno-0-535"></a>
+<a id="__codelineno-0-536" name="__codelineno-0-536"></a><span class="sd">    Returns:</span>
+<a id="__codelineno-0-537" name="__codelineno-0-537"></a><span class="sd">        List of transaction hashes.</span>
+<a id="__codelineno-0-538" name="__codelineno-0-538"></a><span class="sd">    &quot;&quot;&quot;</span>
+<a id="__codelineno-0-539" name="__codelineno-0-539"></a>    <span class="k">return</span> <span class="n">_approve_all</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_private_key</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">funder</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">_builder_creds</span><span class="p">)</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+<div class="doc doc-object doc-function">
+
+
+<h4 id="polytrader.client.PolyTrader.close" class="doc doc-heading">
+<code class="doc-symbol doc-symbol-heading doc-symbol-method"></code>            <span class="doc doc-object-name doc-function-name">close</span>
+
+
+  <span class="doc doc-labels">
+      <small class="doc doc-label doc-label-async"><code>async</code></small>
+  </span>
+
+<a href="#polytrader.client.PolyTrader.close" class="headerlink" title="Permanent link">&para;</a></h4>
+<div class="doc-signature highlight"><pre><span></span><code><a id="__codelineno-0-1" name="__codelineno-0-1" href="#__codelineno-0-1"></a><span class="nf">close</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kc">None</span>
+</code></pre></div>
+
+    <div class="doc doc-contents ">
+
+        <p>Clean up all resources (WebSockets, HTTP client).</p>
+
+
+            <details class="mkdocstrings-source">
+              <summary>Source code in <code>src/polytrader/client.py</code></summary>
+              <div class="highlight"><table class="highlighttable"><tr><td class="linenos"><div class="linenodiv"><pre><span></span><span class="normal"><a href="#__codelineno-0-566">566</a></span>
+<span class="normal"><a href="#__codelineno-0-567">567</a></span>
+<span class="normal"><a href="#__codelineno-0-568">568</a></span>
+<span class="normal"><a href="#__codelineno-0-569">569</a></span>
+<span class="normal"><a href="#__codelineno-0-570">570</a></span>
+<span class="normal"><a href="#__codelineno-0-571">571</a></span>
+<span class="normal"><a href="#__codelineno-0-572">572</a></span>
+<span class="normal"><a href="#__codelineno-0-573">573</a></span>
+<span class="normal"><a href="#__codelineno-0-574">574</a></span></pre></div></td><td class="code"><div><pre><span></span><code><a id="__codelineno-0-566" name="__codelineno-0-566"></a><span class="k">async</span> <span class="k">def</span><span class="w"> </span><span class="nf">close</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+<a id="__codelineno-0-567" name="__codelineno-0-567"></a><span class="w">    </span><span class="sd">&quot;&quot;&quot;Clean up all resources (WebSockets, HTTP client).&quot;&quot;&quot;</span>
+<a id="__codelineno-0-568" name="__codelineno-0-568"></a>    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_market_ws</span><span class="p">:</span>
+<a id="__codelineno-0-569" name="__codelineno-0-569"></a>        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_market_ws</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+<a id="__codelineno-0-570" name="__codelineno-0-570"></a>    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_user_ws</span><span class="p">:</span>
+<a id="__codelineno-0-571" name="__codelineno-0-571"></a>        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_user_ws</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+<a id="__codelineno-0-572" name="__codelineno-0-572"></a>    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binance_ws</span><span class="p">:</span>
+<a id="__codelineno-0-573" name="__codelineno-0-573"></a>        <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_binance_ws</span><span class="o">.</span><span class="n">disconnect</span><span class="p">()</span>
+<a id="__codelineno-0-574" name="__codelineno-0-574"></a>    <span class="k">await</span> <span class="bp">self</span><span class="o">.</span><span class="n">_http</span><span class="o">.</span><span class="n">aclose</span><span class="p">()</span>
+</code></pre></div></td></tr></table></div>
+            </details>
+    </div>
+
+</div>
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+  </div>
+
+    </div>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+  <script>var tabs=__md_get("__tabs");if(Array.isArray(tabs))e:for(var set of document.querySelectorAll(".tabbed-set")){var labels=set.querySelector(".tabbed-labels");for(var tab of tabs)for(var label of labels.getElementsByTagName("label"))if(label.innerText.trim()===tab){var input=document.getElementById(label.htmlFor);input.checked=!0;continue e}}</script>
+
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+          <button type="button" class="md-top md-icon" data-md-component="top" hidden>
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8z"/></svg>
+  Back to top
+</button>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+    
+      
+      <nav class="md-footer__inner md-grid" aria-label="Footer" >
+        
+          
+          <a href="../binance/" class="md-footer__link md-footer__link--prev" aria-label="Previous: binance">
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+            </div>
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Previous
+              </span>
+              <div class="md-ellipsis">
+                binance
+              </div>
+            </div>
+          </a>
+        
+        
+          
+          <a href="../constants/" class="md-footer__link md-footer__link--next" aria-label="Next: constants">
+            <div class="md-footer__title">
+              <span class="md-footer__direction">
+                Next
+              </span>
+              <div class="md-ellipsis">
+                constants
+              </div>
+            </div>
+            <div class="md-footer__button md-icon">
+              
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M4 11v2h12l-5.5 5.5 1.42 1.42L19.84 12l-7.92-7.92L10.5 5.5 16 11z"/></svg>
+            </div>
+          </a>
+        
+      </nav>
+    
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+    Made with
+    <a href="https://squidfunk.github.io/mkdocs-material/" target="_blank" rel="noopener">
+      Material for MkDocs
+    </a>
+  
+</div>
+      
+        
+<div class="md-social">
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://github.com/omidroshani/polytrader" target="_blank" rel="noopener" title="github.com" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M173.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6m-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3m44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9M252.8 8C114.1 8 8 113.3 8 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C436.2 457.8 504 362.9 504 252 504 113.3 391.5 8 252.8 8M105.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1m-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7m32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1m-11.4-14.7c-1.6 1-1.6 3.6 0 5.9s4.3 3.3 5.6 2.3c1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2"/></svg>
+    </a>
+  
+    
+    
+    
+    
+      
+      
+    
+    <a href="https://pypi.org/project/polytrader/" target="_blank" rel="noopener" title="pypi.org" class="md-social__link">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><!--! Font Awesome Free 7.1.0 by @fontawesome - https://fontawesome.com License - https://fontawesome.com/license/free (Icons: CC BY 4.0, Fonts: SIL OFL 1.1, Code: MIT License) Copyright 2025 Fonticons, Inc.--><path d="M439.8 200.5c-7.7-30.9-22.3-54.2-53.4-54.2h-40.1v47.4c0 36.8-31.2 67.8-66.8 67.8H172.7c-29.2 0-53.4 25-53.4 54.3v101.8c0 29 25.2 46 53.4 54.3 33.8 9.9 66.3 11.7 106.8 0 26.9-7.8 53.4-23.5 53.4-54.3v-40.7H226.2v-13.6h160.2c31.1 0 42.6-21.7 53.4-54.2 11.2-33.5 10.7-65.7 0-108.6M286.2 444.7a20.4 20.4 0 1 1 0-40.7 20.4 20.4 0 1 1 0 40.7M167.8 248.1h106.8c29.7 0 53.4-24.5 53.4-54.3V91.9c0-29-24.4-50.7-53.4-55.6-35.8-5.9-74.7-5.6-106.8.1-45.2 8-53.4 24.7-53.4 55.6v40.7h106.9v13.6h-147c-31.1 0-58.3 18.7-66.8 54.2-9.8 40.7-10.2 66.1 0 108.6 7.6 31.6 25.7 54.2 56.8 54.2H101v-48.8c0-35.3 30.5-66.4 66.8-66.4m-6.6-183.4a20.4 20.4 0 1 1 0 40.8 20.4 20.4 0 1 1 0-40.8"/></svg>
+    </a>
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+      <div class="md-progress" data-md-component="progress" role="progressbar"></div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["content.code.copy", "content.code.annotate", "content.tabs.link", "navigation.tabs", "navigation.tabs.sticky", "navigation.sections", "navigation.indexes", "navigation.top", "navigation.footer", "navigation.instant", "navigation.instant.progress", "search.suggest", "search.highlight", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
